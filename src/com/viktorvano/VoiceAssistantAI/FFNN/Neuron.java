@@ -1,9 +1,9 @@
 package com.viktorvano.VoiceAssistantAI.FFNN;
 
 import java.util.LinkedList;
-import static FFNN.Variables.*;
-import static FFNN.FileManagement.*;
-import static FFNN.GeneralFunctions.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.Variables.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.FileManagement.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.GeneralFunctions.*;
 
 public class Neuron {
     public Neuron(int numOutputs, int myIndex)

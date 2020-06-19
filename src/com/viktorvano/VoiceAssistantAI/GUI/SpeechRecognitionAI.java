@@ -7,14 +7,18 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 
 public class SpeechRecognitionAI extends Application {
     private AudioCapture audioCapture;
@@ -34,8 +38,21 @@ public class SpeechRecognitionAI extends Application {
 
         final int width = 750;
         final int height = 750;
-        Pane pane = new Pane();
-        Scene scene = new Scene(pane, width, height);
+
+        BorderPane borderPane = new BorderPane();
+        StackPane stackPaneCenter = new StackPane();
+        HBox hBoxBottom = new HBox();
+        //borderPane.setTop(hbox);
+        borderPane.setBottom(hBoxBottom);
+        borderPane.setCenter(stackPaneCenter);
+        //borderPane.setRight(addFlowPane());
+        //borderPane.setLeft();
+
+        hBoxBottom.setPadding(new Insets(150, 12, 150, 12));
+        hBoxBottom.setSpacing(30);
+        hBoxBottom.setStyle("-fx-background-color: #336699;");
+
+        Scene scene = new Scene(borderPane, width, height);
 
         stage.setTitle("Speech Recognition AI");
         stage.setScene(scene);
@@ -44,7 +61,7 @@ public class SpeechRecognitionAI extends Application {
         stage.setMinWidth(stage.getWidth());
         stage.setMaxHeight(stage.getHeight());
         stage.setMinHeight(stage.getHeight());
-        stage.setResizable(false);
+        //stage.setResizable(false);
 
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
@@ -60,7 +77,7 @@ public class SpeechRecognitionAI extends Application {
         //populating the series with data
         lineChart.getData().add(displayedSeries);
         lineChart.setAnimated(false);
-        pane.getChildren().add(lineChart);
+        stackPaneCenter.getChildren().add(lineChart);
 
 
         Button Play = new Button("Play");
@@ -76,7 +93,7 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        pane.getChildren().add(Play);
+        hBoxBottom.getChildren().add(Play);
 
         Button Clear = new Button("Clear");
         Clear.setLayoutX(300);
@@ -92,7 +109,7 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        pane.getChildren().add(Clear);
+        hBoxBottom.getChildren().add(Clear);
 
         //TODO: Try to use Threads.
         Timeline timelineMain = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {

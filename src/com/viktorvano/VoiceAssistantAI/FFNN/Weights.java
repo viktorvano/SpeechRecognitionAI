@@ -2,8 +2,8 @@ package com.viktorvano.VoiceAssistantAI.FFNN;
 
 import java.util.LinkedList;
 
-import static FFNN.FileManagement.*;
-import static FFNN.Variables.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.FileManagement.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.Variables.*;
 
 public class Weights {
     public static void push_zeros_to_Weights()

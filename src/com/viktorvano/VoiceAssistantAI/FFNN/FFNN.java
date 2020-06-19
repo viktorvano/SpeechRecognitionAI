@@ -15,9 +15,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
-import static FFNN.Variables.*;
-import static FFNN.Weights.*;
-import static FFNN.GeneralFunctions.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.Variables.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.Weights.*;
+import static com.viktorvano.VoiceAssistantAI.FFNN.GeneralFunctions.*;
 
 public class FFNN extends Application
 {
