@@ -3,6 +3,7 @@
 
 # Intellij IDEA IDE
 .idea/
+out/
 
 # Log file
 *.log
