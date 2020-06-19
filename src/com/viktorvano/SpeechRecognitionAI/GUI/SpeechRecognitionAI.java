@@ -57,11 +57,8 @@ public class SpeechRecognitionAI extends Application {
         stage.setTitle("Speech Recognition AI");
         stage.setScene(scene);
         stage.show();
-        stage.setMaxWidth(stage.getWidth());
         stage.setMinWidth(stage.getWidth());
-        stage.setMaxHeight(stage.getHeight());
         stage.setMinHeight(stage.getHeight());
-        //stage.setResizable(false);
 
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
