@@ -1,4 +1,4 @@
-package com.viktorvano.VoiceAssistantAI.Audio;
+package com.viktorvano.SpeechRecognitionAI.Audio;
 
 import javax.sound.sampled.AudioFormat;
 

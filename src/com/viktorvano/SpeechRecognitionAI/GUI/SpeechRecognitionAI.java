@@ -1,7 +1,7 @@
-package com.viktorvano.VoiceAssistantAI.GUI;
+package com.viktorvano.SpeechRecognitionAI.GUI;
 
-import com.viktorvano.VoiceAssistantAI.Audio.AudioCapture;
-import com.viktorvano.VoiceAssistantAI.Audio.RecordedAudio;
+import com.viktorvano.SpeechRecognitionAI.Audio.AudioCapture;
+import com.viktorvano.SpeechRecognitionAI.Audio.RecordedAudio;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
