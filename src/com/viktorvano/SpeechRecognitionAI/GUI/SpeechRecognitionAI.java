@@ -25,6 +25,7 @@ public class SpeechRecognitionAI extends Application {
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries;
     private Timeline timelineUpdateData;
+    private boolean updateData = true;
 
     public static void main(String[] args)
     {
@@ -92,10 +93,10 @@ public class SpeechRecognitionAI extends Application {
         });
         hBoxBottom.getChildren().add(Play);
 
-        Button Clear = new Button("Clear");
-        Clear.setLayoutX(300);
-        Clear.setLayoutY(400);
-        Clear.setOnAction(new EventHandler<ActionEvent>() {
+        Button Listen = new Button("Listen");
+        Listen.setLayoutX(300);
+        Listen.setLayoutY(400);
+        Listen.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(audioCapture.isAudioRecorded())
@@ -103,33 +104,18 @@ public class SpeechRecognitionAI extends Application {
                     audioCapture.clearRecord();
                     recordedAudio.audioRecord = null;
                     recordedAudio.audioRecordLength = 0;
+                    updateData = true;
                 }
             }
         });
-        hBoxBottom.getChildren().add(Clear);
+        hBoxBottom.getChildren().add(Listen);
 
-        //TODO: Try to use Threads.
-        Timeline timelineMain = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try {
-                    Thread.sleep(400);
-                }catch (Exception e)
-                {
-                    System.out.println("Main timeline had a problem.");
-                }
-                audioCapture.playRecord(recordedAudio);
-                audioCapture.clearRecord();// activates listening again
-            }
-        }));
-        timelineMain.setCycleCount(1);
-
-        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
-                if (audioCapture.isAudioRecorded()) {
+                if (updateData && audioCapture.isAudioRecorded()) {
+                    updateData = false;
                     recordedAudio.audioRecord = audioCapture.getRecord();
                     if (recordedAudio.audioRecord != null) {
                         displayedSeries.getData().clear();
@@ -142,21 +128,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         }));
-        timelineUpdateData.setCycleCount(1);
-
-        Timeline timelineCheckData = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (audioCapture.isAudioRecorded()) {
-                    timelineUpdateData.play();
-                    //timelineMain.play();
-                }
-            }
-        }));
-        timelineCheckData.setCycleCount(Timeline.INDEFINITE);
-        timelineCheckData.play();
-        /*CheckData checkData = new CheckData();
-        checkData.start();*/
+        timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
+        timelineUpdateData.play();
     }
 
     @Override
@@ -172,7 +145,6 @@ public class SpeechRecognitionAI extends Application {
         public void run() {
             super.run();
             audioCapture.playRecord(recordedAudio);
-            //audioCapture.clearRecord();// activates listening again
         }
     }
 }
