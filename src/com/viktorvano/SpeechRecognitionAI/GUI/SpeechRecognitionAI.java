@@ -13,6 +13,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -23,7 +24,7 @@ import javafx.util.Duration;
 public class SpeechRecognitionAI extends Application {
     private AudioCapture audioCapture;
     private RecordedAudio recordedAudio;
-    private XYChart.Series<Number, Number> displayedSeries;
+    private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
     private Timeline timelineUpdateData;
     private boolean updateData = true;
 
@@ -49,7 +50,7 @@ public class SpeechRecognitionAI extends Application {
         //borderPane.setRight(addFlowPane());
         //borderPane.setLeft();
 
-        hBoxBottom.setPadding(new Insets(150, 12, 150, 12));
+        hBoxBottom.setPadding(new Insets(50, 12, 50, 12));
         hBoxBottom.setSpacing(30);
         hBoxBottom.setStyle("-fx-background-color: #336699;");
 
@@ -60,6 +61,8 @@ public class SpeechRecognitionAI extends Application {
         stage.show();
         stage.setMinWidth(stage.getWidth());
         stage.setMinHeight(stage.getHeight());
+        Image icon =  new Image("com\\viktorvano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
+        stage.getIcons().add(icon);
 
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
@@ -71,9 +74,12 @@ public class SpeechRecognitionAI extends Application {
         //defining a series
         displayedSeries = new XYChart.Series<Number, Number>();
         displayedSeries.setName("Recorded Audio");
+        detectedWordsSeries = new XYChart.Series<Number, Number>();
+        detectedWordsSeries.setName("Detected Words");
         lineChart.setCreateSymbols(false);
         //populating the series with data
         lineChart.getData().add(displayedSeries);
+        lineChart.getData().add(detectedWordsSeries);
         lineChart.setAnimated(false);
         stackPaneCenter.getChildren().add(lineChart);
 
@@ -124,12 +130,24 @@ public class SpeechRecognitionAI extends Application {
                             if (i % 10 == 0)
                                 displayedSeries.getData().add(new XYChart.Data<Number, Number>(i, recordedAudio.audioRecord[i]));
                         }
+                        detectWords();
                     }
                 }
             }
         }));
         timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
         timelineUpdateData.play();
+    }
+
+    private void detectWords()
+    {
+        detectedWordsSeries.getData().clear();
+        for (int i = 0; i < recordedAudio.audioRecordLength; i++) {
+            if (i % 10 == 0 && Math.abs(recordedAudio.audioRecord[i]) > 75)
+                detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 100));
+            else if (i % 10 == 0)
+                detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
+        }
     }
 
     @Override
