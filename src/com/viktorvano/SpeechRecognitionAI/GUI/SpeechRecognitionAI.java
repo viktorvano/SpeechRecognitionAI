@@ -115,48 +115,6 @@ public class SpeechRecognitionAI extends Application {
         stage.setMinHeight(stage.getHeight());
         Image icon =  new Image("com\\viktorvano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
         stage.getIcons().add(icon);
-
-        //defining the axes
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        //creating the chart
-        final LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
-
-        lineChart.setTitle("Audio Data");
-        //defining a series
-        displayedSeries = new XYChart.Series<Number, Number>();
-        displayedSeries.setName("Recorded Audio");
-        detectedWordsSeries = new XYChart.Series<Number, Number>();
-        detectedWordsSeries.setName("Detected Words");
-        lineChart.setCreateSymbols(false);
-        //populating the series with data
-        lineChart.getData().add(displayedSeries);
-        lineChart.getData().add(detectedWordsSeries);
-        lineChart.setAnimated(false);
-        stackPaneCenter.getChildren().add(lineChart);
-
-        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-                if (updateData && audioCapture.isAudioRecorded()) {
-                    updateData = false;
-                    recordedAudio.audioRecord = audioCapture.getRecord();
-                    if (recordedAudio.audioRecord != null) {
-                        displayedSeries.getData().clear();
-                        recordedAudio.audioRecordLength = audioCapture.getRecordLength();
-                        for (int i = 0; i < recordedAudio.audioRecordLength; i++)
-                        {
-                            if (i % 10 == 0)
-                                displayedSeries.getData().add(new XYChart.Data<Number, Number>(i, recordedAudio.audioRecord[i]));
-                        }
-                        detectWords();
-                    }
-                }
-            }
-        }));
-        timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
-        timelineUpdateData.play();
     }
 
     private void detectWords()
@@ -176,12 +134,10 @@ public class SpeechRecognitionAI extends Application {
         int targetStringLength = 10;
         Random random = new Random();
 
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
+        return random.ints(leftLimit, rightLimit + 1)
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-
-        return generatedString;
     }
 
     @Override
@@ -233,6 +189,48 @@ public class SpeechRecognitionAI extends Application {
             }
         });
         hBoxBottom.getChildren().add(Listen);
+
+        //defining the axes
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        //creating the chart
+        final LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+
+        lineChart.setTitle("Audio Data");
+        //defining a series
+        displayedSeries = new XYChart.Series<Number, Number>();
+        displayedSeries.setName("Recorded Audio");
+        detectedWordsSeries = new XYChart.Series<Number, Number>();
+        detectedWordsSeries.setName("Detected Words");
+        lineChart.setCreateSymbols(false);
+        //populating the series with data
+        lineChart.getData().add(displayedSeries);
+        lineChart.getData().add(detectedWordsSeries);
+        lineChart.setAnimated(false);
+        stackPaneCenter.getChildren().add(lineChart);
+
+        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                if (updateData && audioCapture.isAudioRecorded()) {
+                    updateData = false;
+                    recordedAudio.audioRecord = audioCapture.getRecord();
+                    if (recordedAudio.audioRecord != null) {
+                        displayedSeries.getData().clear();
+                        recordedAudio.audioRecordLength = audioCapture.getRecordLength();
+                        for (int i = 0; i < recordedAudio.audioRecordLength; i++)
+                        {
+                            if (i % 10 == 0)
+                                displayedSeries.getData().add(new XYChart.Data<Number, Number>(i, recordedAudio.audioRecord[i]));
+                        }
+                        detectWords();
+                    }
+                }
+            }
+        }));
+        timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
+        timelineUpdateData.play();
     }
 
     private void initializeTrainingLayout()
