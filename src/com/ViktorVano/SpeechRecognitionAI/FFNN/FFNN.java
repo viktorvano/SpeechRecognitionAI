@@ -1,4 +1,4 @@
-package com.viktorvano.SpeechRecognitionAI.FFNN;
+package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.util.LinkedList;
 import javafx.animation.KeyFrame;
@@ -15,9 +15,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
-import static com.viktorvano.SpeechRecognitionAI.FFNN.Variables.*;
-import static com.viktorvano.SpeechRecognitionAI.FFNN.Weights.*;
-import static com.viktorvano.SpeechRecognitionAI.FFNN.GeneralFunctions.*;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.*;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.GeneralFunctions.*;
 
 public class FFNN extends Application
 {

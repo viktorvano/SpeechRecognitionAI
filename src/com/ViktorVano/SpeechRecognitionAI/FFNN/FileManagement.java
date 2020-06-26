@@ -1,4 +1,4 @@
-package com.viktorvano.SpeechRecognitionAI.FFNN;
+package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.io.BufferedReader;
 import java.io.File;

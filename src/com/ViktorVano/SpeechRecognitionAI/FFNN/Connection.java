@@ -1,4 +1,4 @@
-package com.viktorvano.SpeechRecognitionAI.FFNN;
+package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 public class Connection {
     /*

@@ -1,4 +1,4 @@
-package com.viktorvano.SpeechRecognitionAI.Audio;
+package com.ViktorVano.SpeechRecognitionAI.Audio;
 
 public class RecordedAudio {
     public byte[] audioRecord;

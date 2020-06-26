@@ -1,7 +1,7 @@
-package com.viktorvano.SpeechRecognitionAI.GUI;
+package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.viktorvano.SpeechRecognitionAI.Audio.AudioCapture;
-import com.viktorvano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
+import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -68,7 +68,7 @@ public class SpeechRecognitionAI extends Application {
         ImageView[] icons = new ImageView[4];
         Label[] labelMenu = new Label[4];
         for (int i=0; i<4; i++) {
-            icons[i] = new ImageView(new Image("com\\viktorvano\\SpeechRecognitionAI\\images\\icon"+(i+1)+".jpg"));
+            icons[i] = new ImageView(new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\icon"+(i+1)+".jpg"));
             icons[i].setPreserveRatio(true);
             icons[i].setFitWidth(96);
             icons[i].setFitHeight(96);
@@ -120,11 +120,43 @@ public class SpeechRecognitionAI extends Application {
     private void detectWords()
     {
         detectedWordsSeries.getData().clear();
-        for (int i = 0; i < recordedAudio.audioRecordLength; i++) {
-            if (i % 10 == 0 && Math.abs(recordedAudio.audioRecord[i]) > 75)
+        int lastValue = 50;
+        for (int i = 0; i < recordedAudio.audioRecordLength; i++)
+        {
+            if (lastValue != 100 && Math.abs(recordedAudio.audioRecord[i]) > 75)
+            {
+                if(i-500 >= 0)
+                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-500, 0));
                 detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 100));
-            else if (i % 10 == 0)
+                lastValue = 100;
+            }
+            else if (lastValue != 0 && Math.abs(recordedAudio.audioRecord[i]) <= 75)
+            {
+                if(i-500 >= 0)
+                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-500, 100));
                 detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
+                lastValue = 0;
+            }
+
+            boolean valueTheSame = true;
+
+            while(valueTheSame)
+            {
+                valueTheSame = false;
+                int x=i;
+                for(; x<recordedAudio.audioRecordLength && x<(800+i); x++)
+                {
+                    if(lastValue == 100 && Math.abs(recordedAudio.audioRecord[x]) > 75)
+                        valueTheSame = true;
+                }
+
+                if(valueTheSame)
+                    i = x;
+            }
+
+            if(i == recordedAudio.audioRecordLength-1)
+                detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
+
         }
     }
 

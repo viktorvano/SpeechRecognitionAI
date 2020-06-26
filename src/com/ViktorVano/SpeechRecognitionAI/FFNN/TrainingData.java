@@ -1,7 +1,7 @@
-package com.viktorvano.SpeechRecognitionAI.FFNN;
+package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.util.LinkedList;
-import static com.viktorvano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 
 public class TrainingData {
 

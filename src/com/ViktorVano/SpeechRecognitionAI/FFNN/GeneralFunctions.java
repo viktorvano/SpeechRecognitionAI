@@ -1,4 +1,4 @@
-package com.viktorvano.SpeechRecognitionAI.FFNN;
+package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
