@@ -149,7 +149,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 valueTheSame = false;
                 int x=i;
-                for(; x<recordedAudio.audioRecordLength && x<(400+i); x++)
+                for(; x<recordedAudio.audioRecordLength && x<(300+i); x++)
                 {
                     if(lastValue == 100 && Math.abs(recordedAudio.audioRecord[x]) > 30)
                         valueTheSame = true;
@@ -174,8 +174,15 @@ public class SpeechRecognitionAI extends Application {
                         detectedWordsSeries.getData().get(i+1).getXValue().toString());
                 int start = detectedWordsSeries.getData().get(i).getXValue().intValue();
                 int end = detectedWordsSeries.getData().get(i+1).getXValue().intValue();
+                int length = end - start;
 
-                System.out.println("Word length: " + (end - start));
+                if(length < 4000)
+                {
+                    detectedWordsSeries.getData().remove(i-1, i+2);
+                    System.out.println("Removing a short word: " + length);
+                    i--;
+                }else
+                    System.out.println("Word length: " + (end - start));
             }
         }
 
