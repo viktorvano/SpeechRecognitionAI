@@ -125,9 +125,14 @@ public class SpeechRecognitionAI extends Application {
         {
             if (lastValue != 100 && Math.abs(recordedAudio.audioRecord[i]) > 75)
             {
-                if(i-500 >= 0)
+                if(i>=500)
+                {
                     detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-500, 0));
-                detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 100));
+                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-499, 100));
+                }else
+                {
+                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(0, 100));
+                }
                 lastValue = 100;
             }
             else if (lastValue != 0 && Math.abs(recordedAudio.audioRecord[i]) <= 75)
@@ -152,15 +157,6 @@ public class SpeechRecognitionAI extends Application {
 
                 if(valueTheSame)
                     i = x;
-                else if(lastValue == 100)
-                {
-                    System.out.println(detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-2).getXValue().toString() + " " +
-                            detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-1).getXValue().toString());
-                    int start = detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-2).getXValue().intValue();
-                    int end = detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-1).getXValue().intValue();
-
-                    System.out.println("Word length: " + (end-start));
-                }
             }
 
             if(i == recordedAudio.audioRecordLength-1)
@@ -168,7 +164,21 @@ public class SpeechRecognitionAI extends Application {
 
         }
         for(int i=0; i<detectedWordsSeries.getData().size(); i++)
-            System.out.println(detectedWordsSeries.getData().get(i).toString());
+        {
+            //System.out.println(detectedWordsSeries.getData().get(i).toString());
+            if(i < detectedWordsSeries.getData().size()-1
+            && detectedWordsSeries.getData().get(i).getYValue().intValue() == 100
+            && detectedWordsSeries.getData().get(i+1).getYValue().intValue() == 100)
+            {
+                System.out.println(detectedWordsSeries.getData().get(i).getXValue().toString() + " " +
+                        detectedWordsSeries.getData().get(i+1).getXValue().toString());
+                int start = detectedWordsSeries.getData().get(i).getXValue().intValue();
+                int end = detectedWordsSeries.getData().get(i+1).getXValue().intValue();
+
+                System.out.println("Word length: " + (end - start));
+            }
+        }
+
     }
 
     public String randomString() {
@@ -216,10 +226,10 @@ public class SpeechRecognitionAI extends Application {
         });
         hBoxBottom.getChildren().add(Play);
 
-        Button Listen = new Button("Listen");
-        Listen.setLayoutX(300);
-        Listen.setLayoutY(400);
-        Listen.setOnAction(new EventHandler<ActionEvent>() {
+        Button Record = new Button("Record");
+        Record.setLayoutX(300);
+        Record.setLayoutY(400);
+        Record.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(audioCapture.isAudioRecorded())
@@ -231,7 +241,7 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(Listen);
+        hBoxBottom.getChildren().add(Record);
 
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
