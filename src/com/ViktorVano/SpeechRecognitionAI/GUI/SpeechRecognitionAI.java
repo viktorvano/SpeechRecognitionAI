@@ -132,8 +132,8 @@ public class SpeechRecognitionAI extends Application {
             }
             else if (lastValue != 0 && Math.abs(recordedAudio.audioRecord[i]) <= 75)
             {
-                if(i-500 >= 0)
-                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-500, 100));
+                if(i-1 >= 0)
+                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-1, 100));
                 detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
                 lastValue = 0;
             }
@@ -144,20 +144,31 @@ public class SpeechRecognitionAI extends Application {
             {
                 valueTheSame = false;
                 int x=i;
-                for(; x<recordedAudio.audioRecordLength && x<(800+i); x++)
+                for(; x<recordedAudio.audioRecordLength && x<(400+i); x++)
                 {
-                    if(lastValue == 100 && Math.abs(recordedAudio.audioRecord[x]) > 75)
+                    if(lastValue == 100 && Math.abs(recordedAudio.audioRecord[x]) > 30)
                         valueTheSame = true;
                 }
 
                 if(valueTheSame)
                     i = x;
+                else if(lastValue == 100)
+                {
+                    System.out.println(detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-2).getXValue().toString() + " " +
+                            detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-1).getXValue().toString());
+                    int start = detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-2).getXValue().intValue();
+                    int end = detectedWordsSeries.getData().get(detectedWordsSeries.getData().size()-1).getXValue().intValue();
+
+                    System.out.println("Word length: " + (end-start));
+                }
             }
 
             if(i == recordedAudio.audioRecordLength-1)
                 detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
 
         }
+        for(int i=0; i<detectedWordsSeries.getData().size(); i++)
+            System.out.println(detectedWordsSeries.getData().get(i).toString());
     }
 
     public String randomString() {
