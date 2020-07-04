@@ -33,12 +33,14 @@ public class SpeechRecognitionAI extends Application {
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
     private Timeline timelineUpdateData;
     private boolean updateData = true;
-    BorderPane borderPane = new BorderPane();
-    StackPane stackPaneCenter = new StackPane();
-    StackPane stackPaneRight = new StackPane();
-    FlowPane flow = new FlowPane();
-    HBox hBoxBottom = new HBox();
-    ObservableList<RecordedAudio> recordedAudios;
+    private final BorderPane borderPane = new BorderPane();
+    private final StackPane stackPaneCenter = new StackPane();
+    private final StackPane stackPaneRight = new StackPane();
+    private final FlowPane flow = new FlowPane();
+    private final HBox hBoxBottom = new HBox();
+    private ObservableList<RecordedAudio> recordedAudioDatabase, records;
+    private ListView<String> databaseList, recordsList;
+    private ObservableList<String> databaseItem, recordItem;
 
     public static void main(String[] args)
     {
@@ -52,7 +54,7 @@ public class SpeechRecognitionAI extends Application {
         recordedAudio = new RecordedAudio();
 
         final int width = 1200;
-        final int height = 750;
+        final int height = 800;
 
         borderPane.setBottom(hBoxBottom);
         borderPane.setCenter(stackPaneCenter);
@@ -67,8 +69,9 @@ public class SpeechRecognitionAI extends Application {
 
         ImageView[] icons = new ImageView[4];
         Label[] labelMenu = new Label[4];
-        for (int i=0; i<4; i++) {
-            icons[i] = new ImageView(new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\icon"+(i+1)+".jpg"));
+        for (int i=0; i<4; i++)
+        {
+            icons[i] = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/icon"+(i+1)+".png"));
             icons[i].setPreserveRatio(true);
             icons[i].setFitWidth(96);
             icons[i].setFitHeight(96);
@@ -87,21 +90,8 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        recordedAudios = FXCollections.observableArrayList();
-        ListView<String> list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList();
-        list.setItems(items);
-        for(int i=0; i<60; i++)
-        {
-            recordedAudios.add(new RecordedAudio());
-            recordedAudios.get(i).name = randomString() + " " + i;
-            items.add(recordedAudios.get(i).name);
-        }
-        stackPaneRight.getChildren().add(list);
-
-
-        hBoxBottom.setPadding(new Insets(50, 12, 50, 12));
-        hBoxBottom.setSpacing(30);
+        hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
+        hBoxBottom.setSpacing(50);
         hBoxBottom.setStyle("-fx-background-color: #336699;");
 
         initializeDataLayout();
@@ -174,15 +164,33 @@ public class SpeechRecognitionAI extends Application {
                         detectedWordsSeries.getData().get(i+1).getXValue().toString());
                 int start = detectedWordsSeries.getData().get(i).getXValue().intValue();
                 int end = detectedWordsSeries.getData().get(i+1).getXValue().intValue();
-                int length = end - start;
+                int length = end - start + 1;
 
                 if(length < 4000)
                 {
                     detectedWordsSeries.getData().remove(i-1, i+2);
                     System.out.println("Removing a short word: " + length);
                     i--;
+                }else if(length > 32000)
+                {
+                    detectedWordsSeries.getData().remove(i-1, i+2);
+                    System.out.println("Removing a long word: " + length);
+                    i--;
                 }else
-                    System.out.println("Word length: " + (end - start));
+                {
+                    System.out.println("Word length: " + length);
+                    //TODO: Add these words into the list, which will be added to database.
+                    RecordedAudio tempRecord = new RecordedAudio();
+                    tempRecord.audioRecordLength = length;
+                    tempRecord.name = randomString();
+                    tempRecord.audioRecord = new byte[100000];
+                    for(int x=start; x<=end; x++)
+                    {
+                        tempRecord.audioRecord[x-start] = recordedAudio.audioRecord[x];
+                    }
+                    records.add(tempRecord);
+                    recordItem.add(tempRecord.name);
+                }
             }
         }
 
@@ -250,6 +258,25 @@ public class SpeechRecognitionAI extends Application {
         });
         hBoxBottom.getChildren().add(Record);
 
+        recordedAudioDatabase = FXCollections.observableArrayList();
+        databaseList = new ListView<String>();
+        databaseItem = FXCollections.observableArrayList();
+        databaseList.setItems(databaseItem);
+        for(int i=0; i<60; i++)
+        {
+            recordedAudioDatabase.add(new RecordedAudio());
+            recordedAudioDatabase.get(i).name = randomString() + " " + i;
+            databaseItem.add(recordedAudioDatabase.get(i).name);
+        }
+        stackPaneRight.getChildren().add(databaseList);
+
+        records = FXCollections.observableArrayList();
+        recordsList = new ListView<String>();
+        recordItem = FXCollections.observableArrayList();
+        recordsList.setItems(recordItem);
+        recordsList.setPrefHeight(150);
+        hBoxBottom.getChildren().add(recordsList);
+
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -269,14 +296,18 @@ public class SpeechRecognitionAI extends Application {
         lineChart.setAnimated(false);
         stackPaneCenter.getChildren().add(lineChart);
 
-        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>()
+        {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(ActionEvent event)
+            {
 
-                if (updateData && audioCapture.isAudioRecorded()) {
+                if (updateData && audioCapture.isAudioRecorded())
+                {
                     updateData = false;
                     recordedAudio.audioRecord = audioCapture.getRecord();
-                    if (recordedAudio.audioRecord != null) {
+                    if (recordedAudio.audioRecord != null)
+                    {
                         displayedSeries.getData().clear();
                         recordedAudio.audioRecordLength = audioCapture.getRecordLength();
                         for (int i = 0; i < recordedAudio.audioRecordLength; i++)
