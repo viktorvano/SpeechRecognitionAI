@@ -38,15 +38,15 @@ public class SpeechRecognitionAI extends Application {
     private boolean updateData = true;
     private final BorderPane borderPane = new BorderPane();
     private final StackPane stackPaneCenter = new StackPane();
-    private final StackPane stackPaneRight = new StackPane();
+    private final VBox vBoxRight = new VBox();
     private final FlowPane flow = new FlowPane();
     private final HBox hBoxBottom = new HBox();
-    private ObservableList<RecordedAudio> recordedAudioDatabase, records;
+    private ObservableList<RecordedAudio> database, records;
     private ListView<String> databaseList, recordsList;
     private ObservableList<String> databaseItem, recordItem;
     private final int minWordLength = 3000, maxWordLength = 32000;
-    private TextField txtDetectedWord;
-    private int wordIndex = -1;
+    private TextField txtDetectedWord, txtDatabaseWord;
+    private int recordedWordIndex = -1, databaseWordIndex = -1;
 
     public static void main(String[] args)
     {
@@ -64,7 +64,7 @@ public class SpeechRecognitionAI extends Application {
 
         borderPane.setBottom(hBoxBottom);
         borderPane.setCenter(stackPaneCenter);
-        borderPane.setRight(stackPaneRight);
+        borderPane.setRight(vBoxRight);
         borderPane.setLeft(flow);
 
         flow.setPadding(new Insets(30, 20, 30, 20));
@@ -189,7 +189,7 @@ public class SpeechRecognitionAI extends Application {
                     System.out.println("Word length: " + length);
                     RecordedAudio tempRecord = new RecordedAudio();
                     tempRecord.audioRecordLength = length;
-                    tempRecord.name = "Word " + word;
+                    tempRecord.name = "word" + word;
                     tempRecord.audioRecord = new byte[length];
                     for(int x=start; x<=end; x++)
                     {
@@ -272,7 +272,7 @@ public class SpeechRecognitionAI extends Application {
                     audioCapture.clearRecord();
                     recordItem.clear();
                     records.clear();
-                    wordIndex = -1;
+                    recordedWordIndex = -1;
                     recordedAudio.audioRecord = null;
                     recordedAudio.audioRecordLength = 0;
                     updateData = true;
@@ -281,17 +281,45 @@ public class SpeechRecognitionAI extends Application {
         });
         hBoxBottom.getChildren().add(Record);
 
-        recordedAudioDatabase = FXCollections.observableArrayList();
+        database = FXCollections.observableArrayList();
         databaseList = new ListView<String>();
         databaseItem = FXCollections.observableArrayList();
         databaseList.setItems(databaseItem);
-        /*for(int i=0; i<60; i++)
-        {
-            recordedAudioDatabase.add(new RecordedAudio());
-            recordedAudioDatabase.get(i).name = randomString() + " " + i;
-            databaseItem.add(recordedAudioDatabase.get(i).name);
-        }*/
-        stackPaneRight.getChildren().add(databaseList);
+        databaseList.setPrefHeight(500);
+        databaseList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(databaseList.getSelectionModel().getSelectedIndex() != -1)
+                {
+                    databaseWordIndex = databaseList.getSelectionModel().getSelectedIndex();
+                    txtDatabaseWord.setText(database.get(databaseWordIndex).name);
+                }
+            }
+        });
+        vBoxRight.getChildren().add(databaseList);
+
+        Button buttonPlayDatabaseWord = new Button("Play");
+        buttonPlayDatabaseWord.setStyle("-fx-font-size:30");
+        buttonPlayDatabaseWord.setPrefWidth(250);
+        vBoxRight.getChildren().add(buttonPlayDatabaseWord);
+
+        Button buttonRemoveDatabaseWord = new Button("Remove");
+        vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
+
+        txtDatabaseWord = new TextField();
+        txtDatabaseWord.setPromptText("Name a word");
+        txtDatabaseWord.setPrefWidth(150);
+        txtDatabaseWord.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(databaseWordIndex != -1)
+                {
+                    database.get(databaseWordIndex).name = txtDatabaseWord.getText();
+                    databaseList.getItems().set(databaseWordIndex, database.get(databaseWordIndex).name);
+                }
+            }
+        });
+        vBoxRight.getChildren().add(txtDatabaseWord);
 
         records = FXCollections.observableArrayList();
         recordsList = new ListView<String>();
@@ -303,8 +331,8 @@ public class SpeechRecognitionAI extends Application {
             public void handle(MouseEvent event) {
                 if(recordsList.getSelectionModel().getSelectedIndex() != -1)
                 {
-                    wordIndex = recordsList.getSelectionModel().getSelectedIndex();
-                    txtDetectedWord.setText(records.get(wordIndex).name);
+                    recordedWordIndex = recordsList.getSelectionModel().getSelectedIndex();
+                    txtDetectedWord.setText(records.get(recordedWordIndex).name);
                 }
             }
         });
@@ -316,10 +344,10 @@ public class SpeechRecognitionAI extends Application {
         txtDetectedWord.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(wordIndex != -1)
+                if(recordedWordIndex != -1)
                 {
-                    records.get(wordIndex).name = txtDetectedWord.getText();
-                    recordsList.getItems().set(wordIndex, records.get(wordIndex).name);
+                    records.get(recordedWordIndex).name = txtDetectedWord.getText();
+                    recordsList.getItems().set(recordedWordIndex, records.get(recordedWordIndex).name);
                 }
             }
         });
@@ -329,9 +357,9 @@ public class SpeechRecognitionAI extends Application {
         PlayWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(recordedAudio != null && recordedAudio.audioRecord != null && wordIndex!=-1)
+                if(recordedAudio != null && recordedAudio.audioRecord != null && recordedWordIndex !=-1)
                 {
-                    PlayWordThread playWordThread = new PlayWordThread(records.get(wordIndex));
+                    PlayWordThread playWordThread = new PlayWordThread(records.get(recordedWordIndex));
                     playWordThread.start();
                 }
             }
@@ -342,12 +370,12 @@ public class SpeechRecognitionAI extends Application {
         RemoveWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(wordIndex != -1)
+                if(recordedWordIndex != -1)
                 {
                     txtDetectedWord.setText("");
-                    recordsList.getItems().remove(wordIndex);
-                    records.remove(wordIndex);
-                    wordIndex = -1;
+                    recordsList.getItems().remove(recordedWordIndex);
+                    records.remove(recordedWordIndex);
+                    recordedWordIndex = -1;
                 }
             }
         });
@@ -357,14 +385,15 @@ public class SpeechRecognitionAI extends Application {
         AddWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(wordIndex != -1)
+                if(recordedWordIndex != -1)
                 {
-                    recordedAudioDatabase.add(records.get(wordIndex));
-                    databaseItem.add(records.get(wordIndex).name);
+                    database.add(records.get(recordedWordIndex));
+                    databaseItem.add(records.get(recordedWordIndex).name);
                     txtDetectedWord.setText("");
-                    recordsList.getItems().remove(wordIndex);
-                    records.remove(wordIndex);
-                    wordIndex = -1;
+                    recordsList.getItems().remove(recordedWordIndex);
+                    records.remove(recordedWordIndex);
+                    recordedWordIndex = -1;
+                    database.get(database.size()-1).name = databaseItem.get(databaseItem.size()-1);
                 }
             }
         });
