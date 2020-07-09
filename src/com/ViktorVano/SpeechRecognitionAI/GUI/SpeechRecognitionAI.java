@@ -1,6 +1,7 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
+import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -222,30 +223,6 @@ public class SpeechRecognitionAI extends Application {
         System.exit(0);
     }
 
-    class ReplayThread extends Thread
-    {
-        @Override
-        public void run() {
-            super.run();
-            audioCapture.playRecord(recordedAudio);
-        }
-    }
-
-    class PlayWordThread extends Thread
-    {
-        private RecordedAudio record;
-        PlayWordThread(RecordedAudio recordedAudio)
-        {
-            this.record = recordedAudio;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            audioCapture.playRecord(record);
-        }
-    }
-
     private void initializeDataLayout()
     {
         Button Play = new Button("Play Record");
@@ -255,8 +232,8 @@ public class SpeechRecognitionAI extends Application {
             public void handle(ActionEvent event) {
                 if(recordedAudio != null && recordedAudio.audioRecord != null)
                 {
-                    ReplayThread replayThread = new ReplayThread();
-                    replayThread.start();
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, recordedAudio);
+                    audioPlayer.start();
                 }
             }
         });
@@ -301,6 +278,16 @@ public class SpeechRecognitionAI extends Application {
         Button buttonPlayDatabaseWord = new Button("Play");
         buttonPlayDatabaseWord.setStyle("-fx-font-size:30");
         buttonPlayDatabaseWord.setPrefWidth(250);
+        buttonPlayDatabaseWord.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(recordedAudio != null && recordedAudio.audioRecord != null && databaseWordIndex !=-1)
+                {
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, database.get(databaseWordIndex));
+                    audioPlayer.start();
+                }
+            }
+        });
         vBoxRight.getChildren().add(buttonPlayDatabaseWord);
 
         Button buttonRemoveDatabaseWord = new Button("Remove");
@@ -359,8 +346,8 @@ public class SpeechRecognitionAI extends Application {
             public void handle(ActionEvent event) {
                 if(recordedAudio != null && recordedAudio.audioRecord != null && recordedWordIndex !=-1)
                 {
-                    PlayWordThread playWordThread = new PlayWordThread(records.get(recordedWordIndex));
-                    playWordThread.start();
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, records.get(recordedWordIndex));
+                    audioPlayer.start();
                 }
             }
         });
