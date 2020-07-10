@@ -291,6 +291,18 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(buttonPlayDatabaseWord);
 
         Button buttonRemoveDatabaseWord = new Button("Remove");
+        buttonRemoveDatabaseWord.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(databaseWordIndex != -1)
+                {
+                    txtDatabaseWord.setText("");
+                    databaseList.getItems().remove(databaseWordIndex);
+                    database.remove(databaseWordIndex);
+                    databaseWordIndex = -1;
+                }
+            }
+        });
         vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
 
         txtDatabaseWord = new TextField();
