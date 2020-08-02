@@ -30,6 +30,9 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
+import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
+import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
+
 
 public class SpeechRecognitionAI extends Application {
     private AudioCapture audioCapture;
@@ -110,7 +113,7 @@ public class SpeechRecognitionAI extends Application {
         stage.show();
         stage.setMinWidth(stage.getWidth());
         stage.setMinHeight(stage.getHeight());
-        Image icon =  new Image("com\\viktorvano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
+        Image icon =  new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
         stage.getIcons().add(icon);
     }
 
@@ -124,19 +127,19 @@ public class SpeechRecognitionAI extends Application {
             {
                 if(i>=500)
                 {
-                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-500, 0));
-                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-499, 100));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-500, 0));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-499, 100));
                 }else
                 {
-                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(0, 100));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(0, 100));
                 }
                 lastValue = 100;
             }
             else if (lastValue != 0 && Math.abs(recordedAudio.audioRecord[i]) <= 75)
             {
                 if(i-1 >= 0)
-                    detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i-1, 100));
-                detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-1, 100));
+                detectedWordsSeries.getData().add(new XYChart.Data<>(i, 0));
                 lastValue = 0;
             }
 
@@ -157,7 +160,7 @@ public class SpeechRecognitionAI extends Application {
             }
 
             if(i == recordedAudio.audioRecordLength-1)
-                detectedWordsSeries.getData().add(new XYChart.Data<Number, Number>(i, 0));
+                detectedWordsSeries.getData().add(new XYChart.Data<>(i, 0));
 
         }
         int word = 0;
@@ -258,9 +261,11 @@ public class SpeechRecognitionAI extends Application {
         });
         hBoxBottom.getChildren().add(Record);
 
-        database = FXCollections.observableArrayList();
-        databaseList = new ListView<String>();
+        database = loadDatabase();//FXCollections.observableArrayList();
+        databaseList = new ListView<>();
         databaseItem = FXCollections.observableArrayList();
+        for(int i=0; i<database.size(); i++)
+            databaseItem.add(database.get(i).name);
         databaseList.setItems(databaseItem);
         databaseList.setPrefHeight(500);
         databaseList.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -270,6 +275,8 @@ public class SpeechRecognitionAI extends Application {
                 {
                     databaseWordIndex = databaseList.getSelectionModel().getSelectedIndex();
                     txtDatabaseWord.setText(database.get(databaseWordIndex).name);
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, database.get(databaseWordIndex));
+                    audioPlayer.start();
                 }
             }
         });
@@ -300,6 +307,7 @@ public class SpeechRecognitionAI extends Application {
                     databaseList.getItems().remove(databaseWordIndex);
                     database.remove(databaseWordIndex);
                     databaseWordIndex = -1;
+                    saveDatabase(database);
                 }
             }
         });
@@ -315,13 +323,14 @@ public class SpeechRecognitionAI extends Application {
                 {
                     database.get(databaseWordIndex).name = txtDatabaseWord.getText();
                     databaseList.getItems().set(databaseWordIndex, database.get(databaseWordIndex).name);
+                    saveDatabase(database);
                 }
             }
         });
         vBoxRight.getChildren().add(txtDatabaseWord);
 
         records = FXCollections.observableArrayList();
-        recordsList = new ListView<String>();
+        recordsList = new ListView<>();
         recordItem = FXCollections.observableArrayList();
         recordsList.setItems(recordItem);
         recordsList.setPrefHeight(100);
@@ -332,6 +341,8 @@ public class SpeechRecognitionAI extends Application {
                 {
                     recordedWordIndex = recordsList.getSelectionModel().getSelectedIndex();
                     txtDetectedWord.setText(records.get(recordedWordIndex).name);
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, records.get(recordedWordIndex));
+                    audioPlayer.start();
                 }
             }
         });
@@ -393,6 +404,7 @@ public class SpeechRecognitionAI extends Application {
                     records.remove(recordedWordIndex);
                     recordedWordIndex = -1;
                     database.get(database.size()-1).name = databaseItem.get(databaseItem.size()-1);
+                    saveDatabase(database);
                 }
             }
         });
@@ -402,13 +414,13 @@ public class SpeechRecognitionAI extends Application {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         //creating the chart
-        final LineChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+        final LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
 
         lineChart.setTitle("Audio Data");
         //defining a series
-        displayedSeries = new XYChart.Series<Number, Number>();
+        displayedSeries = new XYChart.Series<>();
         displayedSeries.setName("Recorded Audio");
-        detectedWordsSeries = new XYChart.Series<Number, Number>();
+        detectedWordsSeries = new XYChart.Series<>();
         detectedWordsSeries.setName("Detected Words");
         lineChart.setCreateSymbols(false);
         //populating the series with data
@@ -434,7 +446,7 @@ public class SpeechRecognitionAI extends Application {
                         for (int i = 0; i < recordedAudio.audioRecordLength; i++)
                         {
                             if (i % 10 == 0)
-                                displayedSeries.getData().add(new XYChart.Data<Number, Number>(i, recordedAudio.audioRecord[i]));
+                                displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i]));
                         }
                         detectWords();
                     }
