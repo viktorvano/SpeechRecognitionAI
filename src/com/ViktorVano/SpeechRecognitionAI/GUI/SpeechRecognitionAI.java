@@ -51,6 +51,9 @@ public class SpeechRecognitionAI extends Application {
     private final int minWordLength = 2000, maxWordLength = 32000;
     private TextField txtDetectedWord, txtDatabaseWord;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
+    private LineChart<Number,Number> lineChart;
+    private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
+    private int displayedLayout = -1;
 
     public static void main(String[] args)
     {
@@ -88,17 +91,24 @@ public class SpeechRecognitionAI extends Application {
             labelMenu[i] = new Label();
             flow.getChildren().add(icons[i]);
             flow.getChildren().add(labelMenu[i]);
+            int layoutIndex = i;
+            labelMenu[i].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    displayLayout(layoutIndex);
+                }
+            });
+            icons[i].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    displayLayout(layoutIndex);
+                }
+            });
         }
         labelMenu[0].setText("Training Data\n ");
         labelMenu[1].setText("Train AI\n ");
         labelMenu[2].setText("Speech Recognition\n ");
         labelMenu[3].setText("Settings");
-        labelMenu[0].setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("training data label clicked....");
-            }
-        });
 
         hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
         hBoxBottom.setSpacing(30);
@@ -238,7 +248,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeDataLayout()
     {
-        Button Play = new Button("Play Record");
+        Play = new Button("Play Record");
         Play.setPrefHeight(100);
         Play.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -250,9 +260,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(Play);
 
-        Button Record = new Button("Record Audio");
+        Record = new Button("Record Audio");
         Record.setPrefHeight(100);
         Record.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -269,7 +278,6 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(Record);
 
         database = loadDatabase();//FXCollections.observableArrayList();
         databaseList = new ListView<>();
@@ -290,9 +298,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        vBoxRight.getChildren().add(databaseList);
 
-        Button buttonPlayDatabaseWord = new Button("Play");
+        buttonPlayDatabaseWord = new Button("Play");
         buttonPlayDatabaseWord.setStyle("-fx-font-size:30");
         buttonPlayDatabaseWord.setPrefWidth(250);
         buttonPlayDatabaseWord.setOnAction(new EventHandler<ActionEvent>() {
@@ -305,9 +312,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        vBoxRight.getChildren().add(buttonPlayDatabaseWord);
 
-        Button buttonRemoveDatabaseWord = new Button("Remove");
+        buttonRemoveDatabaseWord = new Button("Remove");
         buttonRemoveDatabaseWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -321,7 +327,6 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
 
         txtDatabaseWord = new TextField();
         txtDatabaseWord.setPromptText("Name a word");
@@ -337,7 +342,6 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        vBoxRight.getChildren().add(txtDatabaseWord);
 
         records = FXCollections.observableArrayList();
         recordsList = new ListView<>();
@@ -356,7 +360,6 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(recordsList);
 
         txtDetectedWord = new TextField();
         txtDetectedWord.setPromptText("Name a word");
@@ -371,9 +374,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(txtDetectedWord);
 
-        Button PlayWord = new Button("Play");
+        PlayWord = new Button("Play");
         PlayWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -384,9 +386,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(PlayWord);
 
-        Button RemoveWord = new Button("Remove");
+        RemoveWord = new Button("Remove");
         RemoveWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -399,9 +400,8 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(RemoveWord);
 
-        Button AddWord = new Button("Add to Database");
+        AddWord = new Button("Add to Database");
         AddWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -418,13 +418,12 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         });
-        hBoxBottom.getChildren().add(AddWord);
 
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         //creating the chart
-        final LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
+        lineChart = new LineChart<>(xAxis,yAxis);
 
         lineChart.setTitle("Audio Data");
         //defining a series
@@ -437,7 +436,6 @@ public class SpeechRecognitionAI extends Application {
         lineChart.getData().add(displayedSeries);
         lineChart.getData().add(detectedWordsSeries);
         lineChart.setAnimated(false);
-        stackPaneCenter.getChildren().add(lineChart);
 
         timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>()
         {
@@ -480,5 +478,93 @@ public class SpeechRecognitionAI extends Application {
     private void initializeSettingsLayout()
     {
 
+    }
+
+    private void displayDataLayout()
+    {
+        hBoxBottom.getChildren().add(Play);
+        hBoxBottom.getChildren().add(Record);
+        vBoxRight.getChildren().add(databaseList);
+        vBoxRight.getChildren().add(buttonPlayDatabaseWord);
+        vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
+        vBoxRight.getChildren().add(txtDatabaseWord);
+        hBoxBottom.getChildren().add(recordsList);
+        hBoxBottom.getChildren().add(txtDetectedWord);
+        hBoxBottom.getChildren().add(PlayWord);
+        hBoxBottom.getChildren().add(RemoveWord);
+        hBoxBottom.getChildren().add(AddWord);
+        stackPaneCenter.getChildren().add(lineChart);
+        displayedLayout = 0;
+        System.out.println("Data Layout displayed.");
+    }
+
+    private void hideDataLayout()
+    {
+        hBoxBottom.getChildren().remove(Play);
+        hBoxBottom.getChildren().remove(Record);
+        vBoxRight.getChildren().remove(databaseList);
+        vBoxRight.getChildren().remove(buttonPlayDatabaseWord);
+        vBoxRight.getChildren().remove(buttonRemoveDatabaseWord);
+        vBoxRight.getChildren().remove(txtDatabaseWord);
+        hBoxBottom.getChildren().remove(recordsList);
+        hBoxBottom.getChildren().remove(txtDetectedWord);
+        hBoxBottom.getChildren().remove(PlayWord);
+        hBoxBottom.getChildren().remove(RemoveWord);
+        hBoxBottom.getChildren().remove(AddWord);
+        stackPaneCenter.getChildren().remove(lineChart);
+    }
+
+    private void displayTrainingLayout()
+    {
+        displayedLayout = 1;
+        System.out.println("Training Layout displayed.");
+    }
+
+    private void hideTrainingLayout()
+    {
+
+    }
+
+    private void displayRecognitionLayout()
+    {
+        displayedLayout = 2;
+        System.out.println("Recognition Layout displayed.");
+    }
+
+    private void hideRecognitionLayout()
+    {
+
+    }
+
+    private void displaySettingsLayout()
+    {
+        displayedLayout = 3;
+        System.out.println("Settings Layout displayed.");
+    }
+
+    private void hideSettingsLayout()
+    {
+
+    }
+
+    private void displayLayout(int layoutIndex)
+    {
+        if(displayedLayout == 0 && layoutIndex != 0)
+            hideDataLayout();
+        else if(displayedLayout == 1 && layoutIndex != 1)
+            hideTrainingLayout();
+        else if(displayedLayout == 2 && layoutIndex != 2)
+            hideRecognitionLayout();
+        else if(displayedLayout == 3 && layoutIndex != 3)
+            hideSettingsLayout();
+
+        if(layoutIndex == 0 && displayedLayout != 0)
+            displayDataLayout();
+        else if(layoutIndex == 1 && displayedLayout != 1)
+            displayTrainingLayout();
+        else if(layoutIndex == 2 && displayedLayout != 2)
+            displayRecognitionLayout();
+        else if(layoutIndex == 3 && displayedLayout != 3)
+            displaySettingsLayout();
     }
 }
