@@ -48,7 +48,7 @@ public class SpeechRecognitionAI extends Application {
     private ObservableList<RecordedAudio> database, records;
     private ListView<String> databaseList, recordsList;
     private ObservableList<String> databaseItem, recordItem;
-    private final int minWordLength = 3000, maxWordLength = 32000;
+    private final int minWordLength = 2000, maxWordLength = 32000;
     private TextField txtDetectedWord, txtDatabaseWord;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
 
@@ -120,25 +120,29 @@ public class SpeechRecognitionAI extends Application {
     private void detectWords()
     {
         detectedWordsSeries.getData().clear();
-        int lastValue = 50;
-        for (int i = 0; i < recordedAudio.audioRecordLength; i++)
+        final int detectedValue = 3000;
+        final int wordThreshold = 350;
+        int lastValue = 1500;
+        int audioSample;
+        for (int i = 0; i < recordedAudio.audioRecordLength; i+=2)
         {
-            if (lastValue != 100 && Math.abs(recordedAudio.audioRecord[i]) > 75)
+            audioSample = recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i+1]*256;
+            if (lastValue != detectedValue && Math.abs(audioSample) > wordThreshold)
             {
-                if(i>=500)
+                if(i>=600)
                 {
-                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-500, 0));
-                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-499, 100));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-600, 0));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-599, detectedValue));
                 }else
                 {
-                    detectedWordsSeries.getData().add(new XYChart.Data<>(0, 100));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(0, detectedValue));
                 }
-                lastValue = 100;
+                lastValue = detectedValue;
             }
-            else if (lastValue != 0 && Math.abs(recordedAudio.audioRecord[i]) <= 75)
+            else if (lastValue != 0 && Math.abs(audioSample) <= wordThreshold)
             {
                 if(i-1 >= 0)
-                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-1, 100));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-1, detectedValue));
                 detectedWordsSeries.getData().add(new XYChart.Data<>(i, 0));
                 lastValue = 0;
             }
@@ -149,9 +153,9 @@ public class SpeechRecognitionAI extends Application {
             {
                 valueTheSame = false;
                 int x=i;
-                for(; x<recordedAudio.audioRecordLength && x<(300+i); x++)
+                for(; x<recordedAudio.audioRecordLength && x<(600+i); x+=2)
                 {
-                    if(lastValue == 100 && Math.abs(recordedAudio.audioRecord[x]) > 30)
+                    if(lastValue == detectedValue && Math.abs(recordedAudio.audioRecord[x] + recordedAudio.audioRecord[x+1]*256) > 280)
                         valueTheSame = true;
                 }
 
@@ -159,7 +163,7 @@ public class SpeechRecognitionAI extends Application {
                     i = x;
             }
 
-            if(i == recordedAudio.audioRecordLength-1)
+            if(i == recordedAudio.audioRecordLength-2)
                 detectedWordsSeries.getData().add(new XYChart.Data<>(i, 0));
 
         }
@@ -168,14 +172,20 @@ public class SpeechRecognitionAI extends Application {
         {
             //System.out.println(detectedWordsSeries.getData().get(i).toString());
             if(i < detectedWordsSeries.getData().size()-1
-            && detectedWordsSeries.getData().get(i).getYValue().intValue() == 100
-            && detectedWordsSeries.getData().get(i+1).getYValue().intValue() == 100)
+            && detectedWordsSeries.getData().get(i).getYValue().intValue() == detectedValue
+            && detectedWordsSeries.getData().get(i+1).getYValue().intValue() == detectedValue)
             {
                 System.out.println(detectedWordsSeries.getData().get(i).getXValue().toString() + " " +
                         detectedWordsSeries.getData().get(i+1).getXValue().toString());
                 int start = detectedWordsSeries.getData().get(i).getXValue().intValue();
                 int end = detectedWordsSeries.getData().get(i+1).getXValue().intValue();
                 int length = end - start + 1;
+                if(start == 0 && length%2==0)
+                {
+                    start++;
+                    end++;
+                    System.out.println("Shifting by a byte.");
+                }
 
                 if(length < minWordLength)
                 {
@@ -443,10 +453,10 @@ public class SpeechRecognitionAI extends Application {
                     {
                         displayedSeries.getData().clear();
                         recordedAudio.audioRecordLength = audioCapture.getRecordLength();
-                        for (int i = 0; i < recordedAudio.audioRecordLength; i++)
+                        for (int i = 0; i < recordedAudio.audioRecordLength-1; i++)
                         {
                             if (i % 10 == 0)
-                                displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i]));
+                                displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i+1]*256));
                         }
                         detectWords();
                     }
