@@ -3,6 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.GUI;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -28,7 +29,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
@@ -54,6 +55,7 @@ public class SpeechRecognitionAI extends Application {
     private LineChart<Number,Number> lineChart;
     private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
     private int displayedLayout = -1;
+    private ArrayList<Classifier> classifier;
 
     public static void main(String[] args)
     {
@@ -113,6 +115,8 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
         hBoxBottom.setSpacing(30);
         hBoxBottom.setStyle("-fx-background-color: #336699;");
+
+        classifier = new ArrayList<>();
 
         initializeDataLayout();
 
@@ -225,18 +229,6 @@ public class SpeechRecognitionAI extends Application {
             }
         }
 
-    }
-
-    public String randomString() {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
-        Random random = new Random();
-
-        return random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
     }
 
     @Override
@@ -516,6 +508,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void displayTrainingLayout()
     {
+        countWords();
         displayedLayout = 1;
         System.out.println("Training Layout displayed.");
     }
@@ -566,5 +559,29 @@ public class SpeechRecognitionAI extends Application {
             displayRecognitionLayout();
         else if(layoutIndex == 3 && displayedLayout != 3)
             displaySettingsLayout();
+    }
+
+    private void countWords()
+    {
+        classifier.clear();
+        for(int i=0; i<databaseList.getItems().size(); i++)
+        {
+            if(classifier.size()==0)
+                classifier.add(new Classifier(databaseList.getItems().get(i)));
+            else
+                for (int x=0; x<classifier.size(); x++)
+                {
+                    if(classifier.get(x).getName().equals(databaseList.getItems().get(i)))
+                    {
+                        classifier.get(x).incrementCount();
+                        break;
+                    }
+                    else if(x==classifier.size()-1)
+                    {
+                        classifier.add(new Classifier(databaseList.getItems().get(i)));
+                        break;
+                    }
+                }
+        }
     }
 }
