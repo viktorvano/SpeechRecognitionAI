@@ -18,10 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -47,8 +44,8 @@ public class SpeechRecognitionAI extends Application {
     private final FlowPane flow = new FlowPane();
     private final HBox hBoxBottom = new HBox();
     private ObservableList<RecordedAudio> database, records;
-    private ListView<String> databaseList, recordsList;
-    private ObservableList<String> databaseItem, recordItem;
+    private ListView<String> databaseList, recordsList, trainingList;
+    private ObservableList<String> databaseItem, recordItem, trainingItem;
     private final int minWordLength = 2000, maxWordLength = 32000;
     private TextField txtDetectedWord, txtDatabaseWord;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
@@ -119,6 +116,9 @@ public class SpeechRecognitionAI extends Application {
         classifier = new ArrayList<>();
 
         initializeDataLayout();
+        initializeTrainingLayout();
+        initializeRecognitionLayout();
+        initializeSettingsLayout();
 
         Scene scene = new Scene(borderPane, width, height);
 
@@ -238,6 +238,20 @@ public class SpeechRecognitionAI extends Application {
         System.exit(0);
     }
 
+    private void captureAudio()
+    {
+        if(audioCapture.isAudioRecorded())
+        {
+            audioCapture.clearRecord();
+            recordItem.clear();
+            records.clear();
+            recordedWordIndex = -1;
+            recordedAudio.audioRecord = null;
+            recordedAudio.audioRecordLength = 0;
+            updateData = true;
+        }
+    }
+
     private void initializeDataLayout()
     {
         Play = new Button("Play Record");
@@ -258,20 +272,11 @@ public class SpeechRecognitionAI extends Application {
         Record.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(audioCapture.isAudioRecorded())
-                {
-                    audioCapture.clearRecord();
-                    recordItem.clear();
-                    records.clear();
-                    recordedWordIndex = -1;
-                    recordedAudio.audioRecord = null;
-                    recordedAudio.audioRecordLength = 0;
-                    updateData = true;
-                }
+                captureAudio();
             }
         });
 
-        database = loadDatabase();//FXCollections.observableArrayList();
+        database = loadDatabase();
         databaseList = new ListView<>();
         databaseItem = FXCollections.observableArrayList();
         for(int i=0; i<database.size(); i++)
@@ -459,7 +464,9 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeTrainingLayout()
     {
-
+        trainingList = new ListView<>();
+        trainingItem = FXCollections.observableArrayList();
+        trainingList.setItems(trainingItem);
     }
 
     private void initializeRecognitionLayout()
@@ -509,13 +516,14 @@ public class SpeechRecognitionAI extends Application {
     private void displayTrainingLayout()
     {
         countWords();
+        stackPaneCenter.getChildren().add(trainingList);
         displayedLayout = 1;
         System.out.println("Training Layout displayed.");
     }
 
     private void hideTrainingLayout()
     {
-
+        stackPaneCenter.getChildren().remove(trainingList);
     }
 
     private void displayRecognitionLayout()
@@ -582,6 +590,19 @@ public class SpeechRecognitionAI extends Application {
                         break;
                     }
                 }
+        }
+
+        int maximum = -1;
+        for(int i=0; i<classifier.size(); i++)
+            if(classifier.get(i).getCount() > maximum)
+                maximum = classifier.get(i).getCount();
+
+        for(int i=0; i<classifier.size(); i++)
+        {
+            if(classifier.get(i).getCount() == maximum)
+                trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tOK");
+            else
+                trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tMore specimens required!");
         }
     }
 }
