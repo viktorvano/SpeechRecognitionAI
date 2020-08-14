@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -44,16 +45,17 @@ public class SpeechRecognitionAI extends Application {
     private final FlowPane flow = new FlowPane();
     private final HBox hBoxBottom = new HBox();
     private ObservableList<RecordedAudio> database, records;
-    private ListView<String> databaseList, recordsList, trainingList;
-    private ObservableList<String> databaseItem, recordItem, trainingItem;
+    private ListView<String> databaseList, recordsList, trainingList, topologyList;
+    private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
     private final int minWordLength = 2000, maxWordLength = 32000;
-    private TextField txtDetectedWord, txtDatabaseWord;
+    private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
     private LineChart<Number,Number> lineChart;
     private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
-    private Button Train;
+    private Button Train, RemoveTopologyLayer, AddHiddenLayer;
     private int displayedLayout = -1;
     private ArrayList<Classifier> classifier;
+    private Label labelTopology, labelNewHiddenLayer;
 
     public static void main(String[] args)
     {
@@ -476,6 +478,36 @@ public class SpeechRecognitionAI extends Application {
                 //TODO: Train Neural Network.
             }
         });
+
+        labelTopology = new Label("\n Topology of hidden layers ");
+        labelTopology.setFont(Font.font("Arial", 26));
+
+        topologyList = new ListView<>();
+        topologyItem = FXCollections.observableArrayList();
+        topologyList.setItems(topologyItem);
+        topologyList.setPrefHeight(200);
+
+        RemoveTopologyLayer = new Button("Remove Hidden Layer");
+        RemoveTopologyLayer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: Remove hidden layer.
+            }
+        });
+
+        labelNewHiddenLayer = new Label("\n\n New hidden layer");
+        labelNewHiddenLayer.setFont(Font.font("Arial", 26));
+
+        txtHiddenLayer = new TextField();
+        txtHiddenLayer.setPromptText("Hidden Layer");
+
+        AddHiddenLayer = new Button("Add Hidden Layer");
+        AddHiddenLayer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: Add hidden layer.
+            }
+        });
     }
 
     private void initializeRecognitionLayout()
@@ -528,6 +560,12 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.getChildren().add(trainingList);
         Train.setDisable(!sameWordCount);
         hBoxBottom.getChildren().add(Train);
+        vBoxRight.getChildren().add(labelTopology);
+        vBoxRight.getChildren().add(topologyList);
+        vBoxRight.getChildren().add(RemoveTopologyLayer);
+        vBoxRight.getChildren().add(labelNewHiddenLayer);
+        vBoxRight.getChildren().add(txtHiddenLayer);
+        vBoxRight.getChildren().add(AddHiddenLayer);
         displayedLayout = 1;
         System.out.println("Training Layout displayed.");
     }
@@ -536,6 +574,12 @@ public class SpeechRecognitionAI extends Application {
     {
         stackPaneCenter.getChildren().remove(trainingList);
         hBoxBottom.getChildren().remove(Train);
+        vBoxRight.getChildren().remove(labelTopology);
+        vBoxRight.getChildren().remove(topologyList);
+        vBoxRight.getChildren().remove(RemoveTopologyLayer);
+        vBoxRight.getChildren().remove(labelNewHiddenLayer);
+        vBoxRight.getChildren().remove(txtHiddenLayer);
+        vBoxRight.getChildren().remove(AddHiddenLayer);
     }
 
     private void displayRecognitionLayout()
