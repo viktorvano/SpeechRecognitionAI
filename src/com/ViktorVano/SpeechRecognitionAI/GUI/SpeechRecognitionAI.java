@@ -37,7 +37,7 @@ public class SpeechRecognitionAI extends Application {
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
     private Timeline timelineUpdateData;
-    private boolean updateData = true;
+    private boolean updateData = true, sameWordCount = false;
     private final BorderPane borderPane = new BorderPane();
     private final StackPane stackPaneCenter = new StackPane();
     private final VBox vBoxRight = new VBox();
@@ -51,6 +51,7 @@ public class SpeechRecognitionAI extends Application {
     private int recordedWordIndex = -1, databaseWordIndex = -1;
     private LineChart<Number,Number> lineChart;
     private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
+    private Button Train;
     private int displayedLayout = -1;
     private ArrayList<Classifier> classifier;
 
@@ -467,6 +468,14 @@ public class SpeechRecognitionAI extends Application {
         trainingList = new ListView<>();
         trainingItem = FXCollections.observableArrayList();
         trainingList.setItems(trainingItem);
+
+        Train = new Button("Train");
+        Train.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: Train Neural Network.
+            }
+        });
     }
 
     private void initializeRecognitionLayout()
@@ -517,6 +526,8 @@ public class SpeechRecognitionAI extends Application {
     {
         countWords();
         stackPaneCenter.getChildren().add(trainingList);
+        Train.setDisable(!sameWordCount);
+        hBoxBottom.getChildren().add(Train);
         displayedLayout = 1;
         System.out.println("Training Layout displayed.");
     }
@@ -524,6 +535,7 @@ public class SpeechRecognitionAI extends Application {
     private void hideTrainingLayout()
     {
         stackPaneCenter.getChildren().remove(trainingList);
+        hBoxBottom.getChildren().remove(Train);
     }
 
     private void displayRecognitionLayout()
@@ -593,16 +605,20 @@ public class SpeechRecognitionAI extends Application {
         }
 
         int maximum = -1;
+        sameWordCount = true;
         for(int i=0; i<classifier.size(); i++)
             if(classifier.get(i).getCount() > maximum)
                 maximum = classifier.get(i).getCount();
-
+        trainingItem.clear();
         for(int i=0; i<classifier.size(); i++)
         {
             if(classifier.get(i).getCount() == maximum)
                 trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tOK");
             else
+            {
                 trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tMore specimens required!");
+                sameWordCount = false;
+            }
         }
     }
 }
