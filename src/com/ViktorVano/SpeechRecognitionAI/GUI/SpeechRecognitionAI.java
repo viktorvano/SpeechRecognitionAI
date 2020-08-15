@@ -28,10 +28,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.minimumLayerSize;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 
 
 public class SpeechRecognitionAI extends Application {
@@ -56,7 +57,7 @@ public class SpeechRecognitionAI extends Application {
     private Button Train, RemoveTopologyLayer, AddHiddenLayer;
     private int displayedLayout = -1, textFieldTopologyValue = -1;
     private ArrayList<Classifier> classifier;
-    private Label labelTopology, labelNewHiddenLayer;
+    private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology;
 
     public static void main(String[] args)
     {
@@ -477,11 +478,15 @@ public class SpeechRecognitionAI extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //TODO: Train Neural Network.
+                if(topology != null || topology.size()>=3)
+                {
+
+                }
             }
         });
 
-        labelTopology = new Label("\n Topology of hidden layers ");
-        labelTopology.setFont(Font.font("Arial", 26));
+        labelHiddenTopology = new Label("\n Topology of hidden layers ");
+        labelHiddenTopology.setFont(Font.font("Arial", 26));
 
         topologyList = new ListView<>();
         topologyItem = FXCollections.observableArrayList();
@@ -508,10 +513,11 @@ public class SpeechRecognitionAI extends Application {
                     topologyItem.remove(topologyList.getSelectionModel().getSelectedIndex());
                 RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
                 //TODO: Recalculate the topology.
+                calculateTopology();
             }
         });
 
-        labelNewHiddenLayer = new Label("\n\n New hidden layer");
+        labelNewHiddenLayer = new Label("\n New hidden layer");
         labelNewHiddenLayer.setFont(Font.font("Arial", 26));
 
         txtHiddenLayer = new TextField();
@@ -533,7 +539,7 @@ public class SpeechRecognitionAI extends Application {
                     }
                 }
                 AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize);
-                if(topologyItem.size() != 0)
+                if(topologyItem.size() != 0 && topology.size() >= maximumTopologySize)
                     AddHiddenLayer.setDisable(topologyList.getSelectionModel().getSelectedIndex() == -1);
 
                 RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
@@ -555,8 +561,13 @@ public class SpeechRecognitionAI extends Application {
                 textFieldTopologyValue = -1;
                 txtHiddenLayer.setText("");
                 //TODO: Recalculate the topology.
+                calculateTopology();
             }
         });
+
+        labelTopology = new Label();
+        labelTopology.setFont(Font.font("Arial", 20));
+        calculateTopology();
     }
 
     private void initializeRecognitionLayout()
@@ -607,14 +618,15 @@ public class SpeechRecognitionAI extends Application {
     {
         countWords();
         stackPaneCenter.getChildren().add(trainingList);
-        Train.setDisable(!sameWordCount);
+        Train.setDisable(!sameWordCount || topology.size() < 3);
         hBoxBottom.getChildren().add(Train);
-        vBoxRight.getChildren().add(labelTopology);
+        vBoxRight.getChildren().add(labelHiddenTopology);
         vBoxRight.getChildren().add(topologyList);
         vBoxRight.getChildren().add(RemoveTopologyLayer);
         vBoxRight.getChildren().add(labelNewHiddenLayer);
         vBoxRight.getChildren().add(txtHiddenLayer);
         vBoxRight.getChildren().add(AddHiddenLayer);
+        vBoxRight.getChildren().add(labelTopology);
         displayedLayout = 1;
         System.out.println("Training Layout displayed.");
     }
@@ -623,12 +635,13 @@ public class SpeechRecognitionAI extends Application {
     {
         stackPaneCenter.getChildren().remove(trainingList);
         hBoxBottom.getChildren().remove(Train);
-        vBoxRight.getChildren().remove(labelTopology);
+        vBoxRight.getChildren().remove(labelHiddenTopology);
         vBoxRight.getChildren().remove(topologyList);
         vBoxRight.getChildren().remove(RemoveTopologyLayer);
         vBoxRight.getChildren().remove(labelNewHiddenLayer);
         vBoxRight.getChildren().remove(txtHiddenLayer);
         vBoxRight.getChildren().remove(AddHiddenLayer);
+        vBoxRight.getChildren().remove(labelTopology);
     }
 
     private void displayRecognitionLayout()
@@ -712,6 +725,37 @@ public class SpeechRecognitionAI extends Application {
                 trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tMore specimens required!");
                 sameWordCount = false;
             }
+        }
+    }
+
+    private void calculateTopology()
+    {
+        topology.clear();
+        topology.add(maxWordLength);
+        for(int i=0; i<topologyItem.size(); i++)
+            topology.add(Integer.parseInt(topologyItem.get(i)));
+        topology.add(classifier.size());
+
+        if(topology.size() >= 3)
+        {
+            String text = "\nTopology:";
+            for(int i=0; i<topology.size(); i++)
+            {
+                if(i == 0)
+                    text += "\nInput Layer: ";
+                else if(i == topology.size()-1)
+                    text += "\nOutput Layer: ";
+                else
+                    text += "\nHidden Layer: ";
+
+                text += topology.get(i);
+            }
+            labelTopology.setText(text);
+            Train.setDisable(!sameWordCount);
+        } else
+        {
+            labelTopology.setText("\nTopology:\nAdd more layers!");
+            Train.setDisable(true);
         }
     }
 }

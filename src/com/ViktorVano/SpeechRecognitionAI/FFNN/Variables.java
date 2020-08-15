@@ -18,7 +18,7 @@ public class Variables {
     public static double definedRecentAverageSmoothingFactor = 0.0;
 
 
-    public static LinkedList<Integer> topology;
+    public static LinkedList<Integer> topology = new LinkedList<>();
     public static final LinkedList<LinkedList<Double>> learningInputs = new LinkedList<>();
     public static final LinkedList<LinkedList<Double>> learningOutputs = new LinkedList<>();
     public static LinkedList<Double> weights = new LinkedList<>();
@@ -28,4 +28,5 @@ public class Variables {
     public static int trainingPass = 0;
 
     public static final int minimumLayerSize = 30;
+    public static final int maximumTopologySize = 9;
 }
