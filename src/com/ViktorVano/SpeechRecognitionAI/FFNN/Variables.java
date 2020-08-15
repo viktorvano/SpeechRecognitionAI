@@ -26,4 +26,6 @@ public class Variables {
     public static int trainingLine = 0;// Has to be initialized 0
     public static LinkedList<Double> input, target, result;
     public static int trainingPass = 0;
+
+    public static final int minimumLayerSize = 30;
 }

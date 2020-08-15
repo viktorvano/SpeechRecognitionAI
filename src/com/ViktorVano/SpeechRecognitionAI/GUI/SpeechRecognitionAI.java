@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.minimumLayerSize;
 
 
 public class SpeechRecognitionAI extends Application {
@@ -53,7 +54,7 @@ public class SpeechRecognitionAI extends Application {
     private LineChart<Number,Number> lineChart;
     private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
     private Button Train, RemoveTopologyLayer, AddHiddenLayer;
-    private int displayedLayout = -1;
+    private int displayedLayout = -1, textFieldTopologyValue = -1;
     private ArrayList<Classifier> classifier;
     private Label labelTopology, labelNewHiddenLayer;
 
@@ -486,12 +487,27 @@ public class SpeechRecognitionAI extends Application {
         topologyItem = FXCollections.observableArrayList();
         topologyList.setItems(topologyItem);
         topologyList.setPrefHeight(200);
+        topologyList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(topologyItem.size() != 0)
+                    AddHiddenLayer.setDisable(topologyList.getSelectionModel().getSelectedIndex() == -1);
+
+                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize);
+
+                RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
+            }
+        });
 
         RemoveTopologyLayer = new Button("Remove Hidden Layer");
+        RemoveTopologyLayer.setDisable(true);
         RemoveTopologyLayer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: Remove hidden layer.
+                if(topologyList.getSelectionModel().getSelectedIndex() != -1)
+                    topologyItem.remove(topologyList.getSelectionModel().getSelectedIndex());
+                RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
+                //TODO: Recalculate the topology.
             }
         });
 
@@ -500,12 +516,45 @@ public class SpeechRecognitionAI extends Application {
 
         txtHiddenLayer = new TextField();
         txtHiddenLayer.setPromptText("Hidden Layer");
+        txtHiddenLayer.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(newValue.length() == 0)
+                {
+                    textFieldTopologyValue = -1;
+                }else
+                {
+                    try
+                    {
+                        textFieldTopologyValue = Integer.parseInt(newValue);
+                    }catch (Exception e)
+                    {
+                        textFieldTopologyValue = -1;
+                    }
+                }
+                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize);
+                if(topologyItem.size() != 0)
+                    AddHiddenLayer.setDisable(topologyList.getSelectionModel().getSelectedIndex() == -1);
+
+                RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
+            }
+        });
 
         AddHiddenLayer = new Button("Add Hidden Layer");
+        AddHiddenLayer.setDisable(true);
         AddHiddenLayer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: Add hidden layer.
+                if(topologyItem.size() != 0
+                    && topologyList.getSelectionModel().getSelectedIndex() != -1
+                    && textFieldTopologyValue >= minimumLayerSize)
+                    topologyItem.add(topologyList.getSelectionModel().getSelectedIndex() +1 , String.valueOf(textFieldTopologyValue));
+                else if(textFieldTopologyValue >= minimumLayerSize)
+                    topologyItem.add(String.valueOf(textFieldTopologyValue));
+
+                textFieldTopologyValue = -1;
+                txtHiddenLayer.setText("");
+                //TODO: Recalculate the topology.
             }
         });
     }
