@@ -32,6 +32,8 @@ import java.util.LinkedList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.loadTopology;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.saveTopology;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 
 
@@ -478,10 +480,6 @@ public class SpeechRecognitionAI extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //TODO: Train Neural Network.
-                if(topology != null || topology.size()>=3)
-                {
-
-                }
             }
         });
 
@@ -490,6 +488,9 @@ public class SpeechRecognitionAI extends Application {
 
         topologyList = new ListView<>();
         topologyItem = FXCollections.observableArrayList();
+        LinkedList<Integer> tempTopology = loadTopology();
+        for (Integer integer : tempTopology)
+            topologyItem.add(integer.toString());
         topologyList.setItems(topologyItem);
         topologyList.setPrefHeight(200);
         topologyList.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -512,8 +513,8 @@ public class SpeechRecognitionAI extends Application {
                 if(topologyList.getSelectionModel().getSelectedIndex() != -1)
                     topologyItem.remove(topologyList.getSelectionModel().getSelectedIndex());
                 RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
-                //TODO: Recalculate the topology.
                 calculateTopology();
+                saveTopology(topology);
             }
         });
 
@@ -560,8 +561,8 @@ public class SpeechRecognitionAI extends Application {
 
                 textFieldTopologyValue = -1;
                 txtHiddenLayer.setText("");
-                //TODO: Recalculate the topology.
                 calculateTopology();
+                saveTopology(topology);
             }
         });
 
