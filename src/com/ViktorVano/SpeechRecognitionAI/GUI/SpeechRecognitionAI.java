@@ -496,10 +496,7 @@ public class SpeechRecognitionAI extends Application {
         topologyList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(topologyItem.size() != 0)
-                    AddHiddenLayer.setDisable(topologyList.getSelectionModel().getSelectedIndex() == -1);
-
-                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize);
+                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
 
                 RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
             }
@@ -539,9 +536,7 @@ public class SpeechRecognitionAI extends Application {
                         textFieldTopologyValue = -1;
                     }
                 }
-                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize);
-                if(topologyItem.size() != 0 && topology.size() >= maximumTopologySize)
-                    AddHiddenLayer.setDisable(topologyList.getSelectionModel().getSelectedIndex() == -1);
+                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
 
                 RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
             }
@@ -568,6 +563,7 @@ public class SpeechRecognitionAI extends Application {
 
         labelTopology = new Label();
         labelTopology.setFont(Font.font("Arial", 20));
+        countWords();
         calculateTopology();
     }
 
