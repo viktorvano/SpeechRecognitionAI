@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Variables {
     /*
-        vector (c++)   <===========> linkedlist(java)
+        vector (c++)   <===========> linkedList(java)
         v.front()      <===========> l.peekFirst()
         v.back()       <===========> l.peekLast()
         v.push_back(x) <===========> l.add(x)

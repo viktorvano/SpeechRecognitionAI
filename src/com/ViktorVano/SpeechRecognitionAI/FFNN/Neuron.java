@@ -156,7 +156,7 @@ public class Neuron {
 
     private double randomWeight()
     {
-        return Math.random();
+        return Math.random()-0.5;
     }
 
     private double m_outputValue;

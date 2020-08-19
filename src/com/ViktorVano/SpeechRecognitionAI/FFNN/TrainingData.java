@@ -14,8 +14,9 @@ public class TrainingData {
     {
         inputValues.clear();
 
-        if (trainingLine >= patternCount)
-            trainingLine = 0;
+        /*if (trainingLine >= patternCount)
+            trainingLine = 0;*/
+        trainingLine = (int)Math.round(Math.random()*(patternCount-1));
 
         for (int i = 0; i<inputNodes; i++)
             inputValues.add(learningInputs.get(trainingLine).get(i));
@@ -29,7 +30,7 @@ public class TrainingData {
         for (int i = 0; i<outputNodes; i++)
             targetOutValues.add(learningOutputs.get(trainingLine).get(i));
 
-        trainingLine++;
+        //trainingLine++;
 
         return targetOutValues.size();
     }

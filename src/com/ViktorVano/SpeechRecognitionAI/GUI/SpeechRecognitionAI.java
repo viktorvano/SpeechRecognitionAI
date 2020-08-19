@@ -3,6 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.GUI;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -51,7 +52,7 @@ public class SpeechRecognitionAI extends Application {
     private ObservableList<RecordedAudio> database, records;
     private ListView<String> databaseList, recordsList, trainingList, topologyList;
     private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
-    private final int minWordLength = 2000, maxWordLength = 32000;
+    private final int minWordLength = 2000, maxWordLength = 18000;
     private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
     private LineChart<Number,Number> lineChart;
@@ -480,6 +481,9 @@ public class SpeechRecognitionAI extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //TODO: Train Neural Network.
+                Train.setDisable(true);
+                TrainingThread trainingThread = new TrainingThread(database, classifier);
+                trainingThread.start();
             }
         });
 
@@ -728,7 +732,7 @@ public class SpeechRecognitionAI extends Application {
     private void calculateTopology()
     {
         topology.clear();
-        topology.add(maxWordLength);
+        topology.add(maxWordLength/2);
         for(int i=0; i<topologyItem.size(); i++)
             topology.add(Integer.parseInt(topologyItem.get(i)));
         topology.add(classifier.size());

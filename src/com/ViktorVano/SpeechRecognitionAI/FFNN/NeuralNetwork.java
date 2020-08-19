@@ -23,7 +23,7 @@ public class NeuralNetwork {
             for (int neuronNum = 0; neuronNum <= topology.get(layerNum); neuronNum++)
             {
                 m_layers.peekLast().add(new Neuron(numOutputs, neuronNum));
-                System.out.println("Made a neuron: " + neuronNum);
+                //System.out.println("Made a neuron: " + neuronNum);
             }
 
             // Force the bias node's output value to 1.0. It's last neuron created above

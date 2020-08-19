@@ -189,5 +189,5 @@ public class Weights {
         }
 
         return number_of_weights;
-    };
+    }
 }
