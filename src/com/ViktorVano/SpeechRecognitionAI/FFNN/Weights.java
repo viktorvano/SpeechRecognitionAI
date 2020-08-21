@@ -20,20 +20,20 @@ public class Weights {
 
         for (index = 0; index < NumberOfWeights; index++)
         {
-            weights.add(0.0);
+            weights.add(0.0f);
         }
     }
 
     public static void push_zeros_to_Learning_table()
     {
-        LinkedList<Double> InputRow = new LinkedList<>();
-        LinkedList<Double> OutputRow = new LinkedList<>();
+        LinkedList<Float> InputRow = new LinkedList<>();
+        LinkedList<Float> OutputRow = new LinkedList<>();
         int row, column;
 
         learningInputs.clear();
         for (row = 0; row < inputNodes; row++)
         {
-            InputRow.add(0.0);
+            InputRow.add(0.0f);
         }
         for (column = 0; column < patternCount; column++)
         {
@@ -43,7 +43,7 @@ public class Weights {
         learningOutputs.clear();
         for (row = 0; row < outputNodes; row++)
         {
-            OutputRow.add(0.0);
+            OutputRow.add(0.0f);
         }
         for (column = 0; column < patternCount; column++)
         {
@@ -134,8 +134,8 @@ public class Weights {
             if(fileContent.get(fileLine).contains("{"))
             {
                 String[] bracketContent = fileContent.get(fileLine).split(",");
-                LinkedList<Double> inputLine = new LinkedList<>();
-                LinkedList<Double> outputLine = new LinkedList<>();
+                LinkedList<Float> inputLine = new LinkedList<>();
+                LinkedList<Float> outputLine = new LinkedList<>();
                 int flag=0;
                 for(int segment = 0; segment < bracketContent.length; segment++)
                 {
@@ -156,9 +156,9 @@ public class Weights {
                         try
                         {
                             if(flag==1)
-                                inputLine.add(Double.parseDouble(number));
+                                inputLine.add(Float.parseFloat(number));
                             else if(flag==2)
-                                outputLine.add(Double.parseDouble(number));
+                                outputLine.add(Float.parseFloat(number));
                         }catch (Exception e)
                         {
                             System.out.println("Failed to parse number from this string:" + number);

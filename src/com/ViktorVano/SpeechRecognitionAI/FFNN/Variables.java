@@ -13,20 +13,20 @@ public class Variables {
     public static int patternCount;
     public static int inputNodes;
     public static int outputNodes;
-    public static double velocity = 0.1; // overall net learning rate [0.0..1.0]
-    public static double momentum = 0.5; // momentum multiplier of last deltaWeight [0.0..n]
-    public static double definedRecentAverageSmoothingFactor = 0.0;
+    public static float velocity = 0.1f; // overall net learning rate [0.0..1.0]
+    public static float momentum = 0.5f; // momentum multiplier of last deltaWeight [0.0..n]
+    public static float definedRecentAverageSmoothingFactor = 0.0f;
 
 
     public static LinkedList<Integer> topology = new LinkedList<>();
-    public static final LinkedList<LinkedList<Double>> learningInputs = new LinkedList<>();
-    public static final LinkedList<LinkedList<Double>> learningOutputs = new LinkedList<>();
-    public static LinkedList<Double> weights = new LinkedList<>();
+    public static final LinkedList<LinkedList<Float>> learningInputs = new LinkedList<>();
+    public static final LinkedList<LinkedList<Float>> learningOutputs = new LinkedList<>();
+    public static LinkedList<Float> weights = new LinkedList<>();
     public static int neuronIndex = 0;
     public static int trainingLine = 0;// Has to be initialized 0
-    public static LinkedList<Double> input, target, result;
+    public static LinkedList<Float> input, target, result;
     public static int trainingPass = 0;
 
-    public static final int minimumLayerSize = 30;
+    public static final int minimumLayerSize = 10;
     public static final int maximumTopologySize = 9;
 }

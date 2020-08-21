@@ -10,7 +10,7 @@ public class TrainingData {
 
     }*/
 
-    public static int getNextInputs(LinkedList<Double> inputValues)
+    public static int getNextInputs(LinkedList<Float> inputValues)
     {
         inputValues.clear();
 
@@ -23,7 +23,7 @@ public class TrainingData {
 
         return inputValues.size();
     }
-    public static int getTargetOutputs(LinkedList<Double> targetOutValues)
+    public static int getTargetOutputs(LinkedList<Float> targetOutValues)
     {
         targetOutValues.clear();
 

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.GeneralFunctions.showVectorValues;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.input;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalizeInputs;
 
 public class TrainingThread extends Thread {
     private TrainingData trainingData;
@@ -25,7 +25,7 @@ public class TrainingThread extends Thread {
         this.neuralNetwork = new NeuralNetwork(topology);
         this.trainingDatabase = database;
         this.trainingClassifier = classifier;
-        this.minimumTrainingCycles = trainingDatabase.size() * 100;
+        this.minimumTrainingCycles = trainingDatabase.size() * 10;
         input = new LinkedList<>();
         target = new LinkedList<>();
         result = new LinkedList<>();
@@ -38,26 +38,21 @@ public class TrainingThread extends Thread {
 
     private void generateTrainingData()
     {
-        LinkedList<Double> inputLine = new LinkedList<>();
-        LinkedList<Double> outputLine = new LinkedList<>();
+        LinkedList<Float> inputLine = new LinkedList<>();
+        LinkedList<Float> outputLine = new LinkedList<>();
         for(int i=0; i<trainingDatabase.size(); i++)
         {
             inputLine.clear();
             outputLine.clear();
-            for(int input=0; input<inputNodes*2; input+=2)
-            {
-                if(input+1 < trainingDatabase.get(i).audioRecordLength)
-                    inputLine.add((double) trainingDatabase.get(i).audioRecord[input] + (double) trainingDatabase.get(i).audioRecord[input + 1] * 256.0);
-                else
-                    inputLine.add(0.0);
-            }
+
+            normalizeInputs(inputLine, trainingDatabase.get(i));
 
             for(int output=0; output<outputNodes; output++)
             {
                 if(trainingDatabase.get(i).name.equals(trainingClassifier.get(output).getName()))
-                    outputLine.add(1.0);
+                    outputLine.add(1.0f);
                 else
-                    outputLine.add(0.0);
+                    outputLine.add(0.0f);
             }
             learningInputs.add(new LinkedList<>(inputLine));
             learningOutputs.add(new LinkedList<>(outputLine));

@@ -9,12 +9,12 @@ public class Connection {
         };
      */
 
-   public double weight;
-   public double deltaWeight;
+   public float weight;
+   public float deltaWeight;
 
    public Connection()
    {
-      weight = 0.0;
-      deltaWeight = 0.0;
+      weight = 0.0f;
+      deltaWeight = 0.0f;
    }
 }

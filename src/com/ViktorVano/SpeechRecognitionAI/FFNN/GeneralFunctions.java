@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 public class GeneralFunctions {
-    public static void showVectorValues(String label, LinkedList<Double> v)
+    public static void showVectorValues(String label, LinkedList<Float> v)
     {
         System.out.println(label + " ");
         for (int i = 0; i < v.size(); i++)
@@ -16,30 +16,30 @@ public class GeneralFunctions {
         System.out.println();
     }
 
-    public static String formatDoubleToString12(double number)
+    public static String formatFloatToString12(float number)
     {
         DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.getDefault());
         formatSymbols.setDecimalSeparator('.');
         return new DecimalFormat("##########.############", formatSymbols).format(number);
     }
 
-    public static String formatDoubleToString4(double number)
+    public static String formatFloatToString4(float number)
     {
         DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.getDefault());
         formatSymbols.setDecimalSeparator('.');
         return new DecimalFormat("##########.####", formatSymbols).format(number);
     }
 
-    public static String colorStyle(double value)
+    public static String colorStyle(float value)
     {
-        if(value > 1.0)
-            value = 1.0;
-        else if(value < -1.0)
-            value = -1.0;
+        if(value > 1.0f)
+            value = 1.0f;
+        else if(value < -1.0f)
+            value = -1.0f;
 
-        value *= 255.0;
+        value *= 255.0f;
         boolean positive = true;
-        if(value >= 0.0)
+        if(value >= 0.0f)
         {
             positive=true;
         }else
