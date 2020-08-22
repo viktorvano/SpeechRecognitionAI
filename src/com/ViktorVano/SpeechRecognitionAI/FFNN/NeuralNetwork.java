@@ -1,7 +1,12 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.push_zeros_to_Weights;
 
 public class NeuralNetwork {
 
@@ -120,6 +125,7 @@ public class NeuralNetwork {
     public void saveNeuronWeights()
     {
         neuronIndex = 0;
+        push_zeros_to_Weights();
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
@@ -133,6 +139,33 @@ public class NeuralNetwork {
 
     public void loadNeuronWeights()
     {
+        neuronIndex = 0;
+        push_zeros_to_Weights();
+
+        try
+        {
+            FileInputStream fi = new FileInputStream(new File("res\\weights.dat"));
+            ObjectInputStream oi = new ObjectInputStream(fi);
+            Object object;
+            while(true)
+            {
+                try{
+                    object = oi.readObject();
+                }
+                catch(IOException e){
+                    break;
+                }
+                if(object != null)
+                    weights.set(neuronIndex++,(Float) object);
+            }
+
+            oi.close();
+            fi.close();
+        }catch (Exception e)
+        {
+            System.out.println("Failed to read the \"weights.dat\" file.");
+        }
+
         neuronIndex = 0;
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)

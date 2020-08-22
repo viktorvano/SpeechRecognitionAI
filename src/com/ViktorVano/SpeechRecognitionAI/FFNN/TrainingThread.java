@@ -25,7 +25,7 @@ public class TrainingThread extends Thread {
         this.neuralNetwork = new NeuralNetwork(topology);
         this.trainingDatabase = database;
         this.trainingClassifier = classifier;
-        this.minimumTrainingCycles = trainingDatabase.size() * 10;
+        this.minimumTrainingCycles = trainingDatabase.size() * 50;
         input = new LinkedList<>();
         target = new LinkedList<>();
         result = new LinkedList<>();
@@ -75,7 +75,7 @@ public class TrainingThread extends Thread {
 
             // Train the net what the outputs should have been:
             trainingData.getTargetOutputs(target);
-            showVectorValues("Targets: ", target);
+            showVectorValues("Targets[" + trainingLine +"]=\"" + trainingDatabase.get(trainingLine).name + "\": ", target);
             assert(target.size() == topology.peekLast());
             neuralNetwork.backProp(target);//This function alters neurons
 
@@ -87,7 +87,7 @@ public class TrainingThread extends Thread {
             // Report how well the training is working, averaged over recent samples:
             System.out.println("Net recent average error: " + neuralNetwork.getRecentAverageError() + "\n\n");
 
-            if (neuralNetwork.getRecentAverageError() < 0.003 && trainingPass>minimumTrainingCycles)
+            if (neuralNetwork.getRecentAverageError() < 0.015f && trainingPass>minimumTrainingCycles)
             {
                 System.out.println("Exit due to low error :D\n\n");
                 neuralNetwork.saveNeuronWeights();

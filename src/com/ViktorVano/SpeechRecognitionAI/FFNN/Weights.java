@@ -112,7 +112,6 @@ public class Weights {
                 outputNodes = topology.get(topology.size() - 1);
                 get_training_data_count();
                 push_zeros_to_Learning_table();
-                push_zeros_to_Weights();
             }
         }
     }

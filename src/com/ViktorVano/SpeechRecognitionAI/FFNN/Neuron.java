@@ -1,5 +1,8 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.FileManagement.*;
@@ -86,13 +89,20 @@ public class Neuron {
         if (neuronIndex == weights.size())
         {
             //save weights from Weights[] to a file
-            String strWeights = new String();
-
-            for (int index = 0; index < weights.size(); index++)
+            try
             {
-                strWeights += (formatFloatToString12(weights.get(index)) + "\n");
+                File file = new File("res\\weights.dat");
+                file.createNewFile();
+                FileOutputStream f = new FileOutputStream(file);
+                ObjectOutputStream o = new ObjectOutputStream(f);
+                for(int i=1; i<weights.size()-1; i++)
+                    o.writeObject(weights.get(i));
+                o.close();
+                f.close();
+            }catch (Exception e)
+            {
+                System.out.println("Failed to create the \"weights.dat\" file.");
             }
-            writeToFile("res\\weights.txt", strWeights);
         }
     }
 
@@ -100,23 +110,6 @@ public class Neuron {
     {
         // The weights to updated are in the Connection container
         // in the neurons in the preceding layer
-
-        //load weights from a file to Weights[]
-        LinkedList<String> fileContent = new LinkedList<>(readOrCreateFile("res\\weights.txt"));
-
-        if(fileContent.size()==0 || fileContent==null)
-        {
-            System.out.println("Cannot open weights.txt");
-            System.exit(-10);
-        }
-
-        for (int index = 0; index < weights.size(); index++)
-        {
-            if(fileContent.get(index).length()!=0)
-            {
-                weights.set(index, Float.parseFloat(fileContent.get(index)));
-            }
-        }
 
         for (int n = 0; n < prevLayer.size(); n++)
         {
