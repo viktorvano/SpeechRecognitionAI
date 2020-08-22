@@ -524,11 +524,13 @@ public class SpeechRecognitionAI extends Application {
                 TrainingThread trainingThread = new TrainingThread(database, classifier);
                 trainingThread.start();
                 trainingIsRunning = true;
+                labelTrainingStatus.setText("Training just started.");
                 timelineTrainingLabelUpdate.play();
             }
         });
 
         labelTrainingStatus = new Label();
+        labelTrainingStatus.setFont(Font.font("Arial", 20));
 
         labelHiddenTopology = new Label("\n Topology of hidden layers ");
         labelHiddenTopology.setFont(Font.font("Arial", 26));
