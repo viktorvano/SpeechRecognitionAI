@@ -17,7 +17,6 @@ public class TrainingThread extends Thread {
     private NeuralNetwork neuralNetwork;
     private ObservableList<RecordedAudio> trainingDatabase;
     private ArrayList<Classifier> trainingClassifier;
-    private int minimumTrainingCycles;
 
     public TrainingThread(ObservableList< RecordedAudio > database, ArrayList<Classifier> classifier)
     {
@@ -25,7 +24,7 @@ public class TrainingThread extends Thread {
         this.neuralNetwork = new NeuralNetwork(topology);
         this.trainingDatabase = database;
         this.trainingClassifier = classifier;
-        this.minimumTrainingCycles = trainingDatabase.size() * 50;
+        minimumTrainingCycles = trainingDatabase.size() * 50;
         input = new LinkedList<>();
         target = new LinkedList<>();
         result = new LinkedList<>();
@@ -87,7 +86,12 @@ public class TrainingThread extends Thread {
             // Report how well the training is working, averaged over recent samples:
             System.out.println("Net recent average error: " + neuralNetwork.getRecentAverageError() + "\n\n");
 
-            if (neuralNetwork.getRecentAverageError() < 0.015f && trainingPass>minimumTrainingCycles)
+            trainingLineLabel = trainingLine;
+            trainingPassLabel = trainingPass;
+            updateTrainingLabel = true;
+            currentTrainingError = neuralNetwork.getRecentAverageError();
+            currentTrainingErrorLabel = currentTrainingError;
+            if (currentTrainingError < minimumTrainingError && trainingPass > minimumTrainingCycles)
             {
                 System.out.println("Exit due to low error :D\n\n");
                 neuralNetwork.saveNeuronWeights();

@@ -42,7 +42,7 @@ public class SpeechRecognitionAI extends Application {
     private AudioCapture audioCapture;
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
-    private Timeline timelineUpdateData;
+    private Timeline timelineUpdateData, timelineTrainingLabelUpdate;
     private boolean updateData = true, sameWordCount = false;
     private final BorderPane borderPane = new BorderPane();
     private final StackPane stackPaneCenter = new StackPane();
@@ -60,7 +60,9 @@ public class SpeechRecognitionAI extends Application {
     private Button Train, RemoveTopologyLayer, AddHiddenLayer;
     private int displayedLayout = -1, textFieldTopologyValue = -1;
     private ArrayList<Classifier> classifier;
-    private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology;
+    private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
+    private ImageView[] icons;
+    private Label[] labelMenu;
 
     public static void main(String[] args)
     {
@@ -87,8 +89,8 @@ public class SpeechRecognitionAI extends Application {
         flow.setPrefWrapLength(30); // preferred width allows for two columns
         flow.setStyle("-fx-background-color: DAE6F3;");
 
-        ImageView[] icons = new ImageView[4];
-        Label[] labelMenu = new Label[4];
+        icons = new ImageView[4];
+        labelMenu = new Label[4];
         for (int i=0; i<4; i++)
         {
             icons[i] = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/icon"+(i+1)+".png"));
@@ -476,16 +478,57 @@ public class SpeechRecognitionAI extends Application {
         trainingItem = FXCollections.observableArrayList();
         trainingList.setItems(trainingItem);
 
+        timelineTrainingLabelUpdate = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event)
+            {
+                if(!trainingIsRunning)
+                {
+                    for(int i=0; i<labelMenu.length; i++)
+                    {
+                        icons[i].setDisable(false);
+                        labelMenu[i].setDisable(false);
+                    }
+                    timelineTrainingLabelUpdate.stop();
+                }else if(updateTrainingLabel)
+                {
+                    if (currentTrainingErrorLabel < minimumTrainingError && trainingPassLabel > minimumTrainingCycles){
+                        trainingIsRunning = false;
+                        labelTrainingStatus.setText("Training pass: " + trainingPassLabel
+                                + "\"\t\tError: " + currentTrainingErrorLabel
+                                + "\t\tTraining DONE");
+                        Train.setDisable(false);
+                    }else
+                    {
+                        labelTrainingStatus.setText("Training pass: " + trainingPassLabel
+                                + "\t\tTargets[" + trainingLineLabel + "]=\"" + database.get(trainingLineLabel).name
+                                + "\"\t\tError: " + currentTrainingErrorLabel);
+                    }
+
+                    updateTrainingLabel = false;
+                }
+            }
+        }));
+        timelineTrainingLabelUpdate.setCycleCount(Timeline.INDEFINITE);
+
         Train = new Button("Train");
         Train.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: Train Neural Network.
                 Train.setDisable(true);
+                for(int i=0; i<labelMenu.length; i++)
+                {
+                    icons[i].setDisable(true);
+                    labelMenu[i].setDisable(true);
+                }
                 TrainingThread trainingThread = new TrainingThread(database, classifier);
                 trainingThread.start();
+                trainingIsRunning = true;
+                timelineTrainingLabelUpdate.play();
             }
         });
+
+        labelTrainingStatus = new Label();
 
         labelHiddenTopology = new Label("\n Topology of hidden layers ");
         labelHiddenTopology.setFont(Font.font("Arial", 26));
@@ -621,6 +664,7 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.getChildren().add(trainingList);
         Train.setDisable(!sameWordCount || topology.size() < 3);
         hBoxBottom.getChildren().add(Train);
+        hBoxBottom.getChildren().add(labelTrainingStatus);
         vBoxRight.getChildren().add(labelHiddenTopology);
         vBoxRight.getChildren().add(topologyList);
         vBoxRight.getChildren().add(RemoveTopologyLayer);
@@ -636,6 +680,7 @@ public class SpeechRecognitionAI extends Application {
     {
         stackPaneCenter.getChildren().remove(trainingList);
         hBoxBottom.getChildren().remove(Train);
+        hBoxBottom.getChildren().remove(labelTrainingStatus);
         vBoxRight.getChildren().remove(labelHiddenTopology);
         vBoxRight.getChildren().remove(topologyList);
         vBoxRight.getChildren().remove(RemoveTopologyLayer);
