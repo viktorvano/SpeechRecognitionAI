@@ -3,6 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.GUI;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.animation.KeyFrame;
@@ -63,6 +64,9 @@ public class SpeechRecognitionAI extends Application {
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
     private ImageView[] icons;
     private Label[] labelMenu;
+    private NeuralNetworkThread neuralNetworkThread;
+    private Label speechRecognitionStatus, speechRecognitionOutput;
+    private boolean wordsDetected = false;
 
     public static void main(String[] args)
     {
@@ -139,6 +143,7 @@ public class SpeechRecognitionAI extends Application {
         stage.setMinHeight(stage.getHeight());
         Image icon =  new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
         stage.getIcons().add(icon);
+        displayLayout(2);//Speech Recognition Layout
     }
 
     private void detectWords()
@@ -264,8 +269,8 @@ public class SpeechRecognitionAI extends Application {
 
     private void neuralNetworkRoutine()
     {
-
-        captureAudio();
+        neuralNetworkThread.setRecords(records);
+        neuralNetworkThread.start();
     }
 
     private void initializeDataLayout()
@@ -460,18 +465,41 @@ public class SpeechRecognitionAI extends Application {
                 {
                     updateData = false;
                     recordedAudio.audioRecord = audioCapture.getRecord();
-                    if (recordedAudio.audioRecord != null)
-                    {
+                    if (recordedAudio.audioRecord != null) {
                         displayedSeries.getData().clear();
                         recordedAudio.audioRecordLength = audioCapture.getRecordLength();
-                        for (int i = 0; i < recordedAudio.audioRecordLength-1; i++)
-                        {
+                        for (int i = 0; i < recordedAudio.audioRecordLength - 1; i++) {
                             if (i % 10 == 0)
-                                displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i+1]*256));
+                                displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                         }
                         detectWords();
-                        if(displayedLayout == 2)
-                            neuralNetworkRoutine();
+                        wordsDetected = true;
+                    }
+                }
+
+                if (weightsLoaded && wordsDetected && displayedLayout == 2)
+                {
+                    if (!wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
+                        neuralNetworkRoutine();
+                    }
+
+                    if (wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
+                        wordsDetected = false;
+                        wordsRecognizedFlag = false;
+                        captureAudio();
+                    }
+
+                    if(!wordsRecognizedFlag && neuralNetworkThread.isAlive())
+                    {
+                        speechRecognitionStatus.setText("Speech recognized.");
+                        speechRecognitionOutput.setText(recognizedMessage);
+                    }
+                }else
+                {
+                    if(weights.size()!=0)
+                    {
+                        speechRecognitionStatus.setText("Loading weights[" + neuronIndex + " / " + weights.size() +"]: "
+                        + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
                     }
                 }
             }
@@ -626,7 +654,11 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeRecognitionLayout()
     {
-
+        neuralNetworkThread = new NeuralNetworkThread(classifier);
+        speechRecognitionStatus = new Label();
+        speechRecognitionStatus.setFont(Font.font("Arial", 20));
+        speechRecognitionOutput = new Label();
+        speechRecognitionOutput.setFont(Font.font("Arial", 20));
     }
 
     private void initializeSettingsLayout()
@@ -703,6 +735,8 @@ public class SpeechRecognitionAI extends Application {
     private void displayRecognitionLayout()
     {
         stackPaneCenter.getChildren().add(lineChart);
+        hBoxBottom.getChildren().add(speechRecognitionStatus);
+        hBoxBottom.getChildren().add(speechRecognitionOutput);
         displayedLayout = 2;
         System.out.println("Recognition Layout displayed.");
     }
@@ -710,6 +744,8 @@ public class SpeechRecognitionAI extends Application {
     private void hideRecognitionLayout()
     {
         stackPaneCenter.getChildren().remove(lineChart);
+        hBoxBottom.getChildren().remove(speechRecognitionStatus);
+        hBoxBottom.getChildren().remove(speechRecognitionOutput);
     }
 
     private void displaySettingsLayout()

@@ -139,6 +139,7 @@ public class NeuralNetwork {
 
     public void loadNeuronWeights()
     {
+        loadingStep = 1;
         neuronIndex = 0;
         push_zeros_to_Weights();
 
@@ -166,6 +167,7 @@ public class NeuralNetwork {
             System.out.println("Failed to read the \"weights.dat\" file.");
         }
 
+        loadingStep = 2;
         neuronIndex = 0;
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
