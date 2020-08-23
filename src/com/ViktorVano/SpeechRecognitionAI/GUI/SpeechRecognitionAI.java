@@ -114,10 +114,10 @@ public class SpeechRecognitionAI extends Application {
                 }
             });
         }
-        labelMenu[0].setText("Training Data\n ");
-        labelMenu[1].setText("Train AI\n ");
+        labelMenu[0].setText("     Training Data\n ");
+        labelMenu[1].setText("        Train AI\n ");
         labelMenu[2].setText("Speech Recognition\n ");
-        labelMenu[3].setText("Settings");
+        labelMenu[3].setText("        Settings");
 
         hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
         hBoxBottom.setSpacing(30);
@@ -786,15 +786,15 @@ public class SpeechRecognitionAI extends Application {
 
         if(topology.size() >= 3)
         {
-            String text = "\nTopology:";
+            String text = "\n Topology:";
             for(int i=0; i<topology.size(); i++)
             {
                 if(i == 0)
-                    text += "\nInput Layer: ";
+                    text += "\n   Input Layer: ";
                 else if(i == topology.size()-1)
-                    text += "\nOutput Layer: ";
+                    text += "\n   Output Layer: ";
                 else
-                    text += "\nHidden Layer: ";
+                    text += "\n   Hidden Layer: ";
 
                 text += topology.get(i);
             }
