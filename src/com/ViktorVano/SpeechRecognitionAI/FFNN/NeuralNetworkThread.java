@@ -74,6 +74,7 @@ public class NeuralNetworkThread extends Thread {
         public void run() {
             super.run();
             neuralNetwork.loadNeuronWeights();
+            weightsLoaded = true;
         }
     }
 }

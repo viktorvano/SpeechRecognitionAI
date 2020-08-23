@@ -481,17 +481,16 @@ public class SpeechRecognitionAI extends Application {
                 {
                     if (!wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
                         neuralNetworkRoutine();
-                    }
-
-                    if (wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
+                    }else if (wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
                         wordsDetected = false;
                         wordsRecognizedFlag = false;
+                        speechRecognitionStatus.setText("Listening...");
+                        recognizedMessage = "";
+                        speechRecognitionOutput.setText(recognizedMessage);
                         captureAudio();
-                    }
-
-                    if(!wordsRecognizedFlag && neuralNetworkThread.isAlive())
+                    }else if(!wordsRecognizedFlag)
                     {
-                        speechRecognitionStatus.setText("Speech recognized.");
+                        speechRecognitionStatus.setText("Speech being processed.");
                         speechRecognitionOutput.setText(recognizedMessage);
                     }
                 }else
