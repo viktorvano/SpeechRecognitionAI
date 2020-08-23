@@ -455,7 +455,7 @@ public class SpeechRecognitionAI extends Application {
         lineChart.getData().add(detectedWordsSeries);
         lineChart.setAnimated(false);
 
-        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>()
+        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(ActionEvent event)
@@ -493,13 +493,10 @@ public class SpeechRecognitionAI extends Application {
                         speechRecognitionStatus.setText("Speech being processed.");
                         speechRecognitionOutput.setText(recognizedMessage);
                     }
-                }else
+                }else if(weights.size()!=0 && neuronIndex != weights.size())
                 {
-                    if(weights.size()!=0)
-                    {
-                        speechRecognitionStatus.setText("Loading weights[" + neuronIndex + " / " + weights.size() +"]: "
-                        + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
-                    }
+                    speechRecognitionStatus.setText("Loading weights[" + neuronIndex + " / " + weights.size() +"]: "
+                    + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
                 }
             }
         }));
