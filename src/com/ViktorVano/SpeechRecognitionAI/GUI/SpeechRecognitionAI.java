@@ -262,6 +262,12 @@ public class SpeechRecognitionAI extends Application {
         }
     }
 
+    private void neuralNetworkRoutine()
+    {
+
+        captureAudio();
+    }
+
     private void initializeDataLayout()
     {
         Play = new Button("Play Record");
@@ -444,7 +450,7 @@ public class SpeechRecognitionAI extends Application {
         lineChart.getData().add(detectedWordsSeries);
         lineChart.setAnimated(false);
 
-        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(50), new EventHandler<ActionEvent>()
+        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(200), new EventHandler<ActionEvent>()
         {
             @Override
             public void handle(ActionEvent event)
@@ -464,6 +470,8 @@ public class SpeechRecognitionAI extends Application {
                                 displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i+1]*256));
                         }
                         detectWords();
+                        if(displayedLayout == 2)
+                            neuralNetworkRoutine();
                     }
                 }
             }
@@ -694,13 +702,14 @@ public class SpeechRecognitionAI extends Application {
 
     private void displayRecognitionLayout()
     {
+        stackPaneCenter.getChildren().add(lineChart);
         displayedLayout = 2;
         System.out.println("Recognition Layout displayed.");
     }
 
     private void hideRecognitionLayout()
     {
-
+        stackPaneCenter.getChildren().remove(lineChart);
     }
 
     private void displaySettingsLayout()

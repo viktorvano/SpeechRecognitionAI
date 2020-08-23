@@ -142,7 +142,7 @@ public class AudioCapture {
                             mainBufferLength += cnt;
                             System.out.println("Main Buffer Length: " + mainBufferLength);
                             silenceCount = 0;
-                        }else if(mainBufferLength > 0 && silenceCount < 2)
+                        }else if(mainBufferLength > 0 && silenceCount < 1)
                         {
                             for(int i = 0; i< tempCaptureBuffer.length; i++)
                             {
