@@ -28,6 +28,12 @@ public class NeuralNetworkThread extends Thread {
             input = new LinkedList<>();
         else
             input.clear();
+        if(result == null)
+            result = new LinkedList<>();
+        else
+            result.clear();
+        inputNodes = topology.get(0);
+        outputNodes = topology.get(topology.size() - 1);
     }
 
     public void setRecords(ObservableList<RecordedAudio> recordedWords)
