@@ -55,26 +55,35 @@ public class NeuralNetworkThread extends Thread {
     @Override
     public void run() {
         super.run();
-        input.clear();
-        recognizedMessage = "";
-        while (records.size() > 0)
+        while(true)
         {
-            normalizeInputs(input, records.get(0));
-            neuralNetwork.feedForward(input);
-            neuralNetwork.getResults(result);
-            int maximumIndex = findMaximumValueIndex(result);
-            if (result.get(maximumIndex) > classifierThreshold)
+            while (!analyseWords);
+            System.out.println("Speech being processed.");
+            input.clear();
+            recognizedMessage = "";
+            while (records.size() > 0)
             {
-                if (recognizedMessage.length() == 0)
-                    recognizedMessage = classifierOutputs.get(maximumIndex).getName();
-                else
-                    recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
-            }
+                normalizeInputs(input, records.get(0));
+                neuralNetwork.feedForward(input);
+                neuralNetwork.getResults(result);
+                int maximumIndex = findMaximumValueIndex(result);
+                if (result.get(maximumIndex) > classifierThreshold)
+                {
+                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" had " + (result.get(maximumIndex)*100.0f) + "% match.");
+                    if (recognizedMessage.length() == 0)
+                        recognizedMessage = classifierOutputs.get(maximumIndex).getName();
+                    else
+                        recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
+                }else {
+                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" had low  match " + (result.get(maximumIndex)*100.0f) + "%.");
+                }
 
-            records.remove(0);
+                records.remove(0);
+            }
+            System.out.println("Speech analysed.");
+            wordsRecognizedFlag = true;
+            analyseWords = false;
         }
-        wordsRecognizedFlag = true;
-        neuralNetworkIsRunning = false;
     }
 
     class LoadWeights extends Thread {

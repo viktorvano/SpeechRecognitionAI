@@ -44,5 +44,8 @@ public class General {
         {
             inputLine.set(i, inputLine.get(i)/maximum);
         }
+
+        while (inputLine.size()>inputNodes)
+            inputLine.remove(inputLine.size()-1);
     }
 }

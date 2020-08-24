@@ -34,8 +34,8 @@ public class Variables {
     public static int minimumTrainingCycles;
     public static int trainingPassLabel, trainingLineLabel;
     public static float currentTrainingErrorLabel;
-    public static float classifierThreshold = 0.6f;
+    public static float classifierThreshold = 0.3f;
     public static String recognizedMessage;
-    public static boolean wordsRecognizedFlag = false, weightsLoaded = false, neuralNetworkIsRunning = false;
+    public static boolean wordsRecognizedFlag = false, weightsLoaded = false, analyseWords = false;
     public static int loadingStep = 0;
 }

@@ -25,6 +25,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -270,7 +271,12 @@ public class SpeechRecognitionAI extends Application {
     private void neuralNetworkRoutine()
     {
         neuralNetworkThread.setRecords(records);
-        neuralNetworkThread.start();
+        if(neuralNetworkThread.getState() == Thread.State.NEW)
+        {
+            neuralNetworkThread.start();
+        }
+
+        analyseWords = true;
     }
 
     private void initializeDataLayout()
@@ -479,25 +485,28 @@ public class SpeechRecognitionAI extends Application {
 
                 if (weightsLoaded && wordsDetected && displayedLayout == 2)
                 {
-                    if (!wordsRecognizedFlag && !neuralNetworkIsRunning) {
-                        neuralNetworkIsRunning = true;
+                    if (!wordsRecognizedFlag && !analyseWords) {
                         neuralNetworkRoutine();
-                    }else if (wordsRecognizedFlag && !neuralNetworkIsRunning) {
+                    }else if (wordsRecognizedFlag && !analyseWords) {
                         wordsDetected = false;
                         wordsRecognizedFlag = false;
                         speechRecognitionStatus.setText("Listening...");
-                        recognizedMessage = "";
                         speechRecognitionOutput.setText(recognizedMessage);
                         captureAudio();
                     }else if(!wordsRecognizedFlag)
                     {
                         speechRecognitionStatus.setText("Speech being processed.");
+                        recognizedMessage = "";
                         speechRecognitionOutput.setText(recognizedMessage);
                     }
                 }else if(weights.size()!=0 && !weightsLoaded)
                 {
-                    speechRecognitionStatus.setText("Loading weights[" + neuronIndex + " / " + weights.size() +"]: "
-                    + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                    if(loadingStep == 1)
+                        speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "
+                        + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                    else
+                        speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.size() +"]: "
+                                + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
                 }
             }
         }));
@@ -656,6 +665,7 @@ public class SpeechRecognitionAI extends Application {
         speechRecognitionStatus.setFont(Font.font("Arial", 20));
         speechRecognitionOutput = new Label();
         speechRecognitionOutput.setFont(Font.font("Arial", 20));
+        speechRecognitionOutput.setTextFill(Color.web("#ffffff"));
     }
 
     private void initializeSettingsLayout()
