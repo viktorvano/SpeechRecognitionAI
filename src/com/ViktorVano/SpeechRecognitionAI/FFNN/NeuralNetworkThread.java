@@ -24,6 +24,10 @@ public class NeuralNetworkThread extends Thread {
         this.loadWeights.start();
         this.records = FXCollections.observableArrayList();
         this.classifierOutputs = classifier;
+        if(input == null)
+            input = new LinkedList<>();
+        else
+            input.clear();
     }
 
     public void setRecords(ObservableList<RecordedAudio> recordedWords)
@@ -45,6 +49,7 @@ public class NeuralNetworkThread extends Thread {
     @Override
     public void run() {
         super.run();
+        input.clear();
         recognizedMessage = "";
         while (records.size() > 0)
         {
@@ -63,6 +68,7 @@ public class NeuralNetworkThread extends Thread {
             records.remove(0);
         }
         wordsRecognizedFlag = true;
+        neuralNetworkIsRunning = false;
     }
 
     class LoadWeights extends Thread {

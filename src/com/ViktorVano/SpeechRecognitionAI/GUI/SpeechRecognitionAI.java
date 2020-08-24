@@ -479,9 +479,10 @@ public class SpeechRecognitionAI extends Application {
 
                 if (weightsLoaded && wordsDetected && displayedLayout == 2)
                 {
-                    if (!wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
+                    if (!wordsRecognizedFlag && !neuralNetworkIsRunning) {
+                        neuralNetworkIsRunning = true;
                         neuralNetworkRoutine();
-                    }else if (wordsRecognizedFlag && !neuralNetworkThread.isAlive()) {
+                    }else if (wordsRecognizedFlag && !neuralNetworkIsRunning) {
                         wordsDetected = false;
                         wordsRecognizedFlag = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -493,7 +494,7 @@ public class SpeechRecognitionAI extends Application {
                         speechRecognitionStatus.setText("Speech being processed.");
                         speechRecognitionOutput.setText(recognizedMessage);
                     }
-                }else if(weights.size()!=0 && neuronIndex != weights.size())
+                }else if(weights.size()!=0 && !weightsLoaded)
                 {
                     speechRecognitionStatus.setText("Loading weights[" + neuronIndex + " / " + weights.size() +"]: "
                     + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");

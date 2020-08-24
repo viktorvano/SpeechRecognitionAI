@@ -36,6 +36,6 @@ public class Variables {
     public static float currentTrainingErrorLabel;
     public static float classifierThreshold = 0.6f;
     public static String recognizedMessage;
-    public static boolean wordsRecognizedFlag = false, weightsLoaded = false;
+    public static boolean wordsRecognizedFlag = false, weightsLoaded = false, neuralNetworkIsRunning = false;
     public static int loadingStep = 0;
 }
