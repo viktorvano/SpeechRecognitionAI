@@ -492,7 +492,7 @@ public class SpeechRecognitionAI extends Application {
                         speechRecognitionStatus.setText("Speech being processed.");
                         speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                     }else if (neuralNetworkThread.isFinished() && displayMessageCounter != -1) {
-                        if(displayMessageCounter < 16)
+                        if(displayMessageCounter < 2)
                             displayMessageCounter++;
                         else {
                             displayMessageCounter = -1;
