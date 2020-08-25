@@ -35,7 +35,6 @@ public class Variables {
     public static int trainingPassLabel, trainingLineLabel;
     public static float currentTrainingErrorLabel;
     public static float classifierThreshold = 0.3f;
-    public static String recognizedMessage;
-    public static boolean wordsRecognizedFlag = false, weightsLoaded = false, analyseWords = false;
+    public static boolean weightsLoaded = false;
     public static int loadingStep = 0;
 }

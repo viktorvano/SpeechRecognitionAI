@@ -16,6 +16,8 @@ public class NeuralNetworkThread extends Thread {
     private ObservableList<RecordedAudio> records;
     private ArrayList<Classifier> classifierOutputs;
     private LoadWeights loadWeights;
+    private boolean runThread;
+    private String recognizedMessage;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
     {
@@ -24,6 +26,8 @@ public class NeuralNetworkThread extends Thread {
         this.loadWeights.start();
         this.records = FXCollections.observableArrayList();
         this.classifierOutputs = classifier;
+        this.runThread = false;
+        this.recognizedMessage = "";
         if(input == null)
             input = new LinkedList<>();
         else
@@ -34,6 +38,21 @@ public class NeuralNetworkThread extends Thread {
             result.clear();
         inputNodes = topology.get(0);
         outputNodes = topology.get(topology.size() - 1);
+    }
+
+    public boolean isFinished()
+    {
+        return !runThread;
+    }
+
+    public void startAnalysis()
+    {
+        runThread = true;
+    }
+
+    public String getRecognizedMessage()
+    {
+        return recognizedMessage;
     }
 
     public void setRecords(ObservableList<RecordedAudio> recordedWords)
@@ -57,7 +76,7 @@ public class NeuralNetworkThread extends Thread {
         super.run();
         while(true)
         {
-            while (!analyseWords);
+            while (!runThread);
             System.out.println("Speech being processed.");
             input.clear();
             recognizedMessage = "";
@@ -81,8 +100,7 @@ public class NeuralNetworkThread extends Thread {
                 records.remove(0);
             }
             System.out.println("Speech analysed.");
-            wordsRecognizedFlag = true;
-            analyseWords = false;
+            runThread = false;
         }
     }
 

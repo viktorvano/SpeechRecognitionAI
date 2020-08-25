@@ -60,7 +60,7 @@ public class SpeechRecognitionAI extends Application {
     private LineChart<Number,Number> lineChart;
     private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
     private Button Train, RemoveTopologyLayer, AddHiddenLayer;
-    private int displayedLayout = -1, textFieldTopologyValue = -1;
+    private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
     private ArrayList<Classifier> classifier;
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
     private ImageView[] icons;
@@ -275,8 +275,8 @@ public class SpeechRecognitionAI extends Application {
         {
             neuralNetworkThread.start();
         }
-
-        analyseWords = true;
+        neuralNetworkThread.startAnalysis();
+        displayMessageCounter = 0;
     }
 
     private void initializeDataLayout()
@@ -485,19 +485,22 @@ public class SpeechRecognitionAI extends Application {
 
                 if (weightsLoaded && wordsDetected && displayedLayout == 2)
                 {
-                    if (!wordsRecognizedFlag && !analyseWords) {
+                    if (neuralNetworkThread.isFinished() && displayMessageCounter == -1) {
                         neuralNetworkRoutine();
-                    }else if (wordsRecognizedFlag && !analyseWords) {
-                        wordsDetected = false;
-                        wordsRecognizedFlag = false;
-                        speechRecognitionStatus.setText("Listening...");
-                        speechRecognitionOutput.setText(recognizedMessage);
-                        captureAudio();
-                    }else if(!wordsRecognizedFlag)
+                    }else if(!neuralNetworkThread.isFinished() && displayMessageCounter == 0)
                     {
                         speechRecognitionStatus.setText("Speech being processed.");
-                        recognizedMessage = "";
-                        speechRecognitionOutput.setText(recognizedMessage);
+                        speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
+                    }else if (neuralNetworkThread.isFinished() && displayMessageCounter != -1) {
+                        if(displayMessageCounter < 16)
+                            displayMessageCounter++;
+                        else {
+                            displayMessageCounter = -1;
+                            wordsDetected = false;
+                            speechRecognitionStatus.setText("Listening...");
+                            speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
+                            captureAudio();
+                        }
                     }
                 }else if(weights.size()!=0 && !weightsLoaded)
                 {
