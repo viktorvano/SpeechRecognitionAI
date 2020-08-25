@@ -76,12 +76,13 @@ public class NeuralNetworkThread extends Thread {
         super.run();
         while(true)
         {
+            System.out.println("Neural Network Thread is waiting.");
             while (!runThread);
             System.out.println("Speech being processed.");
-            input.clear();
             recognizedMessage = "";
             while (records.size() > 0)
             {
+                input.clear();
                 normalizeInputs(input, records.get(0));
                 neuralNetwork.feedForward(input);
                 neuralNetwork.getResults(result);

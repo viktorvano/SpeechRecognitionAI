@@ -498,9 +498,9 @@ public class SpeechRecognitionAI extends Application {
                             displayMessageCounter = -1;
                             wordsDetected = false;
                             speechRecognitionStatus.setText("Listening...");
-                            speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                             captureAudio();
                         }
+                        speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                     }
                 }else if(weights.size()!=0 && !weightsLoaded)
                 {
