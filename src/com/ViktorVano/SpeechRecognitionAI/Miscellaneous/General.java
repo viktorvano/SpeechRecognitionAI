@@ -2,7 +2,7 @@ package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.inputNodes;
@@ -22,7 +22,7 @@ public class General {
                 .toString();
     }
 
-    public static void normalizeInputs(LinkedList<Float> inputLine, RecordedAudio recordedAudio)
+    public static void normalizeInputs(ArrayList<Float> inputLine, RecordedAudio recordedAudio)
     {
         float maximum = -9999999999.0f;
         float absValue;

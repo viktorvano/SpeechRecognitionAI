@@ -4,20 +4,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.push_zeros_to_Weights;
 
 public class NeuralNetwork {
 
-    public NeuralNetwork(LinkedList<Integer> topology)
+    public NeuralNetwork(ArrayList<Integer> topology)
     {
         m_error = 0;
         m_recentAverageError = 0;
         m_recentAverageSmoothingFactor = definedRecentAverageSmoothingFactor;
         int numLayers = topology.size();
         System.out.println("Number of layers: " + numLayers);
-        m_layers = new LinkedList<Layer>();
+        m_layers = new ArrayList<Layer>();
         m_layers.clear();
         for (int layerNum = 0; layerNum < numLayers; layerNum++)
         {
@@ -27,15 +27,15 @@ public class NeuralNetwork {
             // We have made a new Layer, now fill it with neurons, and add a bias neuron to the layer.
             for (int neuronNum = 0; neuronNum <= topology.get(layerNum); neuronNum++)
             {
-                m_layers.peekLast().add(new Neuron(numOutputs, neuronNum));
+                m_layers.get(m_layers.size()-1).add(new Neuron(numOutputs, neuronNum));
                 //System.out.println("Made a neuron: " + neuronNum);
             }
 
             // Force the bias node's output value to 1.0. It's last neuron created above
-            m_layers.peekLast().peekLast().setOutputValue(1.0f);
+            m_layers.get(m_layers.size()-1).peekLast().setOutputValue(1.0f);
         }
     }
-    public void feedForward(LinkedList<Float> inputValues)
+    public void feedForward(ArrayList<Float> inputValues)
     {
         assert(inputValues.size() == m_layers.get(0).size() - 1);
 
@@ -55,10 +55,10 @@ public class NeuralNetwork {
             }
         }
     }
-    public void backProp(LinkedList<Float> targetValues)
+    public void backProp(ArrayList<Float> targetValues)
     {
         // Calculate overall net error (RMS of output neuron errors)
-        Layer outputLayer = m_layers.peekLast();
+        Layer outputLayer = m_layers.get(m_layers.size()-1);
         m_error = 0.0f;
 
         for (int n = 0; n < outputLayer.size() - 1; n++)
@@ -107,13 +107,13 @@ public class NeuralNetwork {
             }
         }
     }
-    public void getResults(LinkedList<Float> resultValues)
+    public void getResults(ArrayList<Float> resultValues)
     {
         resultValues.clear();
 
-        for (int n = 0; n < m_layers.peekLast().size() - 1; n++)
+        for (int n = 0; n < m_layers.get(m_layers.size()-1).size() - 1; n++)
         {
-            resultValues.add(m_layers.peekLast().get(n).getOutputValue());
+            resultValues.add(m_layers.get(m_layers.size()-1).get(n).getOutputValue());
         }
     }
     public float getNeuronOutput(int x, int y)
@@ -180,7 +180,7 @@ public class NeuralNetwork {
         }
     }
 
-    private LinkedList<Layer> m_layers; // m_layers[layerNum][neuronNum]
+    private ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
     private float m_error;
     private float m_recentAverageError;
     private float m_recentAverageSmoothingFactor;

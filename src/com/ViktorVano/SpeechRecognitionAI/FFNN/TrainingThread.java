@@ -5,7 +5,6 @@ import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.GeneralFunctions.showVectorValues;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
@@ -24,10 +23,10 @@ public class TrainingThread extends Thread {
         this.neuralNetwork = new NeuralNetwork(topology);
         this.trainingDatabase = database;
         this.trainingClassifier = classifier;
-        minimumTrainingCycles = trainingDatabase.size() * 50;
-        input = new LinkedList<>();
-        target = new LinkedList<>();
-        result = new LinkedList<>();
+        minimumTrainingCycles = trainingDatabase.size() * 100;
+        input = new ArrayList<>();
+        target = new ArrayList<>();
+        result = new ArrayList<>();
         inputNodes = topology.get(0);
         outputNodes = topology.get(topology.size() - 1);
         this.trainingDatabase = database;
@@ -37,8 +36,8 @@ public class TrainingThread extends Thread {
 
     private void generateTrainingData()
     {
-        LinkedList<Float> inputLine = new LinkedList<>();
-        LinkedList<Float> outputLine = new LinkedList<>();
+        ArrayList<Float> inputLine = new ArrayList<>();
+        ArrayList<Float> outputLine = new ArrayList<>();
         for(int i=0; i<trainingDatabase.size(); i++)
         {
             inputLine.clear();
@@ -53,8 +52,8 @@ public class TrainingThread extends Thread {
                 else
                     outputLine.add(0.0f);
             }
-            learningInputs.add(new LinkedList<>(inputLine));
-            learningOutputs.add(new LinkedList<>(outputLine));
+            learningInputs.add(new ArrayList<>(inputLine));
+            learningOutputs.add(new ArrayList<>(outputLine));
         }
     }
 
@@ -75,7 +74,7 @@ public class TrainingThread extends Thread {
             // Train the net what the outputs should have been:
             trainingData.getTargetOutputs(target);
             showVectorValues("Targets[" + trainingLine +"]=\"" + trainingDatabase.get(trainingLine).name + "\": ", target);
-            assert(target.size() == topology.peekLast());
+            assert(target.size() == topology.get(topology.size()-1));
             neuralNetwork.backProp(target);//This function alters neurons
 
             // Collect the net's actual results:

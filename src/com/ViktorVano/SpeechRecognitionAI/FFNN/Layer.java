@@ -1,8 +1,8 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
-public class Layer extends LinkedList<Neuron> {
+public class Layer extends ArrayList<Neuron> {
 
     public Layer()
     {
@@ -14,19 +14,18 @@ public class Layer extends LinkedList<Neuron> {
         return super.add(aNeuron);
     }
 
-    @Override
     public Neuron pollLast() {
-        return super.pollLast();
+        Neuron neuron = peekFirst();
+        this.remove(super.get(this.size()-1));
+        return neuron;
     }
 
-    @Override
     public Neuron peekFirst() {
-        return super.peekFirst();
+        return super.get(0);
     }
 
-    @Override
     public Neuron peekLast() {
-        return super.peekLast();
+        return super.get(this.size()-1);
     }
 
     @Override

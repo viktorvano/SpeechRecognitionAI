@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 
 public class TrainingData {
@@ -10,7 +10,7 @@ public class TrainingData {
 
     }*/
 
-    public static int getNextInputs(LinkedList<Float> inputValues)
+    public static int getNextInputs(ArrayList<Float> inputValues)
     {
         inputValues.clear();
 
@@ -23,7 +23,7 @@ public class TrainingData {
 
         return inputValues.size();
     }
-    public static int getTargetOutputs(LinkedList<Float> targetOutValues)
+    public static int getTargetOutputs(ArrayList<Float> targetOutValues)
     {
         targetOutValues.clear();
 

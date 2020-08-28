@@ -31,7 +31,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
@@ -144,7 +143,7 @@ public class SpeechRecognitionAI extends Application {
         stage.setMinHeight(stage.getHeight());
         Image icon =  new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
         stage.getIcons().add(icon);
-        displayLayout(2);//Speech Recognition Layout
+        displayLayout(2);//Training layout, Speech Recognition Layout
     }
 
     private void detectWords()
@@ -582,7 +581,7 @@ public class SpeechRecognitionAI extends Application {
 
         topologyList = new ListView<>();
         topologyItem = FXCollections.observableArrayList();
-        LinkedList<Integer> tempTopology = loadTopology();
+        ArrayList<Integer> tempTopology = loadTopology();
         for (Integer integer : tempTopology)
             topologyItem.add(integer.toString());
         topologyList.setItems(topologyItem);

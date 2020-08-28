@@ -1,10 +1,10 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.io.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class TopologyFile {
-    public static void saveTopology(LinkedList<Integer> topology)
+    public static void saveTopology(ArrayList<Integer> topology)
     {
         try
         {
@@ -22,9 +22,9 @@ public class TopologyFile {
         }
     }
 
-    public static LinkedList<Integer> loadTopology()
+    public static ArrayList<Integer> loadTopology()
     {
-        LinkedList<Integer> topology = new LinkedList<>();
+        ArrayList<Integer> topology = new ArrayList<>();
         try
         {
             FileInputStream fi = new FileInputStream(new File("res\\topology.dat"));

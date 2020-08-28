@@ -2,11 +2,11 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class GeneralFunctions {
-    public static void showVectorValues(String label, LinkedList<Float> v)
+    public static void showVectorValues(String label, ArrayList<Float> v)
     {
         System.out.println(label + " ");
         for (int i = 0; i < v.size(); i++)

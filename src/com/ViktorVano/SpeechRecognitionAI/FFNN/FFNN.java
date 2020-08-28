@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -39,7 +39,7 @@ public class FFNN extends Application
     private NeuralNetwork myNet;
     private boolean training = true;
     private Button btnRun;
-    private LinkedList<LinkedList<Button>> btnHidden = new LinkedList<>();
+    private ArrayList<ArrayList<Button>> btnHidden = new ArrayList<>();
 
     @Override
     public void start(Stage stage)
@@ -180,7 +180,7 @@ public class FFNN extends Application
             return;
         }
 
-        if (topology.getLast() != 4)
+        if (topology.get(topology.size()-1) != 4)
         {
             System.out.println("Topology ERROR:\nNeural network must have 4 outputs.");
             return;
@@ -190,7 +190,7 @@ public class FFNN extends Application
         x_range = 900/(topology.size() - 3);
         for(int x=1; x< topology.size()-1; x++)//X = 900 pix range
         {
-            btnHidden.add(new LinkedList<>());
+            btnHidden.add(new ArrayList<>());
             for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
             {
                 y_range = 750/topology.get(x);
@@ -205,9 +205,9 @@ public class FFNN extends Application
 
         myNet = new NeuralNetwork(topology);
 
-        input = new LinkedList<>();
-        target = new LinkedList<>();
-        result = new LinkedList<>();
+        input = new ArrayList<>();
+        target = new ArrayList<>();
+        result = new ArrayList<>();
         input.clear();
         target.clear();
         result.clear();
@@ -230,7 +230,7 @@ public class FFNN extends Application
                 // Train the net what the outputs should have been:
                 trainData.getTargetOutputs(target);
                 showVectorValues("Targets: ", target);
-                assert(target.size() == topology.peekLast());
+                assert(target.size() == topology.get(topology.size()-1));
                 myNet.backProp(target);//This function alters neurons
 
                 // Collect the net's actual results:
@@ -270,7 +270,7 @@ public class FFNN extends Application
         for(int i = 0; i < inputNodes; i++)
         {
             input.add((float)(Math.round(Math.random())));
-            inputColor[i] = input.getLast().floatValue();
+            inputColor[i] = input.get(input.size() - 1);
             btnInputs[i].setStyle(colorStyle(inputColor[i]));
             btnInputs[i].setText(formatFloatToString4(inputColor[i]));
         }
@@ -279,7 +279,7 @@ public class FFNN extends Application
 
         for(int x=1; x< topology.size()-1; x++)//X = 900 pix range
         {
-            btnHidden.add(new LinkedList<>());
+            btnHidden.add(new ArrayList<>());
             for(int y=0; y<topology.get(x); y++)//Y = 750 pix range
             {
                 float color = myNet.getNeuronOutput(x, y);

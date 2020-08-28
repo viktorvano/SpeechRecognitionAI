@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalizeInputs;
@@ -29,11 +28,11 @@ public class NeuralNetworkThread extends Thread {
         this.runThread = false;
         this.recognizedMessage = "";
         if(input == null)
-            input = new LinkedList<>();
+            input = new ArrayList<>();
         else
             input.clear();
         if(result == null)
-            result = new LinkedList<>();
+            result = new ArrayList<>();
         else
             result.clear();
         inputNodes = topology.get(0);
@@ -60,7 +59,7 @@ public class NeuralNetworkThread extends Thread {
         this.records = recordedWords;
     }
 
-    private int findMaximumValueIndex(LinkedList<Float> values)
+    private int findMaximumValueIndex(ArrayList<Float> values)
     {
         int maximumIndex = 0;
         for(int i=0; i<values.size(); i++)

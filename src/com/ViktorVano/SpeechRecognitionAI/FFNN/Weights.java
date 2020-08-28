@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.FileManagement.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
@@ -16,7 +16,7 @@ public class Weights {
             NumberOfWeights += (topology.get(index) + 1)*topology.get(index + 1);
         }
 
-        weights = new LinkedList<>();
+        weights = new ArrayList<>();
 
         for (index = 0; index < NumberOfWeights; index++)
         {
@@ -26,8 +26,8 @@ public class Weights {
 
     public static void push_zeros_to_Learning_table()
     {
-        LinkedList<Float> InputRow = new LinkedList<>();
-        LinkedList<Float> OutputRow = new LinkedList<>();
+        ArrayList<Float> InputRow = new ArrayList<>();
+        ArrayList<Float> OutputRow = new ArrayList<>();
         int row, column;
 
         learningInputs.clear();
@@ -53,7 +53,7 @@ public class Weights {
 
     public static void get_training_data_count()
     {
-        LinkedList<String> fileContent = new LinkedList<>(readOrCreateFile("res\\training.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\training.txt"));
 
         if(fileContent.size()==0 || fileContent==null)
         {
@@ -84,8 +84,8 @@ public class Weights {
 
     public static void loadTopology()
     {
-        topology = new LinkedList<>();
-        LinkedList<String> fileContent = new LinkedList<>(readOrCreateFile("res\\topology.txt"));
+        topology = new ArrayList<>();
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\topology.txt"));
 
         if(fileContent.size()==0 || fileContent==null)
         {
@@ -119,7 +119,7 @@ public class Weights {
 
     public static void load_training_data_from_file()
     {
-        LinkedList<String> fileContent = new LinkedList<>(readOrCreateFile("res\\training.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\training.txt"));
 
         if(fileContent.size()==0 || fileContent==null)
         {
@@ -133,8 +133,8 @@ public class Weights {
             if(fileContent.get(fileLine).contains("{"))
             {
                 String[] bracketContent = fileContent.get(fileLine).split(",");
-                LinkedList<Float> inputLine = new LinkedList<>();
-                LinkedList<Float> outputLine = new LinkedList<>();
+                ArrayList<Float> inputLine = new ArrayList<>();
+                ArrayList<Float> outputLine = new ArrayList<>();
                 int flag=0;
                 for(int segment = 0; segment < bracketContent.length; segment++)
                 {
@@ -179,7 +179,7 @@ public class Weights {
     {
         int number_of_weights = 0;
 
-        LinkedList<String> fileContent = new LinkedList<>(readOrCreateFile("res\\weights.txt"));
+        ArrayList<String> fileContent = new ArrayList<>(readOrCreateFile("res\\weights.txt"));
 
         for (int i = 0; i < fileContent.size(); i++)
         {

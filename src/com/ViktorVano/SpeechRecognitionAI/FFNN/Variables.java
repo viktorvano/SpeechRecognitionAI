@@ -1,15 +1,9 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Variables {
-    /*
-        vector (c++)   <===========> linkedList(java)
-        v.front()      <===========> l.peekFirst()
-        v.back()       <===========> l.peekLast()
-        v.push_back(x) <===========> l.add(x)
-        v.pop_back()   <===========> l.pollLast()
-    */
+
     public static int patternCount;
     public static int inputNodes;
     public static int outputNodes;
@@ -18,19 +12,19 @@ public class Variables {
     public static float definedRecentAverageSmoothingFactor = 0.0f;
 
 
-    public static LinkedList<Integer> topology = new LinkedList<>();
-    public static final LinkedList<LinkedList<Float>> learningInputs = new LinkedList<>();
-    public static final LinkedList<LinkedList<Float>> learningOutputs = new LinkedList<>();
-    public static LinkedList<Float> weights = new LinkedList<>();
+    public static ArrayList<Integer> topology = new ArrayList<>();
+    public static final ArrayList<ArrayList<Float>> learningInputs = new ArrayList<>();
+    public static final ArrayList<ArrayList<Float>> learningOutputs = new ArrayList<>();
+    public static ArrayList<Float> weights = new ArrayList<>();
     public static int neuronIndex = 0;
     public static int trainingLine = 0;// Has to be initialized 0
-    public static LinkedList<Float> input, target, result;
+    public static ArrayList<Float> input, target, result;
     public static int trainingPass = 0;
 
     public static final int minimumLayerSize = 10;
     public static final int maximumTopologySize = 9;
     public static boolean trainingIsRunning = false, updateTrainingLabel = false;
-    public static float currentTrainingError, minimumTrainingError = 0.015f;
+    public static float currentTrainingError, minimumTrainingError = 0.005f;
     public static int minimumTrainingCycles;
     public static int trainingPassLabel, trainingLineLabel;
     public static float currentTrainingErrorLabel;

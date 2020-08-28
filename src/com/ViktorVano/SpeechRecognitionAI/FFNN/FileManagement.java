@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class FileManagement {
     public static String[] readFile(String filename)
@@ -37,7 +37,7 @@ public class FileManagement {
         }
     }
 
-    public static LinkedList<String> readOrCreateFile(String filename)
+    public static ArrayList<String> readOrCreateFile(String filename)
     {
         File file = new File(filename);
 
@@ -53,7 +53,7 @@ public class FileManagement {
 
             BufferedReader reader = new BufferedReader(new FileReader(filename));
             String line;
-            LinkedList<String> fileContent = new LinkedList<>();
+            ArrayList<String> fileContent = new ArrayList<>();
             do {
                 line = reader.readLine();
                 if(line!=null)

@@ -3,7 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.FileManagement.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.GeneralFunctions.*;
@@ -11,13 +11,13 @@ import static com.ViktorVano.SpeechRecognitionAI.FFNN.GeneralFunctions.*;
 public class Neuron {
     public Neuron(int numOutputs, int myIndex)
     {
-        m_outputWeights = new LinkedList<Connection>();
+        m_outputWeights = new ArrayList<Connection>();
         m_outputWeights.clear();
 
         for (int c = 0; c < numOutputs; c++)
         {
             m_outputWeights.add(new Connection());
-            m_outputWeights.peekLast().weight = randomWeight();
+            m_outputWeights.get(m_outputWeights.size()-1).weight = randomWeight();
         }
 
         m_myIndex = myIndex;
@@ -153,7 +153,7 @@ public class Neuron {
     }
 
     private float m_outputValue;
-    private LinkedList<Connection> m_outputWeights;
+    private ArrayList<Connection> m_outputWeights;
     private int m_myIndex;
     private float m_gradient;
 }
