@@ -117,6 +117,8 @@ public class SpeechRecognitionAI extends Application {
                     displayLayout(layoutIndex);
                 }
             });
+            labelMenu[i].setDisable(true);
+            icons[i].setDisable(true);
         }
         labelMenu[0].setText("     Training Data\n ");
         labelMenu[1].setText("        Train AI\n ");
@@ -514,6 +516,11 @@ public class SpeechRecognitionAI extends Application {
                     speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "
                             + ((neuronIndex*100)/weights.size()) + "%\t\tDone.\t\tListening...");
                     loadingStep = 3;
+                    for(int i=0; i<4; i++)
+                    {
+                        labelMenu[i].setDisable(false);
+                        icons[i].setDisable(false);
+                    }
                 }
             }
         }));
@@ -547,6 +554,8 @@ public class SpeechRecognitionAI extends Application {
                                 + "\t\tError: " + currentTrainingErrorLabel
                                 + "\t\tTraining DONE");
                         Train.setDisable(false);
+                        topologyList.setDisable(false);
+                        txtHiddenLayer.setDisable(false);
                     }else
                     {
                         labelTrainingStatus.setText("Training pass: " + trainingPassLabel
@@ -575,6 +584,10 @@ public class SpeechRecognitionAI extends Application {
                 trainingIsRunning = true;
                 labelTrainingStatus.setText("Training just started.");
                 timelineTrainingLabelUpdate.play();
+                topologyList.setDisable(true);
+                txtHiddenLayer.setDisable(true);
+                RemoveTopologyLayer.setDisable(true);
+                AddHiddenLayer.setDisable(true);
             }
         });
 
