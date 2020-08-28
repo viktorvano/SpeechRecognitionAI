@@ -509,6 +509,11 @@ public class SpeechRecognitionAI extends Application {
                     else
                         speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.size() +"]: "
                                 + ((neuronIndex*100)/weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                }else if(weightsLoaded && !wordsDetected && displayedLayout == 2 && loadingStep != 3)
+                {
+                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "
+                            + ((neuronIndex*100)/weights.size()) + "%\t\tDone.\t\tListening...");
+                    loadingStep = 3;
                 }
             }
         }));
