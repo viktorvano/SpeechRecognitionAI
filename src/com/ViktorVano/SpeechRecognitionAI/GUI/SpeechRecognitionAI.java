@@ -539,7 +539,7 @@ public class SpeechRecognitionAI extends Application {
                     if (currentTrainingErrorLabel < minimumTrainingError && trainingPassLabel > minimumTrainingCycles){
                         trainingIsRunning = false;
                         labelTrainingStatus.setText("Training pass: " + trainingPassLabel
-                                + "\"\t\tError: " + currentTrainingErrorLabel
+                                + "\t\tError: " + currentTrainingErrorLabel
                                 + "\t\tTraining DONE");
                         Train.setDisable(false);
                     }else
