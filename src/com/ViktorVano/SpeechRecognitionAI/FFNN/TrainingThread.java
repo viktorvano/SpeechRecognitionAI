@@ -16,6 +16,7 @@ public class TrainingThread extends Thread {
     private NeuralNetwork neuralNetwork;
     private ObservableList<RecordedAudio> trainingDatabase;
     private ArrayList<Classifier> trainingClassifier;
+    private boolean trainingFlag;
 
     public TrainingThread(ObservableList< RecordedAudio > database, ArrayList<Classifier> classifier)
     {
@@ -23,6 +24,7 @@ public class TrainingThread extends Thread {
         this.neuralNetwork = new NeuralNetwork(topology);
         this.trainingDatabase = database;
         this.trainingClassifier = classifier;
+        this.trainingFlag = true;
         minimumTrainingCycles = trainingDatabase.size() * 100;
         input = new ArrayList<>();
         target = new ArrayList<>();
@@ -55,6 +57,11 @@ public class TrainingThread extends Thread {
             learningInputs.add(new ArrayList<>(inputLine));
             learningOutputs.add(new ArrayList<>(outputLine));
         }
+    }
+
+    public void stopTraining()
+    {
+        trainingFlag = false;
     }
 
     @Override
@@ -90,7 +97,12 @@ public class TrainingThread extends Thread {
             updateTrainingLabel = true;
             currentTrainingError = neuralNetwork.getRecentAverageError();
             currentTrainingErrorLabel = currentTrainingError;
-            if (currentTrainingError < minimumTrainingError && trainingPass > minimumTrainingCycles)
+            if(!trainingFlag)
+            {
+                System.out.println("Training stopped via Stop button.");
+                neuralNetwork.saveNeuronWeights();
+                break;
+            }else if (currentTrainingError < minimumTrainingError && trainingPass > minimumTrainingCycles)
             {
                 System.out.println("Exit due to low error :D\n\n");
                 neuralNetwork.saveNeuronWeights();

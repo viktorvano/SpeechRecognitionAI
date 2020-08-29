@@ -58,7 +58,7 @@ public class SpeechRecognitionAI extends Application {
     private int recordedWordIndex = -1, databaseWordIndex = -1;
     private LineChart<Number,Number> lineChart;
     private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
-    private Button Train, RemoveTopologyLayer, AddHiddenLayer;
+    private Button Train, StopTraining, RemoveTopologyLayer, AddHiddenLayer;
     private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
     private ArrayList<Classifier> classifier;
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
@@ -67,6 +67,7 @@ public class SpeechRecognitionAI extends Application {
     private NeuralNetworkThread neuralNetworkThread;
     private Label speechRecognitionStatus, speechRecognitionOutput;
     private boolean wordsDetected = false;
+    private TrainingThread trainingThread;
 
     public static void main(String[] args)
     {
@@ -579,7 +580,7 @@ public class SpeechRecognitionAI extends Application {
                     icons[i].setDisable(true);
                     labelMenu[i].setDisable(true);
                 }
-                TrainingThread trainingThread = new TrainingThread(database, classifier);
+                trainingThread = new TrainingThread(database, classifier);
                 trainingThread.start();
                 trainingIsRunning = true;
                 labelTrainingStatus.setText("Training just started.");
@@ -588,6 +589,20 @@ public class SpeechRecognitionAI extends Application {
                 txtHiddenLayer.setDisable(true);
                 RemoveTopologyLayer.setDisable(true);
                 AddHiddenLayer.setDisable(true);
+                StopTraining.setDisable(false);
+            }
+        });
+
+        StopTraining = new Button("Stop");
+        StopTraining.setDisable(true);
+        StopTraining.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                trainingThread.stopTraining();
+                StopTraining.setDisable(true);
+                Train.setDisable(false);
+                topologyList.setDisable(false);
+                txtHiddenLayer.setDisable(false);
             }
         });
 
@@ -733,6 +748,8 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.getChildren().add(trainingList);
         Train.setDisable(!sameWordCount || topology.size() < 3);
         hBoxBottom.getChildren().add(Train);
+        StopTraining.setDisable(true);
+        hBoxBottom.getChildren().add(StopTraining);
         hBoxBottom.getChildren().add(labelTrainingStatus);
         vBoxRight.getChildren().add(labelHiddenTopology);
         vBoxRight.getChildren().add(topologyList);
@@ -749,6 +766,7 @@ public class SpeechRecognitionAI extends Application {
     {
         stackPaneCenter.getChildren().remove(trainingList);
         hBoxBottom.getChildren().remove(Train);
+        hBoxBottom.getChildren().remove(StopTraining);
         hBoxBottom.getChildren().remove(labelTrainingStatus);
         vBoxRight.getChildren().remove(labelHiddenTopology);
         vBoxRight.getChildren().remove(topologyList);
