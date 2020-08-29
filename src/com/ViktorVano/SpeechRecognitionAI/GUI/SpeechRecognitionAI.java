@@ -561,7 +561,7 @@ public class SpeechRecognitionAI extends Application {
                     }else
                     {
                         labelTrainingStatus.setText("Training pass: " + trainingPassLabel
-                                + "\t\tTargets[" + trainingLineLabel + "]=\"" + database.get(trainingLineLabel).name
+                                + "\t\tSample[" + trainingLineLabel + "]=\"" + database.get(trainingLineLabel).name
                                 + "\"\t\tError: " + currentTrainingErrorLabel);
                     }
 
@@ -858,10 +858,10 @@ public class SpeechRecognitionAI extends Application {
         for(int i=0; i<classifier.size(); i++)
         {
             if(classifier.get(i).getCount() == maximum)
-                trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tOK");
+                trainingItem.add(classifier.get(i).getName() + "\t\t\t\tcount: " + classifier.get(i).getCount() + "\t\t\tOK");
             else
             {
-                trainingItem.add(classifier.get(i).getName() + "\t\tcount: " + classifier.get(i).getCount() + "\t\tMore specimens required!");
+                trainingItem.add(classifier.get(i).getName() + "\t\t\t\tcount: " + classifier.get(i).getCount() + "\t\t\tMore specimens required!");
                 sameWordCount = false;
             }
         }
