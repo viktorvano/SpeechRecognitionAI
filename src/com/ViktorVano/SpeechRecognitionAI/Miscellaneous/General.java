@@ -30,22 +30,23 @@ public class General {
         {
             if(input+1 < recordedAudio.audioRecordLength)
             {
-                float value = (float) recordedAudio.audioRecord[input] + (float) recordedAudio.audioRecord[input + 1] * 256.0f;
-                inputLine.add(value);
-                absValue = Math.abs(value);
+                absValue = Math.abs((float) recordedAudio.audioRecord[input] + (float) recordedAudio.audioRecord[input + 1] * 256.0f);
+                inputLine.add(absValue);//TODO: Maybe a good idea, maybe not.
                 if(absValue > maximum)
                     maximum = absValue;
-            }
-            else
+            }else
                 inputLine.add(0.0f);
         }
 
+        /*float filter = 0.0f;
+        for(int i=0; i<recordedAudio.audioRecordLength/2; i++)
+        {
+            filter = 0.9f*filter + 0.1f*inputLine.get(i);
+            inputLine.set(i, filter/maximum);
+        }*/
         for(int i=0; i<recordedAudio.audioRecordLength/2; i++)
         {
             inputLine.set(i, inputLine.get(i)/maximum);
         }
-
-        while (inputLine.size()>inputNodes)
-            inputLine.remove(inputLine.size()-1);
     }
 }

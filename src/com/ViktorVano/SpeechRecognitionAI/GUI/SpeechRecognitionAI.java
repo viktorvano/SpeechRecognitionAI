@@ -1,6 +1,7 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
+import com.ViktorVano.SpeechRecognitionAI.Audio.AudioParameters;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
@@ -30,6 +31,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
@@ -53,7 +55,7 @@ public class SpeechRecognitionAI extends Application {
     private ObservableList<RecordedAudio> database, records;
     private ListView<String> databaseList, recordsList, trainingList, topologyList;
     private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
-    private final int minWordLength = 2000, maxWordLength = 18000;
+    private final int minWordLength = 6000, maxWordLength = 150000;
     private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
     private LineChart<Number,Number> lineChart;
@@ -146,14 +148,17 @@ public class SpeechRecognitionAI extends Application {
         stage.setMinHeight(stage.getHeight());
         Image icon =  new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
         stage.getIcons().add(icon);
-        displayLayout(2);//Training layout, Speech Recognition Layout
+        displayLayout(2);//Speech Recognition Layout
     }
 
     private void detectWords()
     {
         detectedWordsSeries.getData().clear();
         final int detectedValue = 3000;
-        final int wordThreshold = 350;
+        final int wordThreshold = 500;
+        final int preWordSamples = 1200;
+        final int wordInertiaSamples = 250;
+        final int wordInertiaThreshold = 300;
         int lastValue = 1500;
         int audioSample;
         for (int i = 0; i < recordedAudio.audioRecordLength; i+=2)
@@ -163,8 +168,8 @@ public class SpeechRecognitionAI extends Application {
             {
                 if(i>=600)
                 {
-                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-600, 0));
-                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-599, detectedValue));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-preWordSamples, 0));
+                    detectedWordsSeries.getData().add(new XYChart.Data<>(i-(preWordSamples-1), detectedValue));
                 }else
                 {
                     detectedWordsSeries.getData().add(new XYChart.Data<>(0, detectedValue));
@@ -185,9 +190,9 @@ public class SpeechRecognitionAI extends Application {
             {
                 valueTheSame = false;
                 int x=i;
-                for(; x<recordedAudio.audioRecordLength && x<(600+i); x+=2)
+                for(; x<recordedAudio.audioRecordLength && x<(wordInertiaSamples+i); x+=2)
                 {
-                    if(lastValue == detectedValue && Math.abs(recordedAudio.audioRecord[x] + recordedAudio.audioRecord[x+1]*256) > 280)
+                    if(lastValue == detectedValue && Math.abs(recordedAudio.audioRecord[x] + recordedAudio.audioRecord[x+1]*256) > wordInertiaThreshold)
                         valueTheSame = true;
                 }
 
@@ -477,7 +482,7 @@ public class SpeechRecognitionAI extends Application {
                         displayedSeries.getData().clear();
                         recordedAudio.audioRecordLength = audioCapture.getRecordLength();
                         for (int i = 0; i < recordedAudio.audioRecordLength - 1; i++) {
-                            if (i % 10 == 0)
+                            if (i % 40 == 0)
                                 displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                         }
                         detectWords();
@@ -504,7 +509,7 @@ public class SpeechRecognitionAI extends Application {
                         }
                         speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                     }
-                }else if(weights.size()!=0 && !weightsLoaded)
+                }else if(weights.size()!=0 && !weightsLoaded)//TODO: Verify the weight size with the topology.
                 {
                     if(loadingStep == 1)
                         speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "

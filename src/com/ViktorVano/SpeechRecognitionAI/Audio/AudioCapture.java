@@ -126,7 +126,7 @@ public class AudioCapture {
                         boolean add = false;
                         for(int i = 0; i< tempCaptureBuffer.length; i++)
                         {
-                            if(Math.abs(tempCaptureBuffer[i]) > 75) {
+                            if(Math.abs(tempCaptureBuffer[i]) > 100) {
                                 add = true;
                                 break;
                             }
@@ -142,7 +142,7 @@ public class AudioCapture {
                             mainBufferLength += cnt;
                             System.out.println("Main Buffer Length: " + mainBufferLength);
                             silenceCount = 0;
-                        }else if(mainBufferLength > 0 && silenceCount < 1)
+                        }else if(mainBufferLength > 0 && silenceCount < 3 && mainBufferLength < 950000)
                         {
                             for(int i = 0; i< tempCaptureBuffer.length; i++)
                             {

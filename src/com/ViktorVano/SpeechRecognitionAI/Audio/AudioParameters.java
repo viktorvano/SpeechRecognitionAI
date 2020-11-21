@@ -3,9 +3,9 @@ package com.ViktorVano.SpeechRecognitionAI.Audio;
 import javax.sound.sampled.AudioFormat;
 
 public class AudioParameters {
+    public static final float sampleRate = 22000.0F;
+    public static final int sampleInBits = 16;
     public static AudioFormat getAudioFormat() {
-        float sampleRate = 8000.0F;
-        int sampleInBits = 16;
         int channels = 1;
         boolean signed = true;
         boolean bigEndian = false;
