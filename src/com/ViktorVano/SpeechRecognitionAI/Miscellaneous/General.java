@@ -35,18 +35,18 @@ public class General {
                 if(absValue > maximum)
                     maximum = absValue;
             }else
-                inputLine.add(0.0f);
+                inputLine.add(-1.0f);
         }
 
-        /*float filter = 0.0f;
+        float filter = 0.0f;
         for(int i=0; i<recordedAudio.audioRecordLength/2; i++)
         {
             filter = 0.9f*filter + 0.1f*inputLine.get(i);
             inputLine.set(i, filter/maximum);
-        }*/
-        for(int i=0; i<recordedAudio.audioRecordLength/2; i++)
+        }
+        /*for(int i=0; i<recordedAudio.audioRecordLength/2; i++)
         {
             inputLine.set(i, inputLine.get(i)/maximum);
-        }
+        }*/
     }
 }
