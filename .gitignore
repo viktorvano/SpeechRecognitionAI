@@ -4,6 +4,7 @@
 # Intellij IDEA IDE
 .idea/
 out/
+res/weights.dat
 
 # Log file
 *.log
