@@ -35,7 +35,7 @@ public class General {
                 if(absValue > maximum)
                     maximum = absValue;
             }else
-                inputLine.add(-1.0f);
+                inputLine.add(0.0f);
         }
 
         float filter = 0.0f;
