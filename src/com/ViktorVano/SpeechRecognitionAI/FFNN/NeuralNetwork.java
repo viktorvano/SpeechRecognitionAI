@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import javax.sound.midi.Soundbank;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -136,6 +136,7 @@ public class NeuralNetwork {
             }
         }
         System.out.println("All Weights are Saved.");
+        Toolkit.getDefaultToolkit().beep();
     }
 
     public void loadNeuronWeights()
@@ -182,6 +183,7 @@ public class NeuralNetwork {
             }
         }
         System.out.println("Weights loaded.");
+        Toolkit.getDefaultToolkit().beep();
     }
 
     private ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
