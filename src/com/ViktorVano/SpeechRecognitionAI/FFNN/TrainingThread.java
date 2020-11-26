@@ -68,6 +68,7 @@ public class TrainingThread extends Thread {
     public void run() {
         super.run();
         System.out.println("Training started\n");
+        neuralNetwork.loadNeuronWeights();
         while (true)
         {
             trainingPass++;
@@ -90,7 +91,7 @@ public class TrainingThread extends Thread {
 
 
             // Report how well the training is working, averaged over recent samples:
-            System.out.println("Net recent average error: " + neuralNetwork.getRecentAverageError() + "\n\n");
+            System.out.println("Net recent error: " + neuralNetwork.getRecentAverageError() + "\n\n");
 
             trainingLineLabel = trainingLine;
             trainingPassLabel = trainingPass;

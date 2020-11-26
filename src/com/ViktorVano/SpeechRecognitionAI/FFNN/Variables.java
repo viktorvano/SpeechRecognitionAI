@@ -9,7 +9,6 @@ public class Variables {
     public static int outputNodes;
     public static float velocity = 0.1f; // overall net learning rate [0.0..1.0]
     public static float momentum = 0.5f; // momentum multiplier of last deltaWeight [0.0..n]
-    public static float definedRecentAverageSmoothingFactor = 0.0f;
 
 
     public static ArrayList<Integer> topology = new ArrayList<>();

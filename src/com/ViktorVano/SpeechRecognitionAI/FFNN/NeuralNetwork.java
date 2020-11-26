@@ -1,5 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
+import javax.sound.midi.Soundbank;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,7 +15,6 @@ public class NeuralNetwork {
     {
         m_error = 0;
         m_recentAverageError = 0;
-        m_recentAverageSmoothingFactor = definedRecentAverageSmoothingFactor;
         int numLayers = topology.size();
         System.out.println("Number of layers: " + numLayers);
         m_layers = new ArrayList<Layer>();
@@ -71,9 +71,7 @@ public class NeuralNetwork {
 
         // Implement a recent average measurement;
 
-        m_recentAverageError =
-                (m_recentAverageError * m_recentAverageSmoothingFactor + m_error)
-                        / (m_recentAverageSmoothingFactor + 1.0f);
+        m_recentAverageError = m_error;
 
         // Calculate output layer gradients
         for (int n = 0; n < outputLayer.size() - 1; n++)
@@ -124,21 +122,25 @@ public class NeuralNetwork {
 
     public void saveNeuronWeights()
     {
+        System.out.println("Saving Neuron Weights...");
         neuronIndex = 0;
         push_zeros_to_Weights();
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
+            System.out.println("Saving Layer: " + layerNum);
             Layer prevLayer = m_layers.get(layerNum - 1);
             for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
             {
                 m_layers.get(layerNum).get(n).saveInputWeights(prevLayer);
             }
         }
+        System.out.println("All Weights are Saved.");
     }
 
     public void loadNeuronWeights()
     {
+        System.out.println("Loading Weights...");
         loadingStep = 1;
         neuronIndex = 0;
         push_zeros_to_Weights();
@@ -172,17 +174,17 @@ public class NeuralNetwork {
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
+            System.out.println("Loading Layer: " + layerNum);
             Layer prevLayer = m_layers.get(layerNum - 1);
             for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
             {
                 m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
             }
         }
+        System.out.println("Weights loaded.");
     }
 
     private ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
     private float m_error;
     private float m_recentAverageError;
-    private float m_recentAverageSmoothingFactor;
-
 }
