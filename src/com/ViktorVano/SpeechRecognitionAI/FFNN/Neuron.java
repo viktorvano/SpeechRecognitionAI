@@ -95,7 +95,7 @@ public class Neuron {
                 file.createNewFile();
                 FileOutputStream f = new FileOutputStream(file);
                 ObjectOutputStream o = new ObjectOutputStream(f);
-                for(int i=1; i<weights.size()-1; i++)
+                for(int i=0; i<weights.size(); i++)
                     o.writeObject(weights.get(i));
                 o.close();
                 f.close();
