@@ -236,18 +236,24 @@ public class SpeechRecognitionAI extends Application {
                     i--;
                 }else
                 {
-                    word++;
-                    System.out.println("Word length: " + length);
-                    RecordedAudio tempRecord = new RecordedAudio();
-                    tempRecord.audioRecordLength = length;
-                    tempRecord.name = "word" + word;
-                    tempRecord.audioRecord = new byte[length];
-                    for(int x=start; x<=end; x++)
+                    try
                     {
-                        tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
+                        word++;
+                        System.out.println("Word length: " + length);
+                        RecordedAudio tempRecord = new RecordedAudio();
+                        tempRecord.audioRecordLength = length;
+                        tempRecord.name = "word" + word;
+                        tempRecord.audioRecord = new byte[length];
+                        for(int x=start; x<=end; x++)
+                        {
+                            tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
+                        }
+                        records.add(tempRecord);
+                        recordItem.add(tempRecord.name);
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
-                    records.add(tempRecord);
-                    recordItem.add(tempRecord.name);
                 }
             }
         }
