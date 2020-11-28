@@ -171,7 +171,7 @@ public class NeuralNetwork {
         }
 
         loadingStep = 2;
-        if(neuronIndex == weights.size())
+        if(neuronIndex == weights.size())//TODO: Works only when the topology matches. Need make it work for more words.
         {
             neuronIndex = 0;
             // Forward propagate

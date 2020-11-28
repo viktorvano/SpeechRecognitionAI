@@ -509,7 +509,7 @@ public class SpeechRecognitionAI extends Application {
                         }
                         speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                     }
-                }else if(weights.size()!=0 && !weightsLoaded)//TODO: Verify the weight size with the topology.
+                }else if(weights.size()!=0 && !weightsLoaded)
                 {
                     if(loadingStep == 1)
                         speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "
