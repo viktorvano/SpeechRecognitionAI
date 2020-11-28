@@ -111,5 +111,7 @@ public class TrainingThread extends Thread {
             }
         }
         System.out.println("Training done.\n");
+        System.out.println("Closing application.");
+        System.exit(0);
     }
 }
