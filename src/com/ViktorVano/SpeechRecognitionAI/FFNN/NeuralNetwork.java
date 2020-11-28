@@ -171,18 +171,25 @@ public class NeuralNetwork {
         }
 
         loadingStep = 2;
-        neuronIndex = 0;
-        // Forward propagate
-        for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
+        if(neuronIndex == weights.size())
         {
-            System.out.println("Loading Layer: " + layerNum);
-            Layer prevLayer = m_layers.get(layerNum - 1);
-            for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
+            neuronIndex = 0;
+            // Forward propagate
+            for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
             {
-                m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
+                System.out.println("Loading Layer: " + layerNum);
+                Layer prevLayer = m_layers.get(layerNum - 1);
+                for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
+                {
+                    m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
+                }
             }
+            System.out.println("Weights loaded.");
+        }else
+        {
+            neuronIndex = weights.size();
+            System.out.println("Weights size did not match with the topology. Loading skipped!!!");
         }
-        System.out.println("Weights loaded.");
         Toolkit.getDefaultToolkit().beep();
     }
 
