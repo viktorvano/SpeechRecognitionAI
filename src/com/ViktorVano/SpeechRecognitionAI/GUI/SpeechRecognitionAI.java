@@ -1,7 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioParameters;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;

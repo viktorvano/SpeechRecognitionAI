@@ -114,9 +114,9 @@ public class NeuralNetwork {
             resultValues.add(m_layers.get(m_layers.size()-1).get(n).getOutputValue());
         }
     }
-    public float getNeuronOutput(int x, int y)
+    public float getNeuronOutput(int layer, int neuron)
     {
-        return m_layers.get(x).get(y).getOutputValue();
+        return m_layers.get(layer).get(neuron).getOutputValue();
     }
     public float getRecentAverageError() { return m_recentAverageError; }
 
