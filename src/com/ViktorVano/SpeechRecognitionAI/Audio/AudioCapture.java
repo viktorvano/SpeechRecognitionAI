@@ -157,6 +157,10 @@ public class AudioCapture {
                             System.out.println("Recording stopped.");
                         }
 
+                    }else if(mainBufferLength >= 980000 && !audioRecorded)
+                    {
+                        audioRecorded = true;
+                        System.out.println("Buffer is full. Recording stopped.");
                     }
                 }
             } catch (Exception e)
