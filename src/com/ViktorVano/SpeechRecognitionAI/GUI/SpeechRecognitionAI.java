@@ -30,7 +30,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;

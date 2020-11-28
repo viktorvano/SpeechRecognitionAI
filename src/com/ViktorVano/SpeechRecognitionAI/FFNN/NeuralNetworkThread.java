@@ -98,7 +98,7 @@ public class NeuralNetworkThread extends Thread {
                     System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" had " + (result.get(maximumIndex)*100.0f) + "% match.");
                     if (recognizedMessage.length() == 0)
                         recognizedMessage = classifierOutputs.get(maximumIndex).getName();
-                    else
+                    else if(classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
                         recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
                 }else {
                     System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" had low  match " + (result.get(maximumIndex)*100.0f) + "%.");
