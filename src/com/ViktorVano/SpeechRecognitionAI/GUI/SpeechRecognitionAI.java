@@ -53,7 +53,7 @@ public class SpeechRecognitionAI extends Application {
     private ObservableList<RecordedAudio> database, records;
     private ListView<String> databaseList, recordsList, trainingList, topologyList;
     private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
-    private final int minWordLength = 6000, maxWordLength = 150000;
+    private final int minWordLength = 6000, maxWordLength = 131072;//max length is binary 2^16 * 2(because of 16 bit)
     private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
     private int recordedWordIndex = -1, databaseWordIndex = -1;
     private LineChart<Number,Number> lineChart;
@@ -879,7 +879,7 @@ public class SpeechRecognitionAI extends Application {
     private void calculateTopology()
     {
         topology.clear();
-        topology.add(maxWordLength/2);
+        topology.add(maxWordLength/2 + maxWordLength/4);//16bit samples + fft resolution (samples/2)
         for(int i=0; i<topologyItem.size(); i++)
             topology.add(Integer.parseInt(topologyItem.get(i)));
         topology.add(classifier.size());
