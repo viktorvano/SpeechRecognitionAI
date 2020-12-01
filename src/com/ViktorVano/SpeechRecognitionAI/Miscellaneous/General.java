@@ -26,7 +26,6 @@ public class General {
 
     public static void normalizeInputs(ArrayList<Float> inputLine, RecordedAudio recordedAudio)
     {
-        float maximum = -9999999999.0f;
         float sampleValue;
         float[] absArray = new float[recordedAudio.audioRecordLength/2];
         float[] realSamples = new float[(int)((double)inputNodes * (2.0/3.0))];
@@ -49,14 +48,15 @@ public class General {
         float filter = 0.0f;
         for(int i=0; i<filteredArray.length; i++)//filtering values
         {
-            filter = 0.9f*filter + 0.1f*absArray[i];
+            filter = 0.98f*filter + 0.02f*absArray[i];
             filteredArray[i] = filter;
         }
 
+        float FilteredMaximum = -9.0f;
         for(int i=0; i<filteredArray.length; i++)//look for a maximum
         {
-            if(absArray[i] > maximum)
-                maximum = absArray[i];
+            if(filteredArray[i] > FilteredMaximum)
+                FilteredMaximum = filteredArray[i];
         }
 
         //System.out.println("\nFiltered Normalized Absolute Audio Samples");
@@ -66,7 +66,7 @@ public class General {
         {
             if(i<filteredArray.length)
             {
-                normalizedValue = filteredArray[i]/maximum;
+                normalizedValue = filteredArray[i]/FilteredMaximum;
                 inputLine.add(normalizedValue);
                 //System.out.println(normalizedValue);
             }
@@ -75,10 +75,17 @@ public class General {
         }
 
         //FFT
+        float AbsoluteMaximum = -9.0f;
+        for(int i=0; i<absArray.length; i++)//look for a maximum
+        {
+            if(absArray[i] > AbsoluteMaximum)
+                AbsoluteMaximum = absArray[i];
+        }
+
         float[] normalizedSamples = new float[realSamples.length];
         for(int i=0; i<recordedAudio.audioRecordLength; i++)
         {
-            normalizedSamples[i] = realSamples[i]/maximum;
+            normalizedSamples[i] = realSamples[i]/AbsoluteMaximum;
         }
         float[] img = new float[realSamples.length];
         fft(realSamples.length, realSamples, img);
@@ -88,7 +95,7 @@ public class General {
         float maxFFT = -999;
         for(int i=0; i<samples; i++)//Calculate FFT magnitude and find maximum
         {
-            resultOfFFT[i] = (float)Math.sqrt(realSamples[i]* realSamples[i]+ img[i]* img[i]);
+            resultOfFFT[i] = (float)Math.sqrt(realSamples[i] * realSamples[i] + img[i] * img[i]);
             if(resultOfFFT[i] > maxFFT)
                 maxFFT = resultOfFFT[i];
         }
