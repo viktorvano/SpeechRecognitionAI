@@ -31,6 +31,7 @@ public class General {
         float[] absArray = new float[recordedAudio.audioRecordLength/2];
         float[] realSamples = new float[(int)((double)inputNodes * (2.0/3.0))];
         int a = 0;
+        //System.out.println("\nAudio Sample");
         for(int input=0; input<recordedAudio.audioRecordLength; input+=2)//calculating absolute 16 bit values
         {
             if(input+1 < recordedAudio.audioRecordLength)
@@ -39,6 +40,7 @@ public class General {
                         + (float) recordedAudio.audioRecord[input + 1] * 256.0f;
                 realSamples[a] = sampleValue;
                 absArray[a++] = Math.abs(sampleValue);
+                //System.out.println(sampleValue);
             }else
                 realSamples[a++] = 0;
         }
@@ -57,11 +59,17 @@ public class General {
                 maximum = absArray[i];
         }
 
+        //System.out.println("\nFiltered Normalized Absolute Audio Samples");
         int samples = (int)((double)inputNodes * (2.0/3.0));
+        float normalizedValue;
         for(int i=0; i<samples; i++)//Fill just normalized samples of the inputLine
         {
             if(i<filteredArray.length)
-                inputLine.add(filteredArray[i]/maximum);
+            {
+                normalizedValue = filteredArray[i]/maximum;
+                inputLine.add(normalizedValue);
+                //System.out.println(normalizedValue);
+            }
             else
                 inputLine.add(0.0f);
         }
@@ -85,10 +93,12 @@ public class General {
                 maxFFT = resultOfFFT[i];
         }
 
+        //System.out.println("\nFFT");
         for(int i=0; i<samples; i++)//Normalize FFT magnitude and add to inputLine
         {
             resultOfFFT[i] /= maxFFT;
             inputLine.add(resultOfFFT[i]);
+            //System.out.println(resultOfFFT[i]);
         }
     }
 
