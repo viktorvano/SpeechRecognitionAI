@@ -87,6 +87,7 @@ public class Neuron {
         if (neuronIndex == weights.size())
         {
             //save weights from Weights[] to a file
+            System.out.println("Saving weights to weights.dat...");
             try
             {
                 File file = new File("res\\weights.dat");

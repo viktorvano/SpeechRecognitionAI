@@ -128,7 +128,7 @@ public class NeuralNetwork {
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
-            System.out.println("Saving Layer: " + layerNum);
+            System.out.println("Reading weights from Layer: " + layerNum);
             Layer prevLayer = m_layers.get(layerNum - 1);
             for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
             {
@@ -146,6 +146,7 @@ public class NeuralNetwork {
         neuronIndex = 0;
         push_zeros_to_Weights();
 
+        System.out.println("Reading file weights.dat...");
         try
         {
             FileInputStream fi = new FileInputStream(new File("res\\weights.dat"));

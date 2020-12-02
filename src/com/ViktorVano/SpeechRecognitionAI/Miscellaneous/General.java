@@ -83,7 +83,7 @@ public class General {
         }
 
         float[] normalizedSamples = new float[realSamples.length];
-        for(int i=0; i<recordedAudio.audioRecordLength; i++)
+        for(int i=0; i<normalizedSamples.length; i++)
         {
             normalizedSamples[i] = realSamples[i]/AbsoluteMaximum;
         }
