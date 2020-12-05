@@ -6,6 +6,8 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRouter;
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRouting;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -32,11 +34,10 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
-import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.loadDatabase;
-import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.saveDatabase;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.loadTopology;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.saveTopology;
+import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
 
 public class SpeechRecognitionAI extends Application {
@@ -51,14 +52,17 @@ public class SpeechRecognitionAI extends Application {
     private final FlowPane flow = new FlowPane();
     private final HBox hBoxBottom = new HBox();
     private ObservableList<RecordedAudio> database, records;
-    private ListView<String> databaseList, recordsList, trainingList, topologyList;
-    private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
+    private ObservableList<WordRouting> wordRoutingDatabase;
+    private ListView<String> databaseList, recordsList, trainingList, topologyList, wordRoutingList;
+    private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem, wordRoutingItem;
     private final int minWordLength = 6000, maxWordLength = 131072;//max length is binary 2^16 * 2(because of 16 bit)
     private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
-    private int recordedWordIndex = -1, databaseWordIndex = -1;
+    private int recordedWordIndex = -1, databaseWordIndex = -1, wordRoutingIndex = -1;
     private LineChart<Number,Number> lineChart;
-    private Button Play, Record, buttonPlayDatabaseWord, buttonRemoveDatabaseWord, PlayWord, RemoveWord, AddWord;
-    private Button Train, StopTraining, RemoveTopologyLayer, AddHiddenLayer;
+    private Button buttonPlay, buttonRecord, buttonPlayDatabaseWord, buttonRemoveDatabaseWord;
+    private Button buttonPlayWord, buttonRemoveWord, buttonAddWord;
+    private Button buttonTrain, buttonStopTraining, buttonRemoveTopologyLayer, buttonAddHiddenLayer;
+    private Button buttonAddWordRouting, buttonRemoveWordRouting;
     private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
     private ArrayList<Classifier> classifier;
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
@@ -66,6 +70,8 @@ public class SpeechRecognitionAI extends Application {
     private Label[] labelMenu;
     private NeuralNetworkThread neuralNetworkThread;
     private Label speechRecognitionStatus, speechRecognitionOutput;
+    private Label labelWordRouting;
+    private TextField txtWord, txtAddress, txtPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
 
@@ -292,9 +298,9 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeDataLayout()
     {
-        Play = new Button("Play Record");
-        Play.setPrefHeight(100);
-        Play.setOnAction(new EventHandler<ActionEvent>() {
+        buttonPlay = new Button("Play Record");
+        buttonPlay.setPrefHeight(100);
+        buttonPlay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(recordedAudio != null && recordedAudio.audioRecord != null)
@@ -305,9 +311,9 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        Record = new Button("Record Audio");
-        Record.setPrefHeight(100);
-        Record.setOnAction(new EventHandler<ActionEvent>() {
+        buttonRecord = new Button("Record Audio");
+        buttonRecord.setPrefHeight(100);
+        buttonRecord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 captureAudio();
@@ -410,8 +416,8 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        PlayWord = new Button("Play");
-        PlayWord.setOnAction(new EventHandler<ActionEvent>() {
+        buttonPlayWord = new Button("Play");
+        buttonPlayWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(recordedAudio != null && recordedAudio.audioRecord != null && recordedWordIndex !=-1)
@@ -422,8 +428,8 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        RemoveWord = new Button("Remove");
-        RemoveWord.setOnAction(new EventHandler<ActionEvent>() {
+        buttonRemoveWord = new Button("Remove");
+        buttonRemoveWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(recordedWordIndex != -1)
@@ -436,8 +442,8 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        AddWord = new Button("Add to Database");
-        AddWord.setOnAction(new EventHandler<ActionEvent>() {
+        buttonAddWord = new Button("Add to Database");
+        buttonAddWord.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(recordedWordIndex != -1)
@@ -497,15 +503,16 @@ public class SpeechRecognitionAI extends Application {
                 if (weightsLoaded && wordsDetected && displayedLayout == 2)
                 {
                     if (neuralNetworkThread.isFinished() && displayMessageCounter == -1) {
-                        neuralNetworkRoutine();
+                        neuralNetworkRoutine();//Also sets displayMessageCounter to 0
                     }else if(!neuralNetworkThread.isFinished() && displayMessageCounter == 0)
                     {
                         speechRecognitionStatus.setText("Speech being processed.");
                         speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                     }else if (neuralNetworkThread.isFinished() && displayMessageCounter != -1) {
-                        if(displayMessageCounter < 2)
+                        if(displayMessageCounter < 2)//How long it should keep the displayed message. X*0.25s
                             displayMessageCounter++;
                         else {
+                            new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                             displayMessageCounter = -1;
                             wordsDetected = false;
                             speechRecognitionStatus.setText("Listening...");
@@ -559,12 +566,12 @@ public class SpeechRecognitionAI extends Application {
                 }else if(updateTrainingLabel)
                 {
                     if (currentTrainingErrorLabel < minimumTrainingError && trainingPassLabel > minimumTrainingCycles
-                        || StopTraining.isDisabled()){
+                        || buttonStopTraining.isDisabled()){
                         trainingIsRunning = false;
                         labelTrainingStatus.setText("Training pass: " + trainingPassLabel
                                 + "\t\tError: " + currentTrainingErrorLabel
                                 + "\t\tTraining DONE");
-                        Train.setDisable(false);
+                        buttonTrain.setDisable(false);
                         topologyList.setDisable(false);
                         txtHiddenLayer.setDisable(false);
                     }else
@@ -580,11 +587,11 @@ public class SpeechRecognitionAI extends Application {
         }));
         timelineTrainingLabelUpdate.setCycleCount(Timeline.INDEFINITE);
 
-        Train = new Button("Train");
-        Train.setOnAction(new EventHandler<ActionEvent>() {
+        buttonTrain = new Button("Train");
+        buttonTrain.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Train.setDisable(true);
+                buttonTrain.setDisable(true);
                 for(int i=0; i<labelMenu.length; i++)
                 {
                     icons[i].setDisable(true);
@@ -597,20 +604,20 @@ public class SpeechRecognitionAI extends Application {
                 timelineTrainingLabelUpdate.play();
                 topologyList.setDisable(true);
                 txtHiddenLayer.setDisable(true);
-                RemoveTopologyLayer.setDisable(true);
-                AddHiddenLayer.setDisable(true);
-                StopTraining.setDisable(false);
+                buttonRemoveTopologyLayer.setDisable(true);
+                buttonAddHiddenLayer.setDisable(true);
+                buttonStopTraining.setDisable(false);
             }
         });
 
-        StopTraining = new Button("Stop");
-        StopTraining.setDisable(true);
-        StopTraining.setOnAction(new EventHandler<ActionEvent>() {
+        buttonStopTraining = new Button("Stop");
+        buttonStopTraining.setDisable(true);
+        buttonStopTraining.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 trainingThread.stopTraining();
-                StopTraining.setDisable(true);
-                Train.setDisable(false);
+                buttonStopTraining.setDisable(true);
+                buttonTrain.setDisable(false);
                 topologyList.setDisable(false);
                 txtHiddenLayer.setDisable(false);
             }
@@ -632,20 +639,20 @@ public class SpeechRecognitionAI extends Application {
         topologyList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
+                buttonAddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
 
-                RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
+                buttonRemoveTopologyLayer.setDisable(topologyItem.size() == 0);
             }
         });
 
-        RemoveTopologyLayer = new Button("Remove Hidden Layer");
-        RemoveTopologyLayer.setDisable(true);
-        RemoveTopologyLayer.setOnAction(new EventHandler<ActionEvent>() {
+        buttonRemoveTopologyLayer = new Button("Remove Hidden Layer");
+        buttonRemoveTopologyLayer.setDisable(true);
+        buttonRemoveTopologyLayer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(topologyList.getSelectionModel().getSelectedIndex() != -1)
                     topologyItem.remove(topologyList.getSelectionModel().getSelectedIndex());
-                RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
+                buttonRemoveTopologyLayer.setDisable(topologyItem.size() == 0);
                 calculateTopology();
                 saveTopology(topology);
             }
@@ -672,15 +679,15 @@ public class SpeechRecognitionAI extends Application {
                         textFieldTopologyValue = -1;
                     }
                 }
-                AddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
+                buttonAddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
 
-                RemoveTopologyLayer.setDisable(topologyItem.size() == 0);
+                buttonRemoveTopologyLayer.setDisable(topologyItem.size() == 0);
             }
         });
 
-        AddHiddenLayer = new Button("Add Hidden Layer");
-        AddHiddenLayer.setDisable(true);
-        AddHiddenLayer.setOnAction(new EventHandler<ActionEvent>() {
+        buttonAddHiddenLayer = new Button("Add Hidden Layer");
+        buttonAddHiddenLayer.setDisable(true);
+        buttonAddHiddenLayer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(topologyItem.size() != 0
@@ -715,22 +722,106 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeSettingsLayout()
     {
+        wordRoutingDatabase = loadWordRouting();
+        wordRoutingList = new ListView<>();
+        wordRoutingItem = FXCollections.observableArrayList();
+        for (WordRouting wordRouting : wordRoutingDatabase)
+            wordRoutingItem.add(wordRouting.word + "\t\t\t" + wordRouting.address + " : " + wordRouting.port);
+        wordRoutingList.setItems(wordRoutingItem);
+        wordRoutingList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                if(wordRoutingList.getSelectionModel().getSelectedIndex() != -1)
+                {
+                    wordRoutingIndex = wordRoutingList.getSelectionModel().getSelectedIndex();
+                    buttonRemoveWordRouting.setDisable(false);
+                }
+            }
+        });
 
+        buttonRemoveWordRouting = new Button("Remove Word Routing");
+        buttonRemoveWordRouting.setDisable(wordRoutingIndex == -1);
+        buttonRemoveWordRouting.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(wordRoutingList.getSelectionModel().getSelectedIndex() != -1)
+                {
+                    wordRoutingList.getItems().remove(wordRoutingIndex);
+                    wordRoutingDatabase.remove(wordRoutingIndex);
+                    wordRoutingIndex = wordRoutingList.getSelectionModel().getSelectedIndex();
+                    buttonRemoveWordRouting.setDisable(wordRoutingIndex == -1);
+                    saveWordRouting(wordRoutingDatabase);
+                }
+            }
+        });
+
+        labelWordRouting = new Label("\n Word Routing \n\n");
+        labelWordRouting.setFont(Font.font("Arial", 20));
+
+        txtWord = new TextField();
+        txtWord.setPromptText("Word/Phrase");
+        txtWord.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                buttonAddWordRouting.setDisable(txtWord.getText().length() == 0 ||
+                        txtAddress.getText().length() == 0 || txtPort.getText().length() ==0);
+            }
+        });
+
+        txtAddress = new TextField();
+        txtAddress.setPromptText("IP Address/URL");
+        txtAddress.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                buttonAddWordRouting.setDisable(txtWord.getText().length() == 0 ||
+                        txtAddress.getText().length() == 0 || txtPort.getText().length() ==0);
+            }
+        });
+
+        txtPort = new TextField();
+        txtPort.setPromptText("Port");
+        txtPort.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                buttonAddWordRouting.setDisable(txtWord.getText().length() == 0 ||
+                        txtAddress.getText().length() == 0 || txtPort.getText().length() ==0);
+            }
+        });
+
+        buttonAddWordRouting = new Button("Add Word Routing");
+        buttonAddWordRouting.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                WordRouting tempWordRouting = new WordRouting();
+                tempWordRouting.word = txtWord.getText();
+                tempWordRouting.address = txtAddress.getText();
+                tempWordRouting.port = txtPort.getText();
+                txtWord.setText("");
+                txtAddress.setText("");
+                txtPort.setText("");
+                String tempString =  tempWordRouting.word + "\t\t\t" +
+                        tempWordRouting.address + " : " + tempWordRouting.port;
+                wordRoutingList.getItems().add(tempString);
+                wordRoutingDatabase.add(wordRoutingDatabase.size(), tempWordRouting);
+                saveWordRouting(wordRoutingDatabase);
+            }
+        });
     }
 
     private void displayDataLayout()
     {
-        hBoxBottom.getChildren().add(Play);
-        hBoxBottom.getChildren().add(Record);
+        hBoxBottom.getChildren().add(buttonPlay);
+        hBoxBottom.getChildren().add(buttonRecord);
         vBoxRight.getChildren().add(databaseList);
         vBoxRight.getChildren().add(buttonPlayDatabaseWord);
         vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
         vBoxRight.getChildren().add(txtDatabaseWord);
         hBoxBottom.getChildren().add(recordsList);
         hBoxBottom.getChildren().add(txtDetectedWord);
-        hBoxBottom.getChildren().add(PlayWord);
-        hBoxBottom.getChildren().add(RemoveWord);
-        hBoxBottom.getChildren().add(AddWord);
+        hBoxBottom.getChildren().add(buttonPlayWord);
+        hBoxBottom.getChildren().add(buttonRemoveWord);
+        hBoxBottom.getChildren().add(buttonAddWord);
         stackPaneCenter.getChildren().add(lineChart);
         displayedLayout = 0;
         System.out.println("Data Layout displayed.");
@@ -738,17 +829,17 @@ public class SpeechRecognitionAI extends Application {
 
     private void hideDataLayout()
     {
-        hBoxBottom.getChildren().remove(Play);
-        hBoxBottom.getChildren().remove(Record);
+        hBoxBottom.getChildren().remove(buttonPlay);
+        hBoxBottom.getChildren().remove(buttonRecord);
         vBoxRight.getChildren().remove(databaseList);
         vBoxRight.getChildren().remove(buttonPlayDatabaseWord);
         vBoxRight.getChildren().remove(buttonRemoveDatabaseWord);
         vBoxRight.getChildren().remove(txtDatabaseWord);
         hBoxBottom.getChildren().remove(recordsList);
         hBoxBottom.getChildren().remove(txtDetectedWord);
-        hBoxBottom.getChildren().remove(PlayWord);
-        hBoxBottom.getChildren().remove(RemoveWord);
-        hBoxBottom.getChildren().remove(AddWord);
+        hBoxBottom.getChildren().remove(buttonPlayWord);
+        hBoxBottom.getChildren().remove(buttonRemoveWord);
+        hBoxBottom.getChildren().remove(buttonAddWord);
         stackPaneCenter.getChildren().remove(lineChart);
     }
 
@@ -756,17 +847,17 @@ public class SpeechRecognitionAI extends Application {
     {
         countWords();
         stackPaneCenter.getChildren().add(trainingList);
-        Train.setDisable(!sameWordCount || topology.size() < 3);
-        hBoxBottom.getChildren().add(Train);
-        StopTraining.setDisable(true);
-        hBoxBottom.getChildren().add(StopTraining);
+        buttonTrain.setDisable(!sameWordCount || topology.size() < 3);
+        hBoxBottom.getChildren().add(buttonTrain);
+        buttonStopTraining.setDisable(true);
+        hBoxBottom.getChildren().add(buttonStopTraining);
         hBoxBottom.getChildren().add(labelTrainingStatus);
         vBoxRight.getChildren().add(labelHiddenTopology);
         vBoxRight.getChildren().add(topologyList);
-        vBoxRight.getChildren().add(RemoveTopologyLayer);
+        vBoxRight.getChildren().add(buttonRemoveTopologyLayer);
         vBoxRight.getChildren().add(labelNewHiddenLayer);
         vBoxRight.getChildren().add(txtHiddenLayer);
-        vBoxRight.getChildren().add(AddHiddenLayer);
+        vBoxRight.getChildren().add(buttonAddHiddenLayer);
         vBoxRight.getChildren().add(labelTopology);
         displayedLayout = 1;
         System.out.println("Training Layout displayed.");
@@ -775,15 +866,15 @@ public class SpeechRecognitionAI extends Application {
     private void hideTrainingLayout()
     {
         stackPaneCenter.getChildren().remove(trainingList);
-        hBoxBottom.getChildren().remove(Train);
-        hBoxBottom.getChildren().remove(StopTraining);
+        hBoxBottom.getChildren().remove(buttonTrain);
+        hBoxBottom.getChildren().remove(buttonStopTraining);
         hBoxBottom.getChildren().remove(labelTrainingStatus);
         vBoxRight.getChildren().remove(labelHiddenTopology);
         vBoxRight.getChildren().remove(topologyList);
-        vBoxRight.getChildren().remove(RemoveTopologyLayer);
+        vBoxRight.getChildren().remove(buttonRemoveTopologyLayer);
         vBoxRight.getChildren().remove(labelNewHiddenLayer);
         vBoxRight.getChildren().remove(txtHiddenLayer);
-        vBoxRight.getChildren().remove(AddHiddenLayer);
+        vBoxRight.getChildren().remove(buttonAddHiddenLayer);
         vBoxRight.getChildren().remove(labelTopology);
     }
 
@@ -805,13 +896,26 @@ public class SpeechRecognitionAI extends Application {
 
     private void displaySettingsLayout()
     {
+        stackPaneCenter.getChildren().add(wordRoutingList);
+        vBoxRight.getChildren().add(labelWordRouting);
+        vBoxRight.getChildren().add(txtWord);
+        vBoxRight.getChildren().add(txtAddress);
+        vBoxRight.getChildren().add(txtPort);
+        vBoxRight.getChildren().add(buttonAddWordRouting);
+        hBoxBottom.getChildren().add(buttonRemoveWordRouting);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
 
     private void hideSettingsLayout()
     {
-
+        stackPaneCenter.getChildren().remove(wordRoutingList);
+        vBoxRight.getChildren().remove(labelWordRouting);
+        vBoxRight.getChildren().remove(txtWord);
+        vBoxRight.getChildren().remove(txtAddress);
+        vBoxRight.getChildren().remove(txtPort);
+        vBoxRight.getChildren().remove(buttonAddWordRouting);
+        hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
     }
 
     private void displayLayout(int layoutIndex)
@@ -899,11 +1003,11 @@ public class SpeechRecognitionAI extends Application {
                 text += topology.get(i);
             }
             labelTopology.setText(text);
-            Train.setDisable(!sameWordCount);
+            buttonTrain.setDisable(!sameWordCount);
         } else
         {
             labelTopology.setText("\nTopology:\nAdd more layers!");
-            Train.setDisable(true);
+            buttonTrain.setDisable(true);
         }
     }
 }
