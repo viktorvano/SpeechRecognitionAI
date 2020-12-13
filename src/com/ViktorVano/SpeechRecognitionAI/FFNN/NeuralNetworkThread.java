@@ -103,8 +103,19 @@ public class NeuralNetworkThread extends Thread {
                 }else {
                     System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has low  match " + (result.get(maximumIndex)*100.0f) + "%.");
                 }
-
                 records.remove(0);
+                if(printNetworkValues)
+                {
+                    //From the fist hidden layer to the output layer. Input layer contains just a normalized data.
+                    for (int layer = 1; layer < topology.size(); layer++)
+                    {
+                        System.out.println("\nLayer " + layer);
+                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
+                            System.out.println(neuralNetwork.getNeuronOutput(layer, neuron));
+
+                    }
+                    System.out.println();//just a new line after printing the last layer
+                }
             }
             System.out.println("Speech analysed.");
             runThread = false;
