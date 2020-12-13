@@ -40,7 +40,7 @@ public class SpeechRecognitionAI extends Application {
     private AudioCapture audioCapture;
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
-    private Timeline timelineUpdateData, timelineTrainingLabelUpdate;
+    private Timeline timelineTrainingLabelUpdate;
     private boolean updateData = true, sameWordCount = false;
     private final BorderPane borderPane = new BorderPane();
     private final StackPane stackPaneCenter = new StackPane();
@@ -301,8 +301,7 @@ public class SpeechRecognitionAI extends Application {
         database = loadDatabase();
         databaseList = new ListView<>();
         databaseItem = FXCollections.observableArrayList();
-        for(int i=0; i<database.size(); i++)
-            databaseItem.add(database.get(i).name);
+        for (RecordedAudio audio : database) databaseItem.add(audio.name);
         databaseList.setItems(databaseItem);
         databaseList.setPrefHeight(500);
         databaseList.setOnMouseClicked(event -> {
@@ -429,10 +428,11 @@ public class SpeechRecognitionAI extends Application {
         lineChart.getData().add(detectedWordsSeries);
         lineChart.setAnimated(false);
 
-        timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(250), event -> {
+        //Also sets displayMessageCounter to 0
+        //How long it should keep the displayed message. X*0.25s
+        Timeline timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(250), event -> {
 
-            if (updateData && audioCapture.isAudioRecorded())
-            {
+            if (updateData && audioCapture.isAudioRecorded()) {
                 updateData = false;
                 recordedAudio.audioRecord = audioCapture.getRecord();
                 if (recordedAudio.audioRecord != null) {
@@ -447,16 +447,14 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
 
-            if (weightsLoaded && wordsDetected && displayedLayout == 2)
-            {
+            if (weightsLoaded && wordsDetected && displayedLayout == 2) {
                 if (neuralNetworkThread.isFinished() && displayMessageCounter == -1) {
                     neuralNetworkRoutine();//Also sets displayMessageCounter to 0
-                }else if(!neuralNetworkThread.isFinished() && displayMessageCounter == 0)
-                {
+                } else if (!neuralNetworkThread.isFinished() && displayMessageCounter == 0) {
                     speechRecognitionStatus.setText("Speech being processed.");
                     speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
-                }else if (neuralNetworkThread.isFinished() && displayMessageCounter != -1) {
-                    if(displayMessageCounter < 2)//How long it should keep the displayed message. X*0.25s
+                } else if (neuralNetworkThread.isFinished() && displayMessageCounter != -1) {
+                    if (displayMessageCounter < 2)//How long it should keep the displayed message. X*0.25s
                         displayMessageCounter++;
                     else {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
@@ -467,21 +465,18 @@ public class SpeechRecognitionAI extends Application {
                     }
                     speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                 }
-            }else if(weights.size()!=0 && !weightsLoaded)
-            {
-                if(loadingStep == 1)
-                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "
-                            + Math.round(((double)neuronIndex*100.0)/(double)weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+            } else if (weights.size() != 0 && !weightsLoaded) {
+                if (loadingStep == 1)
+                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() + "]: "
+                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
                 else
-                    speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.size() +"]: "
-                            + Math.round(((double)neuronIndex*100.0)/(double)weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
-            }else if(weightsLoaded && !wordsDetected && displayedLayout == 2 && loadingStep != 3)
-            {
-                speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() +"]: "
-                        + Math.round(((double)neuronIndex*100.0)/(double)weights.size()) + "%\t\tDone.\t\tListening...");
+                    speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.size() + "]: "
+                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+            } else if (weightsLoaded && !wordsDetected && displayedLayout == 2 && loadingStep != 3) {
+                speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() + "]: "
+                        + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tDone.\t\tListening...");
                 loadingStep = 3;
-                for(int i=0; i<4; i++)
-                {
+                for (int i = 0; i < 4; i++) {
                     labelMenu[i].setDisable(false);
                     icons[i].setDisable(false);
                 }
@@ -876,17 +871,15 @@ public class SpeechRecognitionAI extends Application {
 
         int maximum = -1;
         sameWordCount = true;
-        for(int i=0; i<classifier.size(); i++)
-            if(classifier.get(i).getCount() > maximum)
-                maximum = classifier.get(i).getCount();
+        for (Classifier value : classifier)
+            if (value.getCount() > maximum)
+                maximum = value.getCount();
         trainingItem.clear();
-        for(int i=0; i<classifier.size(); i++)
-        {
-            if(classifier.get(i).getCount() == maximum)
-                trainingItem.add(classifier.get(i).getName() + "\t\t\t\tcount: " + classifier.get(i).getCount() + "\t\t\tOK");
-            else
-            {
-                trainingItem.add(classifier.get(i).getName() + "\t\t\t\tcount: " + classifier.get(i).getCount() + "\t\t\tMore specimens required!");
+        for (Classifier value : classifier) {
+            if (value.getCount() == maximum)
+                trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tOK");
+            else {
+                trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tMore specimens required!");
                 sameWordCount = false;
             }
         }
@@ -896,8 +889,7 @@ public class SpeechRecognitionAI extends Application {
     {
         topology.clear();
         topology.add(maxWordLength/2 + maxWordLength/4);//16bit samples + fft resolution (samples/2)
-        for(int i=0; i<topologyItem.size(); i++)
-            topology.add(Integer.parseInt(topologyItem.get(i)));
+        for (String s : topologyItem) topology.add(Integer.parseInt(s));
         topology.add(classifier.size());
 
         if(topology.size() >= 3)
