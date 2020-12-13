@@ -29,7 +29,7 @@ public class WordRoutingFile {
         ObservableList<WordRouting> wordRouting = FXCollections.observableArrayList();
         try
         {
-            FileInputStream fi = new FileInputStream(new File("res\\wordRouting.dat"));
+            FileInputStream fi = new FileInputStream("res\\wordRouting.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)

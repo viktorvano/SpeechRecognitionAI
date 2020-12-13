@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.inputNodes;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.printNetworkValues;
 
 public class General {
     public static final float  pi = (float)Math.atan2(1, 1) * 4.0f;//calculated pi
@@ -30,7 +31,8 @@ public class General {
         float[] absArray = new float[recordedAudio.audioRecordLength/2];
         float[] realSamples = new float[(int)((double)inputNodes * (2.0/3.0))];
         int a = 0;
-        //System.out.println("\nAudio Sample");
+        if(printNetworkValues)
+            System.out.println("\nAudio Sample");
         for(int input=0; input<recordedAudio.audioRecordLength; input+=2)//calculating absolute 16 bit values
         {
             if(input+1 < recordedAudio.audioRecordLength)
@@ -39,7 +41,8 @@ public class General {
                         + (float) recordedAudio.audioRecord[input + 1] * 256.0f;
                 realSamples[a] = sampleValue;
                 absArray[a++] = Math.abs(sampleValue);
-                //System.out.println(sampleValue);
+                if(printNetworkValues)
+                    System.out.println(sampleValue);
             }else
                 realSamples[a++] = 0;
         }
@@ -59,7 +62,8 @@ public class General {
                 FilteredMaximum = filteredArray[i];
         }
 
-        //System.out.println("\nFiltered Normalized Absolute Audio Samples");
+        if(printNetworkValues)
+            System.out.println("\nFiltered Normalized Absolute Audio Samples");
         int samples = (int)((double)inputNodes * (2.0/3.0));
         float normalizedValue;
         for(int i=0; i<samples; i++)//Fill just normalized samples of the inputLine
@@ -68,7 +72,8 @@ public class General {
             {
                 normalizedValue = filteredArray[i]/FilteredMaximum;
                 inputLine.add(normalizedValue);
-                //System.out.println(normalizedValue);
+                if(printNetworkValues)
+                    System.out.println(normalizedValue);
             }
             else
                 inputLine.add(0.0f);
@@ -100,12 +105,14 @@ public class General {
                 maxFFT = resultOfFFT[i];
         }
 
-        //System.out.println("\nFFT");
+        if(printNetworkValues)
+            System.out.println("\nFFT");
         for(int i=0; i<samples; i++)//Normalize FFT magnitude and add to inputLine
         {
             resultOfFFT[i] /= maxFFT;
             inputLine.add(resultOfFFT[i]);
-            //System.out.println(resultOfFFT[i]);
+            if(printNetworkValues)
+                System.out.println(resultOfFFT[i]);
         }
     }
 

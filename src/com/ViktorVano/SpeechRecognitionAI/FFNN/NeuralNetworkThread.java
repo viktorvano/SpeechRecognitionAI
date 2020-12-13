@@ -95,13 +95,13 @@ public class NeuralNetworkThread extends Thread {
                 int maximumIndex = findMaximumValueIndex(result);
                 if (result.get(maximumIndex) > classifierThreshold)
                 {
-                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" had " + (result.get(maximumIndex)*100.0f) + "% match.");
+                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has " + (result.get(maximumIndex)*100.0f) + "% match.");
                     if (recognizedMessage.length() == 0)
                         recognizedMessage = classifierOutputs.get(maximumIndex).getName();
                     else if(classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
                         recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
                 }else {
-                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" had low  match " + (result.get(maximumIndex)*100.0f) + "%.");
+                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has low  match " + (result.get(maximumIndex)*100.0f) + "%.");
                 }
 
                 records.remove(0);

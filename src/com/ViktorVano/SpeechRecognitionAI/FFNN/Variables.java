@@ -30,4 +30,5 @@ public class Variables {
     public static float classifierThreshold = 0.8f;
     public static boolean weightsLoaded = false;
     public static int loadingStep = 0;
+    public static boolean printNetworkValues = false;
 }

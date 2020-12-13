@@ -29,7 +29,7 @@ public class AudioDatabase {
         ObservableList<RecordedAudio> database = FXCollections.observableArrayList();
         try
         {
-            FileInputStream fi = new FileInputStream(new File("res\\database.dat"));
+            FileInputStream fi = new FileInputStream("res\\database.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)

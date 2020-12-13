@@ -32,7 +32,6 @@ public class FileManagement {
         catch (Exception e)
         {
             System.err.format("Exception occurred trying to read '%s'.\n", filename);
-            //e.printStackTrace();
             return null;
         }
     }

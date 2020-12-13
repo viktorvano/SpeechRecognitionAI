@@ -27,7 +27,7 @@ public class TopologyFile {
         ArrayList<Integer> topology = new ArrayList<>();
         try
         {
-            FileInputStream fi = new FileInputStream(new File("res\\topology.dat"));
+            FileInputStream fi = new FileInputStream("res\\topology.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)
