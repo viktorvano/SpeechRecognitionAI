@@ -11,18 +11,17 @@ import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalizeInputs;
 
 public class NeuralNetworkThread extends Thread {
-    private NeuralNetwork neuralNetwork;
+    private final NeuralNetwork neuralNetwork;
     private ObservableList<RecordedAudio> records;
-    private ArrayList<Classifier> classifierOutputs;
-    private LoadWeights loadWeights;
+    private final ArrayList<Classifier> classifierOutputs;
     private boolean runThread;
     private String recognizedMessage;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
     {
         this.neuralNetwork = new NeuralNetwork(topology);
-        this.loadWeights = new LoadWeights();
-        this.loadWeights.start();
+        LoadWeights loadWeights = new LoadWeights();
+        loadWeights.start();
         this.records = FXCollections.observableArrayList();
         this.classifierOutputs = classifier;
         this.runThread = false;

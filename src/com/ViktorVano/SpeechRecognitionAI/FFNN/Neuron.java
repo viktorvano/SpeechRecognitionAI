@@ -9,8 +9,7 @@ import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
 public class Neuron {
     public Neuron(int numOutputs, int myIndex)
     {
-        m_outputWeights = new ArrayList<Connection>();
-        m_outputWeights.clear();
+        m_outputWeights = new ArrayList<>();
 
         for (int c = 0; c < numOutputs; c++)
         {
@@ -30,10 +29,8 @@ public class Neuron {
         // Sum the previous layer's outputs (which are inputs)
         // Include the bias node from the previous layer.
 
-        for (int n = 0; n < prevLayer.size(); n++)
-        {
-            sum += prevLayer.get(n).getOutputValue() * prevLayer.get(n).m_outputWeights.get(m_myIndex).weight;
-        }
+        for (Neuron neuron : prevLayer)
+            sum += neuron.getOutputValue() * neuron.m_outputWeights.get(m_myIndex).weight;
 
         m_outputValue = Neuron.transferFunction(sum);
     }
@@ -54,9 +51,7 @@ public class Neuron {
     {
         // The weights to updated are in the Connection container
         // in the neurons in the preceding layer
-        for (int n = 0; n < prevLayer.size(); n++)
-        {
-            Neuron neuron = prevLayer.get(n);
+        for (Neuron neuron : prevLayer) {
             float oldDeltaWeight = neuron.m_outputWeights.get(m_myIndex).deltaWeight;
 
             float newDeltaWeight =
@@ -74,12 +69,7 @@ public class Neuron {
 
     public void saveInputWeights(Layer prevLayer)
     {
-        // The weights to updated are in the Connection container
-        // in the neurons in the preceding layer
-
-        for (int n = 0; n < prevLayer.size(); n++)
-        {
-            Neuron neuron = prevLayer.get(n);
+        for (Neuron neuron : prevLayer) {
             weights.set(neuronIndex, neuron.m_outputWeights.get(m_myIndex).weight);
             neuronIndex++;
         }
@@ -94,8 +84,7 @@ public class Neuron {
                 file.createNewFile();
                 FileOutputStream f = new FileOutputStream(file);
                 ObjectOutputStream o = new ObjectOutputStream(f);
-                for(int i=0; i<weights.size(); i++)
-                    o.writeObject(weights.get(i));
+                for (Float weight : weights) o.writeObject(weight);
                 o.close();
                 f.close();
             }catch (Exception e)
@@ -107,19 +96,14 @@ public class Neuron {
 
     public void loadInputWeights(Layer prevLayer)
     {
-        // The weights to updated are in the Connection container
-        // in the neurons in the preceding layer
-
-        for (int n = 0; n < prevLayer.size(); n++)
-        {
-            Neuron neuron = prevLayer.get(n);
+        for (Neuron neuron : prevLayer) {
             neuron.m_outputWeights.get(m_myIndex).weight = weights.get(neuronIndex);
             neuronIndex++;
         }
     }
 
-    private static float eta = velocity; // [0.0..1.0] overall network training rate
-    private static float alpha = momentum; // [0.0..n] multiplier of last weight change (momentum)
+    private static final float eta = velocity; // [0.0..1.0] overall network training rate
+    private static final float alpha = momentum; // [0.0..n] multiplier of last weight change (momentum)
 
     private float sumDOW(Layer nextLayer)
     {
@@ -152,7 +136,7 @@ public class Neuron {
     }
 
     private float m_outputValue;
-    private ArrayList<Connection> m_outputWeights;
-    private int m_myIndex;
+    private final ArrayList<Connection> m_outputWeights;
+    private final int m_myIndex;
     private float m_gradient;
 }

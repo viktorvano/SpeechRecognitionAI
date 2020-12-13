@@ -16,8 +16,7 @@ public class NeuralNetwork {
         m_recentAverageError = 0;
         int numLayers = topology.size();
         System.out.println("Number of layers: " + numLayers);
-        m_layers = new ArrayList<Layer>();
-        m_layers.clear();
+        m_layers = new ArrayList<>();
         for (int layerNum = 0; layerNum < numLayers; layerNum++)
         {
             m_layers.add(new Layer());
@@ -84,10 +83,8 @@ public class NeuralNetwork {
             Layer hiddenLayer = m_layers.get(layerNum);
             Layer nextLayer = m_layers.get(layerNum + 1);
 
-            for (int n = 0; n < hiddenLayer.size(); n++)
-            {
-                hiddenLayer.get(n).calcHiddenGradients(nextLayer);
-            }
+            for (Neuron neuron : hiddenLayer)
+                neuron.calcHiddenGradients(nextLayer);
         }
 
         // For all layers from outputs to first hidden layer.
@@ -193,7 +190,7 @@ public class NeuralNetwork {
         Toolkit.getDefaultToolkit().beep();
     }
 
-    private ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
+    private final ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
     private float m_error;
     private float m_recentAverageError;
 }
