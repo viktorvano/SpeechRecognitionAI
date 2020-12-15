@@ -435,11 +435,12 @@ public class SpeechRecognitionAI extends Application {
             if (updateData && audioCapture.isAudioRecorded()) {
                 updateData = false;
                 recordedAudio.audioRecord = audioCapture.getRecord();
+                int modulo = recordedAudio.audioRecord.length/20000;//To achieve constant data points in the chart.
                 if (recordedAudio.audioRecord != null) {
                     displayedSeries.getData().clear();
                     recordedAudio.audioRecordLength = audioCapture.getRecordLength();
-                    for (int i = 0; i < recordedAudio.audioRecordLength - 1; i++) {
-                        if (i % 40 == 0)
+                    for (int i = 0; i < recordedAudio.audioRecordLength - 1; i+=2) {
+                        if (i % modulo == 0)
                             displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                     }
                     detectWords();
