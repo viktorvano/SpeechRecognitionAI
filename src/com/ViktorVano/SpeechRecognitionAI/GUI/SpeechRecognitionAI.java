@@ -752,6 +752,7 @@ public class SpeechRecognitionAI extends Application {
     private void displayTrainingLayout()
     {
         countWords();
+        calculateTopology();
         stackPaneCenter.getChildren().add(trainingList);
         buttonTrain.setDisable(!sameWordCount || topology.size() < 3);
         hBoxBottom.getChildren().add(buttonTrain);
