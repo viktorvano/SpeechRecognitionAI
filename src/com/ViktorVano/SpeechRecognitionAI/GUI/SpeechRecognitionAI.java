@@ -206,6 +206,9 @@ public class SpeechRecognitionAI extends Application {
                         detectedWordsSeries.getData().get(i+1).getXValue().toString());
                 int start = detectedWordsSeries.getData().get(i).getXValue().intValue();
                 int end = detectedWordsSeries.getData().get(i+1).getXValue().intValue();
+                if(start < 0)
+                    start = 0;
+
                 int length = end - start + 1;
                 if(start == 0 && length%2==0)
                 {
