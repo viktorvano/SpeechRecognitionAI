@@ -69,18 +69,22 @@ public class TrainingThread extends Thread {
         super.run();
         System.out.println("Training started\n");
         neuralNetwork.loadNeuronWeights();
+        boolean repeatTrainingCycle = false;
+        float averageError = 1.0f;
         while (true)
         {
             trainingPass++;
             System.out.println("Pass: " + trainingPass);
 
             //Get new input data and feed it forward:
-            trainingData.getNextInputs(input);
+            if(!repeatTrainingCycle)
+                trainingData.getNextInputs(input);
             //showVectorValues("Inputs:", input);
             neuralNetwork.feedForward(input);
 
             // Train the net what the outputs should have been:
-            trainingData.getTargetOutputs(target);
+            if(!repeatTrainingCycle)
+                trainingData.getTargetOutputs(target);
             showVectorValues("Targets[" + trainingLine +"]=\"" + trainingDatabase.get(trainingLine).name + "\": ", target);
             assert(target.size() == topology.get(topology.size()-1));
             neuralNetwork.backProp(target);//This function alters neurons
@@ -89,15 +93,15 @@ public class TrainingThread extends Thread {
             neuralNetwork.getResults(result);
             showVectorValues("Outputs: ", result);
 
-
-            // Report how well the training is working, averaged over recent samples:
-            System.out.println("Net recent error: " + neuralNetwork.getRecentAverageError() + "\n\n");
-
             trainingLineLabel = trainingLine;
             trainingPassLabel = trainingPass;
             updateTrainingLabel = true;
             currentTrainingError = neuralNetwork.getRecentAverageError();
             currentTrainingErrorLabel = currentTrainingError;
+
+            // Report how well the training is working, averaged over recent samples:
+            System.out.println("Net current sample error: " + currentTrainingError);
+
             if(!trainingFlag)
             {
                 System.out.println("Training stopped via Stop button.");
@@ -109,6 +113,10 @@ public class TrainingThread extends Thread {
                 neuralNetwork.saveNeuronWeights();
                 break;
             }
+
+            averageError = 0.99f*averageError + 0.01f*currentTrainingError;
+            System.out.println("Net average error: " + averageError + "\n\n");
+            repeatTrainingCycle = currentTrainingError > averageError;
         }
         System.out.println("Training done.\n");
         System.out.println("Closing application.");

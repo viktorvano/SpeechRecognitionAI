@@ -216,7 +216,10 @@ public class SpeechRecognitionAI extends Application {
 
                 if(length < minWordLength)
                 {
-                    detectedWordsSeries.getData().remove(i-1, i+2);
+                    if(i == 0)
+                        detectedWordsSeries.getData().remove(0, i+2);
+                    else
+                        detectedWordsSeries.getData().remove(i-1, i+2);
                     System.out.println("Removing a short word: " + length);
                     i--;
                 }else if(length > maxWordLength)
