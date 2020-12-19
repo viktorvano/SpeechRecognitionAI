@@ -137,8 +137,23 @@ public class SpeechRecognitionAI extends Application {
         stage.show();
         stage.setMinWidth(stage.getWidth());
         stage.setMinHeight(stage.getHeight());
-        Image icon =  new Image("com\\ViktorVano\\SpeechRecognitionAI\\images\\neural-network-icon.jpg");
-        stage.getIcons().add(icon);
+        try
+        {
+            Image icon = new Image(getClass().getResourceAsStream("../images/neural-network-icon.jpg"));
+            stage.getIcons().add(icon);
+            System.out.println("Icon loaded from IDE...");
+        }catch(Exception e)
+        {
+            try
+            {
+                Image icon = new Image("com/ViktorVano/SpeechRecognitionAI/images/neural-network-icon.jpg");
+                stage.getIcons().add(icon);
+                System.out.println("Icon loaded from exported JAR...");
+            }catch(Exception e1)
+            {
+                System.out.println("Icon failed to load...");
+            }
+        }
         displayLayout(2);//Speech Recognition Layout
     }
 
