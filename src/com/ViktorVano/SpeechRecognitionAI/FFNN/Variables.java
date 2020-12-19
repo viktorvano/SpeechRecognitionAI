@@ -20,6 +20,7 @@ public class Variables {
     public static ArrayList<Float> input, target, result;
     public static int trainingPass = 0;
 
+    public static final int minWordLength = 6000, maxWordLength = 131072;//max length is binary (2^16)*2 (because of 16 bit)
     public static final int minimumLayerSize = 10;
     public static final int maximumTopologySize = 9;
     public static boolean trainingIsRunning = false, updateTrainingLabel = false;

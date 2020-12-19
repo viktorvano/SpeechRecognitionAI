@@ -50,8 +50,7 @@ public class SpeechRecognitionAI extends Application {
     private ObservableList<RecordedAudio> database, records;
     private ObservableList<WordRouting> wordRoutingDatabase;
     private ListView<String> databaseList, recordsList, trainingList, topologyList, wordRoutingList;
-    private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem, wordRoutingItem;
-    private final int minWordLength = 6000, maxWordLength = 131072;//max length is binary (2^16)*2 (because of 16 bit)
+    private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
     private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
     private int recordedWordIndex = -1, databaseWordIndex = -1, wordRoutingIndex = -1;
     private LineChart<Number,Number> lineChart;
@@ -457,16 +456,14 @@ public class SpeechRecognitionAI extends Application {
                 updateData = false;
                 recordedAudio.audioRecord = audioCapture.getRecord();
                 int modulo = recordedAudio.audioRecord.length/20000;//To achieve constant data points in the chart.
-                if (recordedAudio.audioRecord != null) {
-                    displayedSeries.getData().clear();
-                    recordedAudio.audioRecordLength = audioCapture.getRecordLength();
-                    for (int i = 0; i < recordedAudio.audioRecordLength - 1; i+=2) {
-                        if (i % modulo == 0)
-                            displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
-                    }
-                    detectWords();
-                    wordsDetected = true;
+                displayedSeries.getData().clear();
+                recordedAudio.audioRecordLength = audioCapture.getRecordLength();
+                for (int i = 0; i < recordedAudio.audioRecordLength - 1; i+=2) {
+                    if (i % modulo == 0)
+                        displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                 }
+                detectWords();
+                wordsDetected = true;
             }
 
             if (weightsLoaded && wordsDetected && displayedLayout == 2) {
@@ -665,7 +662,7 @@ public class SpeechRecognitionAI extends Application {
     {
         wordRoutingDatabase = loadWordRouting();
         wordRoutingList = new ListView<>();
-        wordRoutingItem = FXCollections.observableArrayList();
+        ObservableList<String> wordRoutingItem = FXCollections.observableArrayList();
         for (WordRouting wordRouting : wordRoutingDatabase)
             wordRoutingItem.add(wordRouting.word + "\t\t\t" + wordRouting.address + " : " + wordRouting.port);
         wordRoutingList.setItems(wordRoutingItem);
