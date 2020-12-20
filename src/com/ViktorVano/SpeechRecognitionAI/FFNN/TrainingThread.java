@@ -70,7 +70,8 @@ public class TrainingThread extends Thread {
         System.out.println("Training started\n");
         neuralNetwork.loadNeuronWeights();
         boolean repeatTrainingCycle = false;
-        float averageError = 1.0f;
+        averageError = 1.0f;
+        float currentTrainingError;
         while (true)
         {
             trainingPass++;

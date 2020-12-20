@@ -526,7 +526,7 @@ public class SpeechRecognitionAI extends Application {
                     || buttonStopTraining.isDisabled()){
                     trainingIsRunning = false;
                     labelTrainingStatus.setText("Training pass: " + trainingPassLabel
-                            + "\t\tError: " + currentTrainingErrorLabel
+                            + "\t\tAverage: " + averageError
                             + "\t\tTraining DONE");
                     buttonTrain.setDisable(false);
                     topologyList.setDisable(false);
@@ -535,7 +535,8 @@ public class SpeechRecognitionAI extends Application {
                 {
                     labelTrainingStatus.setText("Training pass: " + trainingPassLabel
                             + "\t\tSample[" + trainingLineLabel + "]=\"" + database.get(trainingLineLabel).name
-                            + "\"\t\tError: " + currentTrainingErrorLabel);
+                            + "\"\t\tError: " + currentTrainingErrorLabel
+                            + "\t\tAverage: " + averageError);
                 }
 
                 updateTrainingLabel = false;

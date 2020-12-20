@@ -24,7 +24,7 @@ public class Variables {
     public static final int minimumLayerSize = 10;
     public static final int maximumTopologySize = 9;
     public static boolean trainingIsRunning = false, updateTrainingLabel = false;
-    public static float currentTrainingError, minimumTrainingError = 0.008f;
+    public static float averageError, minimumTrainingError = 0.008f;
     public static int minimumTrainingCycles;
     public static int trainingPassLabel, trainingLineLabel;
     public static float currentTrainingErrorLabel;
