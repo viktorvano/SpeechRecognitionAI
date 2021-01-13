@@ -29,13 +29,13 @@
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20raw%20samples.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20raw%20samples.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20raw%20samples.png" width="330"/>  
   
 ###### Input Layer: Normalized Outer Shell + Normalized FFT
-(hello)          Normalized Outer Shell                                                                Normalized FFT  
+<pre>(hello)          Normalized Outer Shell                                                                Normalized FFT</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20FFT.png" width="450"/>  
   
-(hi)          Normalized Outer Shell                                                                Normalized FFT  
+<pre>(hi)          Normalized Outer Shell                                                                Normalized FFT</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20FFT.png" width="450"/>  
   
-(understand)          Normalized Outer Shell                                                                Normalized FFT  
+<pre>(understand)          Normalized Outer Shell                                                                Normalized FFT</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20FFT.png" width="450"/>  
   
   
