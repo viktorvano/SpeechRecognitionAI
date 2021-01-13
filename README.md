@@ -32,11 +32,11 @@
 <pre>(hello)      Normalized Outer Shell                                            Normalized FFT</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20FFT.png" width="450"/>  
   
-<pre>(hi)         Normalized Outer Shell                                            Normalized FFT</pre>  
-<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20FFT.png" width="450"/>  
-  
 <pre>(understand) Normalized Outer Shell                                            Normalized FFT</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20FFT.png" width="450"/>  
+  
+<pre>(hi)         Normalized Outer Shell                                            Normalized FFT</pre>  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20outher%20shell.png" width="450"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20FFT.png" width="450"/>  
   
   
 ###### Hidden Layers: "hello", "understand", "hi"
