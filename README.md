@@ -25,7 +25,7 @@
 ##### Words: "hello", "understand", "hi"
   
 ###### Raw audio sample
-  
+<pre>                 (hello)                               (understand)                                  (hi)   </pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20raw%20samples.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20raw%20samples.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20raw%20samples.png" width="330"/>  
   
 ###### Input Layer: Normalized Outer Shell + Normalized FFT
@@ -43,14 +43,17 @@
 <pre>                 (hello) L1                            (understand) L1                               (hi) L1</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L1.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L1.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L1.png" width="330"/>  
   
+<pre>                 (hello) L2                            (understand) L2                               (hi) L2</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L2.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L2.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L2.png" width="330"/>  
   
+<pre>                 (hello) L3                            (understand) L3                               (hi) L3</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L3.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L3.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L3.png" width="330"/>  
   
+<pre>                 (hello) L4                            (understand) L4                               (hi) L4</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L4.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L4.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L4.png" width="330"/>  
   
 ###### Output Layer: "hello", "understand", "hi"
-  
+<pre>                 (hello)                               (understand)                                  (hi)   </pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20Output%20Layer.png" width="330"/>  
   
   
