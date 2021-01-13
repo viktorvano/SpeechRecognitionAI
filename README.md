@@ -55,12 +55,3 @@
 ###### Output Layer: "hello", "understand", "hi"
 <pre>                 (hello)                               (understand)                                  (hi)   </pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20Output%20Layer.png" width="330"/>  
-  
-  
-
-  
-## Caption2
-### Caption3
-#### Caption4
-##### Caption5
-###### Caption6
