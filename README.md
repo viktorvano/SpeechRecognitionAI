@@ -40,7 +40,7 @@
   
   
 ###### Hidden Layers: "hello", "understand", "hi"
-<pre>                     (hello) L1                      (understand) L1                          (hi) L1</pre>  
+<pre>                 (hello) L1                            (understand) L1                               (hi) L1</pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L1.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L1.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L1.png" width="330"/>  
   
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L2.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L2.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L2.png" width="330"/>  
