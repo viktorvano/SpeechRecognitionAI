@@ -22,11 +22,11 @@
   
 ### Word Examples Feedforwarded via Neural Network
   
-##### Words: "hello", "hi", "understand"
+##### Words: "hello", "understand", "hi"
   
 ###### Raw audio sample
   
-<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20raw%20samples.png" width="300"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20raw%20samples.png" width="300"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20raw%20samples.png" width="300"/>  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20raw%20samples.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20raw%20samples.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20raw%20samples.png" width="330"/>  
   
 ###### Input Layer: Normalized Outer Shell + Normalized FFT
 (hello)  
@@ -39,15 +39,19 @@
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20outher%20shell.png" width="425"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20FFT.png" width="425"/>  
   
   
-###### Hidden Layers
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L1.png?raw=true)  
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L2.png?raw=true)  
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L3.png?raw=true)  
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L4.png?raw=true)  
+###### Hidden Layers: "hello", "understand", "hi"
   
-###### Output Layer: "hello", "hi", "understand"
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L1.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L1.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L1.png" width="330"/>  
   
-<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20Output%20Layer.png" width="330"/>  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L2.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L2.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L2.png" width="330"/>  
+  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L3.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L3.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L3.png" width="330"/>  
+  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20L4.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20L4.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20L4.png" width="330"/>  
+  
+###### Output Layer: "hello", "understand", "hi"
+  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20Output%20Layer.png" width="330"/>  
   
   
 
