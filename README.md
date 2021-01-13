@@ -47,7 +47,7 @@
   
 ###### Output Layer: "hello", "hi", "understand"
   
-<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20Output%20Layer.png" width="350"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20Output%20Layer.png" width="350"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20Output%20Layer.png" width="350"/>  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi%20Output%20Layer.png" width="330"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand%20Output%20Layer.png" width="330"/>  
   
   
 
