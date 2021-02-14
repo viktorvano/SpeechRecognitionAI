@@ -65,8 +65,8 @@ public class SpeechRecognitionAI extends Application {
     private Label[] labelMenu;
     private NeuralNetworkThread neuralNetworkThread;
     private Label speechRecognitionStatus, speechRecognitionOutput;
-    private Label labelWordRouting;
-    private TextField txtWord, txtAddress, txtPort;
+    private Label labelNewWordRouting;
+    private TextField txtNewWord, txtNewAddress, txtNewPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
     private CheckBox checkBoxPrintToConsole;
@@ -352,7 +352,7 @@ public class SpeechRecognitionAI extends Application {
                 txtDatabaseWord.setText("");
                 databaseList.getItems().remove(databaseWordIndex);
                 database.remove(databaseWordIndex);
-                databaseWordIndex = -1;
+                databaseWordIndex = databaseList.getSelectionModel().getSelectedIndex();
                 saveDatabase(database);
             }
         });
@@ -688,36 +688,37 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        labelWordRouting = new Label("\n Word Routing \n\n");
-        labelWordRouting.setFont(Font.font("Arial", 20));
+        labelNewWordRouting = new Label("\n New Word Routing \n\n");
+        labelNewWordRouting.setFont(Font.font("Arial", 20));
 
-        txtWord = new TextField();
-        txtWord.setPromptText("Word/Phrase");
-        txtWord.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWordRouting.setDisable(txtWord.getText().length() == 0 ||
-                txtAddress.getText().length() == 0 || txtPort.getText().length() ==0));
+        txtNewWord = new TextField();
+        txtNewWord.setPromptText("Word/Phrase");
+        txtNewWord.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonAddWordRouting.setDisable(txtNewWord.getText().length() == 0 ||
+                txtNewAddress.getText().length() == 0 || txtNewPort.getText().length() == 0));
 
-        txtAddress = new TextField();
-        txtAddress.setPromptText("IP Address/URL");
-        txtAddress.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWordRouting.setDisable(txtWord.getText().length() == 0 ||
-                txtAddress.getText().length() == 0 || txtPort.getText().length() ==0));
+        txtNewAddress = new TextField();
+        txtNewAddress.setPromptText("IP Address/URL");
+        txtNewAddress.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonAddWordRouting.setDisable(txtNewWord.getText().length() == 0 ||
+                txtNewAddress.getText().length() == 0 || txtNewPort.getText().length() == 0));
 
-        txtPort = new TextField();
-        txtPort.setPromptText("Port");
-        txtPort.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWordRouting.setDisable(txtWord.getText().length() == 0 ||
-                txtAddress.getText().length() == 0 || txtPort.getText().length() ==0));
+        txtNewPort = new TextField();
+        txtNewPort.setPromptText("Port");
+        txtNewPort.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonAddWordRouting.setDisable(txtNewWord.getText().length() == 0 ||
+                txtNewAddress.getText().length() == 0 || txtNewPort.getText().length() == 0));
 
         buttonAddWordRouting = new Button("Add Word Routing");
+        buttonAddWordRouting.setDisable(true);
         buttonAddWordRouting.setOnAction(event -> {
             WordRouting tempWordRouting = new WordRouting();
-            tempWordRouting.word = txtWord.getText();
-            tempWordRouting.address = txtAddress.getText();
-            tempWordRouting.port = txtPort.getText();
-            txtWord.setText("");
-            txtAddress.setText("");
-            txtPort.setText("");
+            tempWordRouting.word = txtNewWord.getText();
+            tempWordRouting.address = txtNewAddress.getText();
+            tempWordRouting.port = txtNewPort.getText();
+            txtNewWord.setText("");
+            txtNewAddress.setText("");
+            txtNewPort.setText("");
             String tempString =  tempWordRouting.word + "\t\t\t" +
                     tempWordRouting.address + " : " + tempWordRouting.port;
             wordRoutingList.getItems().add(tempString);
@@ -823,10 +824,10 @@ public class SpeechRecognitionAI extends Application {
     private void displaySettingsLayout()
     {
         stackPaneCenter.getChildren().add(wordRoutingList);
-        vBoxRight.getChildren().add(labelWordRouting);
-        vBoxRight.getChildren().add(txtWord);
-        vBoxRight.getChildren().add(txtAddress);
-        vBoxRight.getChildren().add(txtPort);
+        vBoxRight.getChildren().add(labelNewWordRouting);
+        vBoxRight.getChildren().add(txtNewWord);
+        vBoxRight.getChildren().add(txtNewAddress);
+        vBoxRight.getChildren().add(txtNewPort);
         vBoxRight.getChildren().add(buttonAddWordRouting);
         hBoxBottom.getChildren().add(buttonRemoveWordRouting);
         hBoxBottom.getChildren().add(checkBoxPrintToConsole);
@@ -837,10 +838,10 @@ public class SpeechRecognitionAI extends Application {
     private void hideSettingsLayout()
     {
         stackPaneCenter.getChildren().remove(wordRoutingList);
-        vBoxRight.getChildren().remove(labelWordRouting);
-        vBoxRight.getChildren().remove(txtWord);
-        vBoxRight.getChildren().remove(txtAddress);
-        vBoxRight.getChildren().remove(txtPort);
+        vBoxRight.getChildren().remove(labelNewWordRouting);
+        vBoxRight.getChildren().remove(txtNewWord);
+        vBoxRight.getChildren().remove(txtNewAddress);
+        vBoxRight.getChildren().remove(txtNewPort);
         vBoxRight.getChildren().remove(buttonAddWordRouting);
         hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
         hBoxBottom.getChildren().remove(checkBoxPrintToConsole);
