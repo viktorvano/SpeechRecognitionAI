@@ -57,7 +57,7 @@ public class SpeechRecognitionAI extends Application {
     private Button buttonPlay, buttonRecord, buttonPlayDatabaseWord, buttonRemoveDatabaseWord;
     private Button buttonPlayWord, buttonRemoveWord, buttonAddWord;
     private Button buttonTrain, buttonStopTraining, buttonRemoveTopologyLayer, buttonAddHiddenLayer;
-    private Button buttonAddWordRouting, buttonRemoveWordRouting;
+    private Button buttonAddWordRouting, buttonUpdateWordRouting, buttonRemoveWordRouting;
     private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
     private ArrayList<Classifier> classifier;
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
@@ -65,8 +65,9 @@ public class SpeechRecognitionAI extends Application {
     private Label[] labelMenu;
     private NeuralNetworkThread neuralNetworkThread;
     private Label speechRecognitionStatus, speechRecognitionOutput;
-    private Label labelNewWordRouting;
+    private Label labelNewWordRouting, labelEditWordRouting;
     private TextField txtNewWord, txtNewAddress, txtNewPort;
+    private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
     private CheckBox checkBoxPrintToConsole;
@@ -138,14 +139,14 @@ public class SpeechRecognitionAI extends Application {
         stage.setMinHeight(stage.getHeight());
         try
         {
-            Image icon = new Image(getClass().getResourceAsStream("../images/neural-network-icon.jpg"));
+            Image icon = new Image(getClass().getResourceAsStream("../images/icon3.png"));
             stage.getIcons().add(icon);
             System.out.println("Icon loaded from IDE...");
         }catch(Exception e)
         {
             try
             {
-                Image icon = new Image("com/ViktorVano/SpeechRecognitionAI/images/neural-network-icon.jpg");
+                Image icon = new Image("com/ViktorVano/SpeechRecognitionAI/images/icon3.png");
                 stage.getIcons().add(icon);
                 System.out.println("Icon loaded from exported JAR...");
             }catch(Exception e1)
@@ -350,9 +351,19 @@ public class SpeechRecognitionAI extends Application {
             if(databaseWordIndex != -1)
             {
                 txtDatabaseWord.setText("");
-                databaseList.getItems().remove(databaseWordIndex);
-                database.remove(databaseWordIndex);
-                databaseWordIndex = databaseList.getSelectionModel().getSelectedIndex();
+                if(database.size() == databaseWordIndex)
+                    databaseWordIndex--;
+                if(databaseWordIndex != -1)
+                {
+                    databaseList.getItems().remove(databaseWordIndex);
+                    database.remove(databaseWordIndex);
+                }
+                try{
+                    databaseList.getSelectionModel().select(databaseWordIndex);
+                }catch (Exception e)
+                {
+                    databaseWordIndex = -1;
+                }
                 saveDatabase(database);
             }
         });
@@ -672,6 +683,19 @@ public class SpeechRecognitionAI extends Application {
             {
                 wordRoutingIndex = wordRoutingList.getSelectionModel().getSelectedIndex();
                 buttonRemoveWordRouting.setDisable(false);
+                String[] strings = wordRoutingList.getItems().get(wordRoutingIndex).split("\t\t\t");
+                txtEditWord.setText(strings[0]);
+                strings = strings[1].split(" : ");
+                txtEditAddress.setText(strings[0]);
+                txtEditPort.setText(strings[1]);
+            }else
+            {
+                wordRoutingIndex = -1;
+                buttonRemoveWordRouting.setDisable(true);
+                txtEditWord.setText("");
+                txtEditAddress.setText("");
+                txtEditPort.setText("");
+                buttonUpdateWordRouting.setDisable(true);
             }
         });
 
@@ -684,6 +708,13 @@ public class SpeechRecognitionAI extends Application {
                 wordRoutingDatabase.remove(wordRoutingIndex);
                 wordRoutingIndex = wordRoutingList.getSelectionModel().getSelectedIndex();
                 buttonRemoveWordRouting.setDisable(wordRoutingIndex == -1);
+                if(wordRoutingIndex == -1)
+                {
+                    txtEditWord.setText("");
+                    txtEditAddress.setText("");
+                    txtEditPort.setText("");
+                    buttonUpdateWordRouting.setDisable(true);
+                }
                 saveWordRouting(wordRoutingDatabase);
             }
         });
@@ -723,6 +754,47 @@ public class SpeechRecognitionAI extends Application {
                     tempWordRouting.address + " : " + tempWordRouting.port;
             wordRoutingList.getItems().add(tempString);
             wordRoutingDatabase.add(wordRoutingDatabase.size(), tempWordRouting);
+            saveWordRouting(wordRoutingDatabase);
+        });
+
+        labelEditWordRouting = new Label("\n Edit\n Logger Routing \n\n");
+        labelEditWordRouting.setFont(Font.font("Arial", 20));
+
+        txtEditWord = new TextField();
+        txtEditWord.setPromptText("Word/Phrase");
+        txtEditWord.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonUpdateWordRouting.setDisable(txtEditWord.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 || txtEditPort.getText().length() == 0 ||
+                        wordRoutingIndex == -1));
+
+        txtEditAddress = new TextField();
+        txtEditAddress.setPromptText("IP Address/URL");
+        txtEditAddress.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonUpdateWordRouting.setDisable(txtEditWord.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 || txtEditPort.getText().length() == 0 ||
+                        wordRoutingIndex == -1));
+
+        txtEditPort = new TextField();
+        txtEditPort.setPromptText("Port");
+        txtEditPort.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonUpdateWordRouting.setDisable(txtEditWord.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 || txtEditPort.getText().length() == 0 ||
+                        wordRoutingIndex == -1));
+
+        buttonUpdateWordRouting = new Button("Update Word Routing");
+        buttonUpdateWordRouting.setDisable(true);
+        buttonUpdateWordRouting.setOnAction(event -> {
+            WordRouting tempWordRouting = new WordRouting();
+            tempWordRouting.word = txtEditWord.getText();
+            tempWordRouting.address = txtEditAddress.getText();
+            tempWordRouting.port = txtEditPort.getText();
+            txtEditWord.setText("");
+            txtEditAddress.setText("");
+            txtEditPort.setText("");
+            String tempString =  tempWordRouting.word + "\t\t\t" +
+                    tempWordRouting.address + " : " + tempWordRouting.port;
+            wordRoutingList.getItems().set(wordRoutingIndex, tempString);
+            wordRoutingDatabase.set(wordRoutingIndex, tempWordRouting);
             saveWordRouting(wordRoutingDatabase);
         });
 
@@ -829,6 +901,11 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(txtNewAddress);
         vBoxRight.getChildren().add(txtNewPort);
         vBoxRight.getChildren().add(buttonAddWordRouting);
+        vBoxRight.getChildren().add(labelEditWordRouting);
+        vBoxRight.getChildren().add(txtEditWord);
+        vBoxRight.getChildren().add(txtEditAddress);
+        vBoxRight.getChildren().add(txtEditPort);
+        vBoxRight.getChildren().add(buttonUpdateWordRouting);
         hBoxBottom.getChildren().add(buttonRemoveWordRouting);
         hBoxBottom.getChildren().add(checkBoxPrintToConsole);
         displayedLayout = 3;
@@ -843,6 +920,11 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(txtNewAddress);
         vBoxRight.getChildren().remove(txtNewPort);
         vBoxRight.getChildren().remove(buttonAddWordRouting);
+        vBoxRight.getChildren().remove(labelEditWordRouting);
+        vBoxRight.getChildren().remove(txtEditWord);
+        vBoxRight.getChildren().remove(txtEditAddress);
+        vBoxRight.getChildren().remove(txtEditPort);
+        vBoxRight.getChildren().remove(buttonUpdateWordRouting);
         hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
         hBoxBottom.getChildren().remove(checkBoxPrintToConsole);
     }
