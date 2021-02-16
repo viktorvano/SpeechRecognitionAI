@@ -132,7 +132,7 @@ public class SpeechRecognitionAI extends Application {
 
         Scene scene = new Scene(borderPane, width, height);
 
-        stage.setTitle("Speech Recognition AI");
+        stage.setTitle("Speech Recognition AI - developed by Viktor Vano");
         stage.setScene(scene);
         stage.show();
         stage.setMinWidth(stage.getWidth());
