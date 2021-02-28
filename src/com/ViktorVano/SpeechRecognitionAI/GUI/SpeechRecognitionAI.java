@@ -757,7 +757,7 @@ public class SpeechRecognitionAI extends Application {
             saveWordRouting(wordRoutingDatabase);
         });
 
-        labelEditWordRouting = new Label("\n Edit\n Logger Routing \n\n");
+        labelEditWordRouting = new Label("\n Edit\n Word Routing \n\n");
         labelEditWordRouting.setFont(Font.font("Arial", 20));
 
         txtEditWord = new TextField();
