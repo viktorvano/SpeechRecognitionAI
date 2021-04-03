@@ -84,7 +84,7 @@ public class SpeechRecognitionAI extends Application {
         recordedAudio = new RecordedAudio();
 
         final int width = 1200;
-        final int height = 700;
+        final int height = 690;
 
         borderPane.setBottom(hBoxBottom);
         borderPane.setCenter(stackPaneCenter);
@@ -307,7 +307,7 @@ public class SpeechRecognitionAI extends Application {
     private void initializeDataLayout()
     {
         buttonPlay = new Button("Play Record");
-        buttonPlay.setPrefHeight(90);
+        buttonPlay.setPrefHeight(80);
         buttonPlay.setOnAction(event -> {
             if(recordedAudio != null && recordedAudio.audioRecord != null)
             {
@@ -317,7 +317,7 @@ public class SpeechRecognitionAI extends Application {
         });
 
         buttonRecord = new Button("Record Audio");
-        buttonRecord.setPrefHeight(90);
+        buttonRecord.setPrefHeight(80);
         buttonRecord.setOnAction(event -> captureAudio());
 
         database = loadDatabase();
@@ -385,7 +385,7 @@ public class SpeechRecognitionAI extends Application {
         recordsList = new ListView<>();
         recordItem = FXCollections.observableArrayList();
         recordsList.setItems(recordItem);
-        recordsList.setPrefHeight(90);
+        recordsList.setPrefHeight(80);
         recordsList.setOnMouseClicked(event -> {
             if(recordsList.getSelectionModel().getSelectedIndex() != -1)
             {
@@ -587,10 +587,11 @@ public class SpeechRecognitionAI extends Application {
         });
 
         labelTrainingStatus = new Label();
-        labelTrainingStatus.setFont(Font.font("Arial", 20));
+        labelTrainingStatus.setFont(Font.font("Arial", 18));
 
         labelHiddenTopology = new Label("\n Topology of hidden layers ");
-        labelHiddenTopology.setFont(Font.font("Arial", 24));
+        labelHiddenTopology.setFont(Font.font("Arial", 22));
+        labelHiddenTopology.setStyle("-fx-font-weight: bold");
 
         topologyList = new ListView<>();
         topologyItem = FXCollections.observableArrayList();
@@ -616,7 +617,8 @@ public class SpeechRecognitionAI extends Application {
         });
 
         labelNewHiddenLayer = new Label("\n New hidden layer");
-        labelNewHiddenLayer.setFont(Font.font("Arial", 24));
+        labelNewHiddenLayer.setFont(Font.font("Arial", 22));
+        labelNewHiddenLayer.setStyle("-fx-font-weight: bold");
 
         txtHiddenLayer = new TextField();
         txtHiddenLayer.setPromptText("Hidden Layer");
@@ -635,8 +637,6 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
             buttonAddHiddenLayer.setDisable(textFieldTopologyValue < minimumLayerSize || topology.size() >= maximumTopologySize);
-
-            buttonRemoveTopologyLayer.setDisable(topologyItem.size() == 0);
         });
 
         buttonAddHiddenLayer = new Button("Add Hidden Layer");
@@ -656,7 +656,7 @@ public class SpeechRecognitionAI extends Application {
         });
 
         labelTopology = new Label();
-        labelTopology.setFont(Font.font("Arial", 16));
+        labelTopology.setFont(Font.font("Arial", 14));
         countWords();
         calculateTopology();
     }
@@ -669,6 +669,7 @@ public class SpeechRecognitionAI extends Application {
         speechRecognitionOutput = new Label();
         speechRecognitionOutput.setFont(Font.font("Arial", 20));
         speechRecognitionOutput.setTextFill(Color.web("#ffffff"));
+        speechRecognitionOutput.setStyle("-fx-font-weight: bold");
     }
 
     private void initializeSettingsLayout()
@@ -720,8 +721,9 @@ public class SpeechRecognitionAI extends Application {
             }
         });
 
-        labelNewWordRouting = new Label("\n New Word Routing \n\n");
+        labelNewWordRouting = new Label("\n New\n Word Routing \n\n");
         labelNewWordRouting.setFont(Font.font("Arial", 20));
+        labelNewWordRouting.setStyle("-fx-font-weight: bold");
 
         txtNewWord = new TextField();
         txtNewWord.setPromptText("Word/Phrase");
@@ -760,6 +762,7 @@ public class SpeechRecognitionAI extends Application {
 
         labelEditWordRouting = new Label("\n Edit\n Word Routing \n\n");
         labelEditWordRouting.setFont(Font.font("Arial", 20));
+        labelEditWordRouting.setStyle("-fx-font-weight: bold");
 
         txtEditWord = new TextField();
         txtEditWord.setPromptText("Word/Phrase");
@@ -1015,7 +1018,7 @@ public class SpeechRecognitionAI extends Application {
             buttonTrain.setDisable(!sameWordCount);
         } else
         {
-            labelTopology.setText("\nTopology:\nAdd more layers!");
+            labelTopology.setText("\n Topology:\n   Add more layers!");
             buttonTrain.setDisable(true);
         }
     }
