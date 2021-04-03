@@ -10,7 +10,8 @@ public class WordRoutingFile {
     {
         try
         {
-            File file = new File("res\\wordRouting.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            File file = new File("res" + fileSeparator + "wordRouting.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -29,7 +30,8 @@ public class WordRoutingFile {
         ObservableList<WordRouting> wordRouting = FXCollections.observableArrayList();
         try
         {
-            FileInputStream fi = new FileInputStream("res\\wordRouting.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "wordRouting.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)

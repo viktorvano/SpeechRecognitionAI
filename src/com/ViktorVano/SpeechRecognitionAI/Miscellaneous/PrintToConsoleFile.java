@@ -8,7 +8,8 @@ public class PrintToConsoleFile {
     {
         try
         {
-            File file = new File("res\\printToConsole.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            File file = new File("res" + fileSeparator + "printToConsole.dat");
             file.createNewFile();
             //Write Content
             FileWriter writer = new FileWriter(file);
@@ -25,7 +26,8 @@ public class PrintToConsoleFile {
         Boolean state;
         try
         {
-            File file = new File("res\\printToConsole.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            File file = new File("res" + fileSeparator + "printToConsole.dat");
             Scanner scanner = new Scanner(file);
             if(scanner.hasNextBoolean())
             {

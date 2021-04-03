@@ -145,7 +145,8 @@ public class NeuralNetwork {
         System.out.println("Reading file weights.dat...");
         try
         {
-            FileInputStream fi = new FileInputStream("res\\weights.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "weights.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)

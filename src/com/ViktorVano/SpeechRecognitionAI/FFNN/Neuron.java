@@ -80,7 +80,8 @@ public class Neuron {
             System.out.println("Saving weights to weights.dat...");
             try
             {
-                File file = new File("res\\weights.dat");
+                String fileSeparator = System.getProperty("file.separator");
+                File file = new File("res" + fileSeparator + "weights.dat");
                 file.createNewFile();
                 FileOutputStream f = new FileOutputStream(file);
                 ObjectOutputStream o = new ObjectOutputStream(f);

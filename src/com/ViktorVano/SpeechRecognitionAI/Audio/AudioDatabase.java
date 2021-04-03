@@ -10,7 +10,8 @@ public class AudioDatabase {
     {
         try
         {
-            File file = new File("res\\database.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            File file = new File("res" + fileSeparator + "database.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -29,7 +30,8 @@ public class AudioDatabase {
         ObservableList<RecordedAudio> database = FXCollections.observableArrayList();
         try
         {
-            FileInputStream fi = new FileInputStream("res\\database.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "database.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)

@@ -8,7 +8,8 @@ public class TopologyFile {
     {
         try
         {
-            File file = new File("res\\topology.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            File file = new File("res"+ fileSeparator + "topology.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -27,7 +28,8 @@ public class TopologyFile {
         ArrayList<Integer> topology = new ArrayList<>();
         try
         {
-            FileInputStream fi = new FileInputStream("res\\topology.dat");
+            String fileSeparator = System.getProperty("file.separator");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "topology.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)
