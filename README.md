@@ -31,7 +31,7 @@ When all words are analysed then the "word routing" feature steps in and sends t
 After this the application listens again and the whole process repeats.  
   
 ###### Notes:
-1.) The application can record 44.5 seconds of speech.  
+1.) The application can record 22 seconds of speech.  
 2.) Words are detected by their amplitude. Alternating amplitude is considered as a word and silence is not a word.  
 3.) A single word of a phrase can be 2.97 seconds long.  
 4.) Speech is recognized word by word.
