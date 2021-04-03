@@ -39,6 +39,8 @@ After this the application listens again and the whole process repeats.
     It means that you need to speak like a sloth.  
 5.) If you wont to speak more fluently you can, but the neural network has a 2.97 second word (phrase) buffer.  
 6.) For a good training data it is recommended to have about 50 training samples of each word you want to teach the neural network.  
+7.) It is also recommended to record an audio artifacts (random unwanted noises like chair sounds, typing, clicking...). 
+    They should be named as an empty string "". This way the neural network will learn those sounds and will not be mistaken of a spoken word.  
   
 ### Word Examples Feedforwarded via Neural Network
   
