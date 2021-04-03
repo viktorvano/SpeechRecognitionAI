@@ -84,7 +84,7 @@ public class SpeechRecognitionAI extends Application {
         recordedAudio = new RecordedAudio();
 
         final int width = 1200;
-        final int height = 750;
+        final int height = 700;
 
         borderPane.setBottom(hBoxBottom);
         borderPane.setCenter(stackPaneCenter);
@@ -103,8 +103,8 @@ public class SpeechRecognitionAI extends Application {
         {
             icons[i] = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/icon"+(i+1)+".png"));
             icons[i].setPreserveRatio(true);
-            icons[i].setFitWidth(96);
-            icons[i].setFitHeight(96);
+            icons[i].setFitWidth(80);
+            icons[i].setFitHeight(80);
             labelMenu[i] = new Label();
             flow.getChildren().add(icons[i]);
             flow.getChildren().add(labelMenu[i]);
@@ -114,10 +114,10 @@ public class SpeechRecognitionAI extends Application {
             labelMenu[i].setDisable(true);
             icons[i].setDisable(true);
         }
-        labelMenu[0].setText("     Training Data\n ");
-        labelMenu[1].setText("        Train AI\n ");
-        labelMenu[2].setText("Speech Recognition\n ");
-        labelMenu[3].setText("        Settings");
+        labelMenu[0].setText("Training Data\n ");
+        labelMenu[1].setText("    Train AI\n ");
+        labelMenu[2].setText("   Speech\nRecognition\n ");
+        labelMenu[3].setText("   Settings");
 
         hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
         hBoxBottom.setSpacing(30);
@@ -132,7 +132,8 @@ public class SpeechRecognitionAI extends Application {
 
         Scene scene = new Scene(borderPane, width, height);
 
-        stage.setTitle("Speech Recognition AI - developed by Viktor Vano");
+        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (20210403)");
+        stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
         stage.setMinWidth(stage.getWidth());
@@ -306,7 +307,7 @@ public class SpeechRecognitionAI extends Application {
     private void initializeDataLayout()
     {
         buttonPlay = new Button("Play Record");
-        buttonPlay.setPrefHeight(100);
+        buttonPlay.setPrefHeight(90);
         buttonPlay.setOnAction(event -> {
             if(recordedAudio != null && recordedAudio.audioRecord != null)
             {
@@ -316,7 +317,7 @@ public class SpeechRecognitionAI extends Application {
         });
 
         buttonRecord = new Button("Record Audio");
-        buttonRecord.setPrefHeight(100);
+        buttonRecord.setPrefHeight(90);
         buttonRecord.setOnAction(event -> captureAudio());
 
         database = loadDatabase();
@@ -384,7 +385,7 @@ public class SpeechRecognitionAI extends Application {
         recordsList = new ListView<>();
         recordItem = FXCollections.observableArrayList();
         recordsList.setItems(recordItem);
-        recordsList.setPrefHeight(100);
+        recordsList.setPrefHeight(90);
         recordsList.setOnMouseClicked(event -> {
             if(recordsList.getSelectionModel().getSelectedIndex() != -1)
             {
@@ -589,7 +590,7 @@ public class SpeechRecognitionAI extends Application {
         labelTrainingStatus.setFont(Font.font("Arial", 20));
 
         labelHiddenTopology = new Label("\n Topology of hidden layers ");
-        labelHiddenTopology.setFont(Font.font("Arial", 26));
+        labelHiddenTopology.setFont(Font.font("Arial", 24));
 
         topologyList = new ListView<>();
         topologyItem = FXCollections.observableArrayList();
@@ -615,7 +616,7 @@ public class SpeechRecognitionAI extends Application {
         });
 
         labelNewHiddenLayer = new Label("\n New hidden layer");
-        labelNewHiddenLayer.setFont(Font.font("Arial", 26));
+        labelNewHiddenLayer.setFont(Font.font("Arial", 24));
 
         txtHiddenLayer = new TextField();
         txtHiddenLayer.setPromptText("Hidden Layer");
@@ -655,7 +656,7 @@ public class SpeechRecognitionAI extends Application {
         });
 
         labelTopology = new Label();
-        labelTopology.setFont(Font.font("Arial", 20));
+        labelTopology.setFont(Font.font("Arial", 16));
         countWords();
         calculateTopology();
     }
