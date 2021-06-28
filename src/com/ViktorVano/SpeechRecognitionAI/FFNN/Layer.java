@@ -14,16 +14,6 @@ public class Layer extends ArrayList<Neuron> {
         return super.add(aNeuron);
     }
 
-    public Neuron pollLast() {
-        Neuron neuron = peekFirst();
-        this.remove(super.get(this.size()-1));
-        return neuron;
-    }
-
-    public Neuron peekFirst() {
-        return super.get(0);
-    }
-
     public Neuron peekLast() {
         return super.get(this.size()-1);
     }
