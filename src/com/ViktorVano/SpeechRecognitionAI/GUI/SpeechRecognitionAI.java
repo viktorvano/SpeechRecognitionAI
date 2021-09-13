@@ -24,6 +24,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -37,6 +39,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*
 
 
 public class SpeechRecognitionAI extends Application {
+    private Stage stageReference;
     private AudioCapture audioCapture;
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
@@ -71,6 +74,7 @@ public class SpeechRecognitionAI extends Application {
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
     private CheckBox checkBoxPrintToConsole;
+    private Button buttonWordDetection;
 
     public static void main(String[] args)
     {
@@ -80,6 +84,7 @@ public class SpeechRecognitionAI extends Application {
     @Override
     public void start(Stage stage)
     {
+        stageReference = stage;
         audioCapture = new AudioCapture();
         recordedAudio = new RecordedAudio();
 
@@ -132,7 +137,7 @@ public class SpeechRecognitionAI extends Application {
 
         Scene scene = new Scene(borderPane, width, height);
 
-        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (20210403)");
+        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (20210913)");
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
@@ -809,6 +814,40 @@ public class SpeechRecognitionAI extends Application {
             printNetworkValues = checkBoxPrintToConsole.isSelected();
             savePrintToConsole(printNetworkValues);
         });
+
+        buttonWordDetection = new Button("Word Detection");
+        buttonWordDetection.setOnAction(event -> {
+            final int dialogWidth = 600;
+            final int dialogHeight = 300;
+            final Stage dialog = new Stage();
+            dialog.setTitle("Word Detection Settings");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(stageReference);
+            Pane dialogPane = new Pane();
+            Scene dialogScene = new Scene(dialogPane, dialogWidth, dialogHeight);
+            dialog.setMinWidth(dialogPane.getWidth());
+            dialog.setMinHeight(dialogPane.getHeight());
+            dialog.setResizable(false);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            try
+            {
+                Image icon = new Image(getClass().getResourceAsStream("../images/icon3.png"));
+                dialog.getIcons().add(icon);
+                System.out.println("Icon loaded from IDE...");
+            }catch(Exception e)
+            {
+                try
+                {
+                    Image icon = new Image("com/ViktorVano/SpeechRecognitionAI/images/icon3.png");
+                    dialog.getIcons().add(icon);
+                    System.out.println("Icon loaded from exported JAR...");
+                }catch(Exception e1)
+                {
+                    System.out.println("Icon failed to load...");
+                }
+            }
+        });
     }
 
     private void displayDataLayout()
@@ -912,6 +951,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(buttonUpdateWordRouting);
         hBoxBottom.getChildren().add(buttonRemoveWordRouting);
         hBoxBottom.getChildren().add(checkBoxPrintToConsole);
+        hBoxBottom.getChildren().add(buttonWordDetection);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -931,6 +971,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(buttonUpdateWordRouting);
         hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
         hBoxBottom.getChildren().remove(checkBoxPrintToConsole);
+        hBoxBottom.getChildren().remove(buttonWordDetection);
     }
 
     private void displayLayout(int layoutIndex)
