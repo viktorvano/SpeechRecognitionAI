@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class Neuron {
     public Neuron(int numOutputs, int myIndex)

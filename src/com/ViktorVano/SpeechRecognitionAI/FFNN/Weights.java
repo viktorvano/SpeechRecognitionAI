@@ -3,7 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.FileManagement.*;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class Weights {
     public static void push_zeros_to_Weights()

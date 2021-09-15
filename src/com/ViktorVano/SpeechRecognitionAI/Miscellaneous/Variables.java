@@ -1,8 +1,10 @@
-package com.ViktorVano.SpeechRecognitionAI.FFNN;
+package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import java.util.ArrayList;
 
 public class Variables {
+
+    public static int versionNumber = 20210915;
 
     public static int patternCount;
     public static int inputNodes;

@@ -5,9 +5,7 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRouter;
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRouting;
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -24,8 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -33,7 +29,7 @@ import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
@@ -137,7 +133,7 @@ public class SpeechRecognitionAI extends Application {
 
         Scene scene = new Scene(borderPane, width, height);
 
-        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (20210913)");
+        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ")");
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
@@ -817,36 +813,7 @@ public class SpeechRecognitionAI extends Application {
 
         buttonWordDetection = new Button("Word Detection");
         buttonWordDetection.setOnAction(event -> {
-            final int dialogWidth = 600;
-            final int dialogHeight = 300;
-            final Stage dialog = new Stage();
-            dialog.setTitle("Word Detection Settings");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(stageReference);
-            Pane dialogPane = new Pane();
-            Scene dialogScene = new Scene(dialogPane, dialogWidth, dialogHeight);
-            dialog.setMinWidth(dialogPane.getWidth());
-            dialog.setMinHeight(dialogPane.getHeight());
-            dialog.setResizable(false);
-            dialog.setScene(dialogScene);
-            dialog.show();
-            try
-            {
-                Image icon = new Image(getClass().getResourceAsStream("../images/icon3.png"));
-                dialog.getIcons().add(icon);
-                System.out.println("Icon loaded from IDE...");
-            }catch(Exception e)
-            {
-                try
-                {
-                    Image icon = new Image("com/ViktorVano/SpeechRecognitionAI/images/icon3.png");
-                    dialog.getIcons().add(icon);
-                    System.out.println("Icon loaded from exported JAR...");
-                }catch(Exception e1)
-                {
-                    System.out.println("Icon failed to load...");
-                }
-            }
+            new AdvancedSettingsMenu(stageReference);
         });
     }
 

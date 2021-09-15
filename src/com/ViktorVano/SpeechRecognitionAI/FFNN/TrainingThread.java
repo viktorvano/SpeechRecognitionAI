@@ -7,8 +7,8 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.GeneralFunctions.showVectorValues;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.*;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.input;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.input;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalizeInputs;
 
 public class TrainingThread extends Thread {

@@ -5,8 +5,8 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.inputNodes;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Variables.printNetworkValues;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.inputNodes;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.printNetworkValues;
 
 public class General {
     public static final float  pi = (float)Math.atan2(1, 1) * 4.0f;//calculated pi
