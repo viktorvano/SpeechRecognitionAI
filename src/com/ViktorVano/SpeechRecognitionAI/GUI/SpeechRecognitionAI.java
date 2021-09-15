@@ -69,8 +69,7 @@ public class SpeechRecognitionAI extends Application {
     private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private CheckBox checkBoxPrintToConsole;
-    private Button buttonWordDetection;
+    private Button buttonAdvancedSettings;
 
     public static void main(String[] args)
     {
@@ -83,6 +82,7 @@ public class SpeechRecognitionAI extends Application {
         stageReference = stage;
         audioCapture = new AudioCapture();
         recordedAudio = new RecordedAudio();
+        printNetworkValues = loadPrintToConsole();
 
         final int width = 1200;
         final int height = 690;
@@ -803,16 +803,8 @@ public class SpeechRecognitionAI extends Application {
             saveWordRouting(wordRoutingDatabase);
         });
 
-        printNetworkValues = loadPrintToConsole();
-        checkBoxPrintToConsole = new CheckBox("Print to console");
-        checkBoxPrintToConsole.setSelected(printNetworkValues);
-        checkBoxPrintToConsole.setOnAction(event -> {
-            printNetworkValues = checkBoxPrintToConsole.isSelected();
-            savePrintToConsole(printNetworkValues);
-        });
-
-        buttonWordDetection = new Button("Word Detection");
-        buttonWordDetection.setOnAction(event -> {
+        buttonAdvancedSettings = new Button("Advanced Settings");
+        buttonAdvancedSettings.setOnAction(event -> {
             new AdvancedSettingsMenu(stageReference);
         });
     }
@@ -917,8 +909,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(txtEditPort);
         vBoxRight.getChildren().add(buttonUpdateWordRouting);
         hBoxBottom.getChildren().add(buttonRemoveWordRouting);
-        hBoxBottom.getChildren().add(checkBoxPrintToConsole);
-        hBoxBottom.getChildren().add(buttonWordDetection);
+        hBoxBottom.getChildren().add(buttonAdvancedSettings);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -937,8 +928,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(txtEditPort);
         vBoxRight.getChildren().remove(buttonUpdateWordRouting);
         hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
-        hBoxBottom.getChildren().remove(checkBoxPrintToConsole);
-        hBoxBottom.getChildren().remove(buttonWordDetection);
+        hBoxBottom.getChildren().remove(buttonAdvancedSettings);
     }
 
     private void displayLayout(int layoutIndex)

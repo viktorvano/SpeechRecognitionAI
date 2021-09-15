@@ -1,18 +1,26 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.loadPrintToConsole;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.savePrintToConsole;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.printNetworkValues;
 
 public class AdvancedSettingsMenu {
     public AdvancedSettingsMenu(Stage stageReference)
     {
-        final int dialogWidth = 600;
-        final int dialogHeight = 300;
+        final int dialogWidth = 900;
+        final int dialogHeight = 600;
         final Stage dialog = new Stage();
-        dialog.setTitle("Word Detection Settings");
+        dialog.setTitle("Advanced Settings");
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(stageReference);
         Pane dialogPane = new Pane();
@@ -39,5 +47,67 @@ public class AdvancedSettingsMenu {
                 System.out.println("Icon failed to load...");
             }
         }
+
+        Label labelWordDetection =  new Label("Word Detection");
+        labelWordDetection.setLayoutX(30);
+        labelWordDetection.setLayoutY(10);
+        labelWordDetection.setFont(Font.font("Arial", 22));
+        labelWordDetection.setStyle("-fx-font-weight: bold");
+        dialogPane.getChildren().add(labelWordDetection);
+
+        Label labelsForWordDetection = new Label(
+                "Word Threshold\n\n" +
+                "Pre-Word Samples\n\n" +
+                "Word Inertia Samples\n\n" +
+                "Word Inertia Threshold");
+        labelsForWordDetection.setLayoutX(30);
+        labelsForWordDetection.setLayoutY(50);
+        dialogPane.getChildren().add(labelsForWordDetection);
+
+        TextField textFieldWordThreshold = new TextField();
+        textFieldWordThreshold.setPromptText("500");
+        textFieldWordThreshold.setLayoutX(200);
+        textFieldWordThreshold.setLayoutY(45);
+        textFieldWordThreshold.setPrefWidth(60);
+        dialogPane.getChildren().add(textFieldWordThreshold);
+
+        TextField textFieldPreWordSamples = new TextField();
+        textFieldPreWordSamples.setPromptText("1200");
+        textFieldPreWordSamples.setLayoutX(200);
+        textFieldPreWordSamples.setLayoutY(86);
+        textFieldPreWordSamples.setPrefWidth(60);
+        dialogPane.getChildren().add(textFieldPreWordSamples);
+
+        TextField textFieldWordInertiaSamples = new TextField();
+        textFieldWordInertiaSamples.setPromptText("250");
+        textFieldWordInertiaSamples.setLayoutX(200);
+        textFieldWordInertiaSamples.setLayoutY(127);
+        textFieldWordInertiaSamples.setPrefWidth(60);
+        dialogPane.getChildren().add(textFieldWordInertiaSamples);
+
+        TextField textFieldWordInertiaThreshold = new TextField();
+        textFieldWordInertiaThreshold.setPromptText("300");
+        textFieldWordInertiaThreshold.setLayoutX(200);
+        textFieldWordInertiaThreshold.setLayoutY(168);
+        textFieldWordInertiaThreshold.setPrefWidth(60);
+        dialogPane.getChildren().add(textFieldWordInertiaThreshold);
+
+        Label labelOtherSettings =  new Label("Other Settings");
+        labelOtherSettings.setLayoutX(30);
+        labelOtherSettings.setLayoutY(250);
+        labelOtherSettings.setFont(Font.font("Arial", 22));
+        labelOtherSettings.setStyle("-fx-font-weight: bold");
+        dialogPane.getChildren().add(labelOtherSettings);
+
+        printNetworkValues = loadPrintToConsole();
+        CheckBox checkBoxPrintToConsole = new CheckBox("Print to console");
+        checkBoxPrintToConsole.setSelected(printNetworkValues);
+        checkBoxPrintToConsole.setOnAction(event -> {
+            printNetworkValues = checkBoxPrintToConsole.isSelected();
+            savePrintToConsole(printNetworkValues);
+        });
+        checkBoxPrintToConsole.setLayoutX(30);
+        checkBoxPrintToConsole.setLayoutY(290);
+        dialogPane.getChildren().add(checkBoxPrintToConsole);
     }
 }
