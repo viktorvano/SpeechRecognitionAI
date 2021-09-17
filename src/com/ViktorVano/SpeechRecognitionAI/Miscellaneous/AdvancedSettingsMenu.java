@@ -10,8 +10,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.loadPrintToConsole;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.savePrintToConsole;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PlotNeuralChartsFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.plotNeuralCharts;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.printNetworkValues;
 
 public class AdvancedSettingsMenu {
@@ -117,5 +118,16 @@ public class AdvancedSettingsMenu {
         checkBoxPrintToConsole.setLayoutX(30);
         checkBoxPrintToConsole.setLayoutY(331);
         dialogPane.getChildren().add(checkBoxPrintToConsole);
+
+        plotNeuralCharts = loadPlotNeuralCharts();
+        CheckBox checkBoxPlotNeuralCharts = new CheckBox("Plot Neural Network Charts");
+        checkBoxPlotNeuralCharts.setSelected(plotNeuralCharts);
+        checkBoxPlotNeuralCharts.setOnAction(event -> {
+            plotNeuralCharts = checkBoxPlotNeuralCharts.isSelected();
+            savePlotNeuralCharts(plotNeuralCharts);
+        });
+        checkBoxPlotNeuralCharts.setLayoutX(30);
+        checkBoxPlotNeuralCharts.setLayoutY(361);
+        dialogPane.getChildren().add(checkBoxPlotNeuralCharts);
     }
 }

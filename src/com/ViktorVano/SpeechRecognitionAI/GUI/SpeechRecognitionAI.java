@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PlotNeuralChartsFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
@@ -83,6 +84,7 @@ public class SpeechRecognitionAI extends Application {
         audioCapture = new AudioCapture();
         recordedAudio = new RecordedAudio();
         printNetworkValues = loadPrintToConsole();
+        plotNeuralCharts = loadPlotNeuralCharts();
 
         final int width = 1200;
         final int height = 690;
