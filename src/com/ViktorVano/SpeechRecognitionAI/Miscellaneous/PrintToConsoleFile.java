@@ -3,6 +3,8 @@ package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 import java.io.*;
 import java.util.Scanner;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+
 public class PrintToConsoleFile {
     public static void savePrintToConsole(boolean state)
     {
@@ -35,14 +37,14 @@ public class PrintToConsoleFile {
             }else
             {
                 state = false;
-                savePrintToConsole(false);
+                savePrintToConsole(printNetworkValues);
             }
             scanner.close();
         }catch (Exception e)
         {
             System.out.println("Failed to read the \"printToConsole.dat\" file.");
             state = false;
-            savePrintToConsole(false);
+            savePrintToConsole(printNetworkValues);
         }
         return state;
     }

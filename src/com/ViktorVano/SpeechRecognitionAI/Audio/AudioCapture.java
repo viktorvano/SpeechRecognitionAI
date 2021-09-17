@@ -3,6 +3,8 @@ package com.ViktorVano.SpeechRecognitionAI.Audio;
 import java.io.*;
 import javax.sound.sampled.*;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+
 public class AudioCapture {
     private AudioFormat adFormat;
     private TargetDataLine targetDataLine;
@@ -112,7 +114,7 @@ public class AudioCapture {
 
     class CaptureThread extends Thread {
 
-        byte[] tempCaptureBuffer = new byte[10000];
+        byte[] tempCaptureBuffer = new byte[(int)AudioParameters.sampleRate];
 
         public void run()
         {
@@ -123,16 +125,16 @@ public class AudioCapture {
                     int cnt = targetDataLine.read(tempCaptureBuffer, 0, tempCaptureBuffer.length);
                     if (cnt > 0 && mainBufferLength < 980000)
                     {
-                        boolean add = false;
-                        for(int i = 0; i< tempCaptureBuffer.length; i++)
+                        boolean addRecording = false;
+                        for(int i = 0; i< tempCaptureBuffer.length; i+=2)
                         {
-                            if(Math.abs(tempCaptureBuffer[i]) > 100) {
-                                add = true;
+                            if(Math.abs(tempCaptureBuffer[i] + tempCaptureBuffer[i+1]*256) > recorderThreshold) {
+                                addRecording = true;
                                 break;
                             }
                         }
 
-                        if(add && !audioRecorded)
+                        if(addRecording && !audioRecorded)
                         {
                             System.out.println("Adding a packet");
                             for(int i = 0; i< tempCaptureBuffer.length; i++)

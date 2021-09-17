@@ -56,45 +56,53 @@ public class AdvancedSettingsMenu {
         dialogPane.getChildren().add(labelWordDetection);
 
         Label labelsForWordDetection = new Label(
-                "Word Threshold\n\n" +
-                "Pre-Word Samples\n\n" +
-                "Word Inertia Samples\n\n" +
-                "Word Inertia Threshold");
+                "Start Recording\n\n" +
+                    "Word Threshold\n\n" +
+                    "Pre-Word Samples\n\n" +
+                    "Word Inertia Samples\n\n" +
+                    "Word Inertia Threshold");
         labelsForWordDetection.setLayoutX(30);
         labelsForWordDetection.setLayoutY(50);
         dialogPane.getChildren().add(labelsForWordDetection);
 
+        TextField textFieldStartRecording = new TextField();
+        textFieldStartRecording.setPromptText("500");
+        textFieldStartRecording.setLayoutX(200);
+        textFieldStartRecording.setLayoutY(45);
+        textFieldStartRecording.setPrefWidth(60);
+        dialogPane.getChildren().add(textFieldStartRecording);
+
         TextField textFieldWordThreshold = new TextField();
         textFieldWordThreshold.setPromptText("500");
         textFieldWordThreshold.setLayoutX(200);
-        textFieldWordThreshold.setLayoutY(45);
+        textFieldWordThreshold.setLayoutY(86);
         textFieldWordThreshold.setPrefWidth(60);
         dialogPane.getChildren().add(textFieldWordThreshold);
 
         TextField textFieldPreWordSamples = new TextField();
         textFieldPreWordSamples.setPromptText("1200");
         textFieldPreWordSamples.setLayoutX(200);
-        textFieldPreWordSamples.setLayoutY(86);
+        textFieldPreWordSamples.setLayoutY(127);
         textFieldPreWordSamples.setPrefWidth(60);
         dialogPane.getChildren().add(textFieldPreWordSamples);
 
         TextField textFieldWordInertiaSamples = new TextField();
         textFieldWordInertiaSamples.setPromptText("250");
         textFieldWordInertiaSamples.setLayoutX(200);
-        textFieldWordInertiaSamples.setLayoutY(127);
+        textFieldWordInertiaSamples.setLayoutY(168);
         textFieldWordInertiaSamples.setPrefWidth(60);
         dialogPane.getChildren().add(textFieldWordInertiaSamples);
 
         TextField textFieldWordInertiaThreshold = new TextField();
         textFieldWordInertiaThreshold.setPromptText("300");
         textFieldWordInertiaThreshold.setLayoutX(200);
-        textFieldWordInertiaThreshold.setLayoutY(168);
+        textFieldWordInertiaThreshold.setLayoutY(209);
         textFieldWordInertiaThreshold.setPrefWidth(60);
         dialogPane.getChildren().add(textFieldWordInertiaThreshold);
 
         Label labelOtherSettings =  new Label("Other Settings");
         labelOtherSettings.setLayoutX(30);
-        labelOtherSettings.setLayoutY(250);
+        labelOtherSettings.setLayoutY(291);
         labelOtherSettings.setFont(Font.font("Arial", 22));
         labelOtherSettings.setStyle("-fx-font-weight: bold");
         dialogPane.getChildren().add(labelOtherSettings);
@@ -107,7 +115,7 @@ public class AdvancedSettingsMenu {
             savePrintToConsole(printNetworkValues);
         });
         checkBoxPrintToConsole.setLayoutX(30);
-        checkBoxPrintToConsole.setLayoutY(290);
+        checkBoxPrintToConsole.setLayoutY(331);
         dialogPane.getChildren().add(checkBoxPrintToConsole);
     }
 }
