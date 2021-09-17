@@ -27,7 +27,7 @@ public class AudioCapture {
             targetDataLine.open(adFormat);
             targetDataLine.start();
 
-            Thread captureThread = new Thread(new CaptureThread());
+            CaptureThread captureThread = new CaptureThread();
             captureThread.start();
             System.out.println("Started listening.");
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class AudioCapture {
 
     public void playRecord()
     {
-        Thread playThread;
+        PlayThread playThread;
         InputStream byteInputStream;
         DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, adFormat);
         System.out.println("Playing: " + mainBufferLength);
@@ -78,7 +78,7 @@ public class AudioCapture {
             sourceLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
             sourceLine.open(adFormat);
             sourceLine.start();
-            playThread = new Thread(new PlayThread());
+            playThread = new PlayThread();
             playThread.start();
             while (playThread.isAlive());
             System.out.println("Recording played.");
@@ -90,7 +90,7 @@ public class AudioCapture {
 
     public void playRecord(RecordedAudio recordedAudio)
     {
-        Thread playThread;
+        PlayThread playThread;
         InputStream byteInputStream;
         DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, adFormat);
         System.out.println("Playing: " + recordedAudio.audioRecordLength);
@@ -100,7 +100,7 @@ public class AudioCapture {
             sourceLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
             sourceLine.open(adFormat);
             sourceLine.start();
-            playThread = new Thread(new PlayThread());
+            playThread = new PlayThread();
             playThread.start();
             while (playThread.isAlive());
             System.out.println("Recording played.");

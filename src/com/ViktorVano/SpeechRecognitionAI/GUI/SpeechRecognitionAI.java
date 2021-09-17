@@ -163,10 +163,6 @@ public class SpeechRecognitionAI extends Application {
     {
         detectedWordsSeries.getData().clear();
         final int detectedValue = 3000;
-        final int wordThreshold = 500;
-        final int preWordSamples = 1200;
-        final int wordInertiaSamples = 250;
-        final int wordInertiaThreshold = 300;
         int lastValue = 1500;
         int audioSample;
         for (int i = 0; i < recordedAudio.audioRecordLength; i+=2)
