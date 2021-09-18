@@ -27,6 +27,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PlotNeuralChartsFile.*;
@@ -85,6 +86,11 @@ public class SpeechRecognitionAI extends Application {
         recordedAudio = new RecordedAudio();
         printNetworkValues = loadPrintToConsole();
         plotNeuralCharts = loadPlotNeuralCharts();
+        recorderThreshold = loadIntegerFromFile("recorderThreshold.dat", recorderThreshold);
+        wordThreshold = loadIntegerFromFile("wordThreshold.dat", wordThreshold);
+        preWordSamples = loadIntegerFromFile("preWordSamples.dat", preWordSamples);
+        wordInertiaSamples = loadIntegerFromFile("wordInertiaSamples.dat", wordInertiaSamples);
+        wordInertiaThreshold = loadIntegerFromFile("wordInertiaThreshold.dat", wordInertiaThreshold);
 
         final int width = 1200;
         final int height = 690;

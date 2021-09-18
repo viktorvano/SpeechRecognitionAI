@@ -10,10 +10,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PlotNeuralChartsFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.plotNeuralCharts;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.printNetworkValues;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class AdvancedSettingsMenu {
     public AdvancedSettingsMenu(Stage stageReference)
@@ -67,38 +67,93 @@ public class AdvancedSettingsMenu {
         dialogPane.getChildren().add(labelsForWordDetection);
 
         TextField textFieldStartRecording = new TextField();
-        textFieldStartRecording.setPromptText("500");
+        textFieldStartRecording.setPromptText(Integer.toString(recorderThreshold));
+        textFieldStartRecording.setText(Integer.toString(recorderThreshold));
         textFieldStartRecording.setLayoutX(200);
         textFieldStartRecording.setLayoutY(45);
         textFieldStartRecording.setPrefWidth(60);
+        textFieldStartRecording.textProperty().addListener(observable -> {
+            try{
+                int value = Integer.parseInt(textFieldStartRecording.getText());
+                recorderThreshold = value;
+                saveIntegerToFile("recorderThreshold.dat", value);
+            }catch (Exception e)
+            {
+                textFieldStartRecording.setText(String.valueOf(recorderThreshold));
+            }
+        });
         dialogPane.getChildren().add(textFieldStartRecording);
 
         TextField textFieldWordThreshold = new TextField();
-        textFieldWordThreshold.setPromptText("500");
+        textFieldWordThreshold.setPromptText(Integer.toString(wordThreshold));
+        textFieldWordThreshold.setText(Integer.toString(wordThreshold));
         textFieldWordThreshold.setLayoutX(200);
         textFieldWordThreshold.setLayoutY(86);
         textFieldWordThreshold.setPrefWidth(60);
+        textFieldWordThreshold.textProperty().addListener(observable -> {
+            try{
+                int value = Integer.parseInt(textFieldWordThreshold.getText());
+                wordThreshold = value;
+                saveIntegerToFile("wordThreshold.dat", value);
+            }catch (Exception e)
+            {
+                textFieldWordThreshold.setText(String.valueOf(wordThreshold));
+            }
+        });
         dialogPane.getChildren().add(textFieldWordThreshold);
 
         TextField textFieldPreWordSamples = new TextField();
-        textFieldPreWordSamples.setPromptText("1200");
+        textFieldPreWordSamples.setPromptText(Integer.toString(preWordSamples));
+        textFieldPreWordSamples.setText(Integer.toString(preWordSamples));
         textFieldPreWordSamples.setLayoutX(200);
         textFieldPreWordSamples.setLayoutY(127);
         textFieldPreWordSamples.setPrefWidth(60);
+        textFieldPreWordSamples.textProperty().addListener(observable -> {
+            try{
+                int value = Integer.parseInt(textFieldPreWordSamples.getText());
+                preWordSamples = value;
+                saveIntegerToFile("preWordSamples.dat", value);
+            }catch (Exception e)
+            {
+                textFieldPreWordSamples.setText(String.valueOf(preWordSamples));
+            }
+        });
         dialogPane.getChildren().add(textFieldPreWordSamples);
 
         TextField textFieldWordInertiaSamples = new TextField();
-        textFieldWordInertiaSamples.setPromptText("250");
+        textFieldWordInertiaSamples.setPromptText(Integer.toString(wordInertiaSamples));
+        textFieldWordInertiaSamples.setText(Integer.toString(wordInertiaSamples));
         textFieldWordInertiaSamples.setLayoutX(200);
         textFieldWordInertiaSamples.setLayoutY(168);
         textFieldWordInertiaSamples.setPrefWidth(60);
+        textFieldWordInertiaSamples.textProperty().addListener(observable -> {
+            try{
+                int value = Integer.parseInt(textFieldWordInertiaSamples.getText());
+                wordInertiaSamples = value;
+                saveIntegerToFile("wordInertiaSamples.dat", value);
+            }catch (Exception e)
+            {
+                textFieldWordInertiaSamples.setText(String.valueOf(wordInertiaSamples));
+            }
+        });
         dialogPane.getChildren().add(textFieldWordInertiaSamples);
 
         TextField textFieldWordInertiaThreshold = new TextField();
-        textFieldWordInertiaThreshold.setPromptText("300");
+        textFieldWordInertiaThreshold.setPromptText(Integer.toString(wordInertiaThreshold));
+        textFieldWordInertiaThreshold.setText(Integer.toString(wordInertiaThreshold));
         textFieldWordInertiaThreshold.setLayoutX(200);
         textFieldWordInertiaThreshold.setLayoutY(209);
         textFieldWordInertiaThreshold.setPrefWidth(60);
+        textFieldWordInertiaThreshold.textProperty().addListener(observable -> {
+            try{
+                int value = Integer.parseInt(textFieldWordInertiaThreshold.getText());
+                wordInertiaThreshold = value;
+                saveIntegerToFile("wordInertiaSamples.dat", value);
+            }catch (Exception e)
+            {
+                textFieldWordInertiaThreshold.setText(String.valueOf(wordInertiaThreshold));
+            }
+        });
         dialogPane.getChildren().add(textFieldWordInertiaThreshold);
 
         Label labelOtherSettings =  new Label("Other Settings");
