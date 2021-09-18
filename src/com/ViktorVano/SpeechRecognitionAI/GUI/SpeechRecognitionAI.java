@@ -178,7 +178,7 @@ public class SpeechRecognitionAI extends Application {
             audioSample = recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i+1]*256;
             if (lastValue != detectedValue && Math.abs(audioSample) > wordThreshold)
             {
-                if(i>=600)
+                if(i>=preWordSamples)
                 {
                     detectedWordsSeries.getData().add(new XYChart.Data<>(i-preWordSamples, 0));
                     detectedWordsSeries.getData().add(new XYChart.Data<>(i-(preWordSamples-1), detectedValue));
