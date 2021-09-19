@@ -41,7 +41,7 @@ public class SpeechRecognitionAI extends Application {
     private AudioCapture audioCapture;
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
-    private Timeline timelineTrainingLabelUpdate;
+    private Timeline timelineTrainingLabelUpdate, timelineDisplayNeuralChart;
     private boolean updateData = true, sameWordCount = false;
     private final BorderPane borderPane = new BorderPane();
     private final StackPane stackPaneCenter = new StackPane();
@@ -165,6 +165,16 @@ public class SpeechRecognitionAI extends Application {
             }
         }
         displayLayout(2);//Speech Recognition Layout
+
+        timelineDisplayNeuralChart = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            if(displayNeuralChart)
+            {
+                displayNeuralChart = false;
+                new NeuralCharts(stageReference, chartClassifierName);
+            }
+        }));
+        timelineDisplayNeuralChart.setCycleCount(Timeline.INDEFINITE);
+        timelineDisplayNeuralChart.play();
     }
 
     private void detectWords()

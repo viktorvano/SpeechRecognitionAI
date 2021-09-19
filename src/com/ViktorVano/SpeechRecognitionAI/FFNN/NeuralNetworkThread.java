@@ -125,6 +125,8 @@ public class NeuralNetworkThread extends Thread {
                         for (int neuron = 0; neuron < topology.get(layer); neuron++)
                             System.out.println(neuralNetwork.getNeuronOutput(layer, neuron));
                         //TODO: Insert data into charts
+                        chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                        displayNeuralChart = true;
                     }
                 }
             }
