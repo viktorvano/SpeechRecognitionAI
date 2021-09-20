@@ -1,17 +1,16 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
-
-public class PrintToConsoleFile {
-    public static void savePrintToConsole(boolean state)
+public class BooleanFile {
+    public static void saveBoolean(String filename, boolean state)
     {
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            File file = new File("res" + fileSeparator + "printToConsole.dat");
+            File file = new File("res" + fileSeparator + filename);
             file.createNewFile();
             //Write Content
             FileWriter writer = new FileWriter(file);
@@ -19,32 +18,32 @@ public class PrintToConsoleFile {
             writer.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to create the \"printToConsole.dat\" file.");
+            System.out.println("Failed to create the \"" + filename + "\" file.");
         }
     }
 
-    public static boolean loadPrintToConsole()
+    public static boolean loadBoolean(String filename, boolean defaultValue)
     {
         Boolean state;
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            File file = new File("res" + fileSeparator + "printToConsole.dat");
+            File file = new File("res" + fileSeparator + filename);
             Scanner scanner = new Scanner(file);
             if(scanner.hasNextBoolean())
             {
                 state = scanner.nextBoolean();
             }else
             {
-                state = false;
-                savePrintToConsole(printNetworkValues);
+                state = defaultValue;
+                saveBoolean(filename, state);
             }
             scanner.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to read the \"printToConsole.dat\" file.");
-            state = false;
-            savePrintToConsole(printNetworkValues);
+            System.out.println("Failed to read the \"" + filename + "\" file.");
+            state = defaultValue;
+            saveBoolean(filename, state);
         }
         return state;
     }

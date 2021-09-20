@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20210919;
+    public static int versionNumber = 20210920;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -42,6 +42,8 @@ public class Variables {
     public static float classifierThreshold = 0.5f;
     public static boolean weightsLoaded = false;
     public static int loadingStep = 0;
+
     public static boolean printNetworkValues = false;
     public static boolean plotNeuralCharts = false;
+    public static boolean keepLongWords = false;
 }

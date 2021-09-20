@@ -10,9 +10,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PlotNeuralChartsFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class AdvancedSettingsMenu {
@@ -168,26 +167,37 @@ public class AdvancedSettingsMenu {
         labelOtherSettings.setStyle("-fx-font-weight: bold");
         dialogPane.getChildren().add(labelOtherSettings);
 
-        printNetworkValues = loadPrintToConsole();
-        CheckBox checkBoxPrintToConsole = new CheckBox("Print to console");
+        printNetworkValues = loadBoolean("printNetworkValues.dat", printNetworkValues);
+        CheckBox checkBoxPrintToConsole = new CheckBox("Print Neural Network Values To Console");
         checkBoxPrintToConsole.setSelected(printNetworkValues);
         checkBoxPrintToConsole.setOnAction(event -> {
             printNetworkValues = checkBoxPrintToConsole.isSelected();
-            savePrintToConsole(printNetworkValues);
+            saveBoolean("printNetworkValues.dat", printNetworkValues);
         });
         checkBoxPrintToConsole.setLayoutX(30);
         checkBoxPrintToConsole.setLayoutY(331);
         dialogPane.getChildren().add(checkBoxPrintToConsole);
 
-        plotNeuralCharts = loadPlotNeuralCharts();
+        plotNeuralCharts = loadBoolean("plotNeuralCharts.dat", plotNeuralCharts);
         CheckBox checkBoxPlotNeuralCharts = new CheckBox("Plot Neural Network Charts");
         checkBoxPlotNeuralCharts.setSelected(plotNeuralCharts);
         checkBoxPlotNeuralCharts.setOnAction(event -> {
             plotNeuralCharts = checkBoxPlotNeuralCharts.isSelected();
-            savePlotNeuralCharts(plotNeuralCharts);
+            saveBoolean("plotNeuralCharts.dat", plotNeuralCharts);
         });
         checkBoxPlotNeuralCharts.setLayoutX(30);
         checkBoxPlotNeuralCharts.setLayoutY(361);
         dialogPane.getChildren().add(checkBoxPlotNeuralCharts);
+
+        keepLongWords = loadBoolean("keepLongWords.dat", keepLongWords);
+        CheckBox checkBoxPlotKeepLongWords = new CheckBox("Keep Long Words (But Trim Them)");
+        checkBoxPlotKeepLongWords.setSelected(keepLongWords);
+        checkBoxPlotKeepLongWords.setOnAction(event -> {
+            keepLongWords = checkBoxPlotKeepLongWords.isSelected();
+            saveBoolean("keepLongWords.dat", keepLongWords);
+        });
+        checkBoxPlotKeepLongWords.setLayoutX(30);
+        checkBoxPlotKeepLongWords.setLayoutY(391);
+        dialogPane.getChildren().add(checkBoxPlotKeepLongWords);
     }
 }

@@ -27,12 +27,11 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PlotNeuralChartsFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.PrintToConsoleFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
 
@@ -84,13 +83,14 @@ public class SpeechRecognitionAI extends Application {
         stageReference = stage;
         audioCapture = new AudioCapture();
         recordedAudio = new RecordedAudio();
-        printNetworkValues = loadPrintToConsole();
-        plotNeuralCharts = loadPlotNeuralCharts();
         recorderThreshold = loadIntegerFromFile("recorderThreshold.dat", recorderThreshold);
         wordThreshold = loadIntegerFromFile("wordThreshold.dat", wordThreshold);
         preWordSamples = loadIntegerFromFile("preWordSamples.dat", preWordSamples);
         wordInertiaSamples = loadIntegerFromFile("wordInertiaSamples.dat", wordInertiaSamples);
         wordInertiaThreshold = loadIntegerFromFile("wordInertiaThreshold.dat", wordInertiaThreshold);
+        keepLongWords = loadBoolean("keepLongWords.dat", keepLongWords);
+        plotNeuralCharts = loadBoolean("plotNeuralCharts.dat", plotNeuralCharts);
+        printNetworkValues = loadBoolean("printNetworkValues.dat", printNetworkValues);
 
         final int width = 1200;
         final int height = 690;
@@ -258,9 +258,34 @@ public class SpeechRecognitionAI extends Application {
                     i--;
                 }else if(length > maxWordLength)
                 {
-                    detectedWordsSeries.getData().remove(i-1, i+2);
-                    System.out.println("Removing a long word: " + length);
-                    i--;
+                    if(keepLongWords)
+                    {
+                        try
+                        {
+                            word++;
+                            length = maxWordLength;
+                            end = start + maxWordLength - 1;
+                            System.out.println("Word length: " + length);
+                            RecordedAudio tempRecord = new RecordedAudio();
+                            tempRecord.audioRecordLength = length;
+                            tempRecord.name = "word" + word;
+                            tempRecord.audioRecord = new byte[length];
+                            for(int x=start; x<=end; x++)
+                            {
+                                tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
+                            }
+                            records.add(tempRecord);
+                            recordItem.add(tempRecord.name);
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }else
+                    {
+                        detectedWordsSeries.getData().remove(i-1, i+2);
+                        System.out.println("Removing a long word: " + length);
+                        i--;
+                    }
                 }else
                 {
                     try
