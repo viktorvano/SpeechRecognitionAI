@@ -1,9 +1,13 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,7 +25,7 @@ public class NeuralCharts {
             dialog.setTitle("Neural Charts: " + classifierName);
         dialog.initModality(Modality.NONE);
         dialog.initOwner(stageReference);
-        Pane dialogPane = new Pane();
+        VBox dialogPane = new VBox();
         Scene dialogScene = new Scene(dialogPane, dialogWidth, dialogHeight);
         dialog.setMinWidth(dialogPane.getWidth());
         dialog.setMinHeight(dialogPane.getHeight());
@@ -44,6 +48,17 @@ public class NeuralCharts {
             {
                 System.out.println("Icon failed to load...");
             }
+        }
+
+        LineChart<Number,Number> lineChart;
+        NumberAxis xAxis;
+        NumberAxis yAxis;
+        for(int i=0; i<charts.size(); i++)
+        {
+            xAxis = new NumberAxis();
+            yAxis = new NumberAxis();
+            lineChart = new LineChart<>(xAxis, yAxis);
+            dialogPane.getChildren().add(lineChart);
         }
     }
 }
