@@ -4,6 +4,7 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 
@@ -118,16 +119,24 @@ public class NeuralNetworkThread extends Thread {
 
                 if(plotNeuralCharts)
                 {
-                    //TODO: Plot Neural Network Charts
-                    for (int layer = 0; layer < topology.size(); layer++)//Yes, from the first Layer
+                    while (displayNeuralChart)
                     {
-                        System.out.println("\nLayer " + layer);
-                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
-                            System.out.println(neuralNetwork.getNeuronOutput(layer, neuron));
-                        //TODO: Insert data into charts
-                        chartClassifierName = classifierOutputs.get(maximumIndex).getName();
-                        displayNeuralChart = true;
+                        try{
+                            Thread.sleep(1);
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
+                    neuralCharts = new ArrayList<>();
+                    for (int layer = 1; layer < topology.size(); layer++)
+                    {
+                        neuralCharts.add(new XYChart.Series<>());
+                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
+                            neuralCharts.get(layer-1).getData().add(new XYChart.Data<>(neuron, neuralNetwork.getNeuronOutput(layer, neuron)));
+                    }
+                    chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                    displayNeuralChart = true;
                 }
             }
             System.out.println("Speech analysed.");

@@ -1,13 +1,16 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import javafx.scene.Scene;
+import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class NeuralCharts {
-    public NeuralCharts(Stage stageReference, String classifierName)
+    public NeuralCharts(Stage stageReference, ArrayList<XYChart.Series<Number, Number>> charts, ArrayList<Classifier> classifier, String classifierName)
     {
         final int dialogWidth = 900;
         final int dialogHeight = 600;
