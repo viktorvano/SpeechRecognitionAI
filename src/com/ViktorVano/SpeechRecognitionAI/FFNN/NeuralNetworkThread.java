@@ -133,9 +133,10 @@ public class NeuralNetworkThread extends Thread {
                     {
                         neuralCharts.add(new XYChart.Series<>());
                         for (int neuron = 0; neuron < topology.get(layer); neuron++)
-                            neuralCharts.get(layer-1).getData().add(new XYChart.Data<>(neuron, neuralNetwork.getNeuronOutput(layer, neuron)));
+                            neuralCharts.get(layer-1).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
                     }
                     chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                    chartClassifierMatch = String.format("%.2g%n", result.get(maximumIndex)*100.0) + "%";
                     displayNeuralChart = true;
                 }
             }

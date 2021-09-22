@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20210921;
+    public static int versionNumber = 20210922;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -16,6 +16,7 @@ public class Variables {
 
     public static boolean displayNeuralChart = false;
     public static String chartClassifierName = "";
+    public static String chartClassifierMatch = "";
     public static ArrayList<XYChart.Series<Number, Number>> neuralCharts = new ArrayList<>();
 
     public static int patternCount;
