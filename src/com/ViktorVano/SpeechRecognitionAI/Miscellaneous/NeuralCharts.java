@@ -64,9 +64,15 @@ public class NeuralCharts {
             lineChart = new LineChart<>(xAxis, yAxis);
             lineChart.setPrefWidth(dialogScene.getWidth()-25);
             if(i==0)
+            {
                 lineChart.setTitle("Input Layer");
+                lineChart.setCreateSymbols(false);
+            }
             else
+            {
                 lineChart.setTitle("Hidden Layer " + (i+1));
+                lineChart.setCreateSymbols(true);
+            }
             lineChart.setLegendVisible(false);
             lineChart.setAnimated(false);
             lineChart.getData().add(neuralSeries.get(i));
