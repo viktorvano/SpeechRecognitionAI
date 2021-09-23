@@ -63,6 +63,7 @@ public class NeuralCharts {
             yAxis = new NumberAxis();
             yAxis.setUpperBound(1.0);
             yAxis.setLowerBound(-1.0);
+            yAxis.setAutoRanging(false);
             lineChart = new LineChart<>(xAxis, yAxis);
             lineChart.setPrefWidth(dialogScene.getWidth()-15);
             lineChart.setTitle("Hidden Layer " + (i+1));
@@ -87,6 +88,7 @@ public class NeuralCharts {
         yAxis = new NumberAxis();
         yAxis.setUpperBound(1.0);
         yAxis.setLowerBound(-1.0);
+        yAxis.setAutoRanging(false);
         lineChartOutput = new LineChart<>(xAxisOutputLayer, yAxis);
         lineChartOutput.setPrefWidth(dialogScene.getWidth()-15);
         lineChartOutput.setTitle("Output Layer");

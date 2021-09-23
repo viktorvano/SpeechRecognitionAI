@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
@@ -136,7 +137,8 @@ public class NeuralNetworkThread extends Thread {
                             neuralCharts.get(layer-1).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
                     }
                     chartClassifierName = classifierOutputs.get(maximumIndex).getName();
-                    chartClassifierMatch = String.format("%.2g%n", result.get(maximumIndex)*100.0) + "%";
+                    DecimalFormat df = new DecimalFormat("##.##");
+                    chartClassifierMatch = df.format(result.get(maximumIndex)*100.0) + "%";
                     displayNeuralChart = true;
                 }
             }
