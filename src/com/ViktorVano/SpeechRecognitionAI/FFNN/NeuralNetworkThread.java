@@ -129,12 +129,12 @@ public class NeuralNetworkThread extends Thread {
                             e.printStackTrace();
                         }
                     }
-                    neuralCharts = new ArrayList<>();
+
                     for (int layer = 1; layer < topology.size(); layer++)
                     {
                         neuralCharts.add(new XYChart.Series<>());
                         for (int neuron = 0; neuron < topology.get(layer); neuron++)
-                            neuralCharts.get(layer-1).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
+                            neuralCharts.get(layer).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
                     }
                     chartClassifierName = classifierOutputs.get(maximumIndex).getName();
                     DecimalFormat df = new DecimalFormat("##.##");

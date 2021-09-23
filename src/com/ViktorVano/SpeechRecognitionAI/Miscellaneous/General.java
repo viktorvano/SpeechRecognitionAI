@@ -1,12 +1,12 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.inputNodes;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.printNetworkValues;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class General {
     public static final float  pi = (float)Math.atan2(1, 1) * 4.0f;//calculated pi
@@ -62,6 +62,11 @@ public class General {
                 FilteredMaximum = filteredArray[i];
         }
 
+        if(plotNeuralCharts)
+        {
+            neuralCharts = new ArrayList<>();
+            neuralCharts.add(new XYChart.Series<>());
+        }
         if(printNetworkValues)
             System.out.println("\nFiltered Normalized Absolute Audio Samples");
         int samples = (int)((double)inputNodes * (2.0/3.0));
@@ -74,9 +79,15 @@ public class General {
                 inputLine.add(normalizedValue);
                 if(printNetworkValues)
                     System.out.println(normalizedValue);
+                if(plotNeuralCharts && i%100==0)
+                    neuralCharts.get(0).getData().add(new XYChart.Data<>(i+1, normalizedValue));
             }
             else
+            {
                 inputLine.add(0.0f);
+                if(plotNeuralCharts && i%100==0)
+                    neuralCharts.get(0).getData().add(new XYChart.Data<>(i+1, 0));
+            }
         }
 
         //FFT
@@ -113,6 +124,8 @@ public class General {
             inputLine.add(resultOfFFT[i]);
             if(printNetworkValues)
                 System.out.println(resultOfFFT[i]);
+            if(plotNeuralCharts && i%100==0)
+                neuralCharts.get(0).getData().add(new XYChart.Data<>(i+65637, resultOfFFT[i]));
         }
     }
 
