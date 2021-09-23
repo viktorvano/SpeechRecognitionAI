@@ -64,8 +64,17 @@ public class General {
 
         if(plotNeuralCharts)
         {
-            neuralCharts = new ArrayList<>();
-            neuralCharts.add(new XYChart.Series<>());
+            while (displayNeuralChart)
+            {
+                try{
+                    Thread.sleep(1);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            neuralChartSeries = new ArrayList<>();
+            neuralChartSeries.add(new XYChart.Series<>());
         }
         if(printNetworkValues)
             System.out.println("\nFiltered Normalized Absolute Audio Samples");
@@ -80,13 +89,13 @@ public class General {
                 if(printNetworkValues)
                     System.out.println(normalizedValue);
                 if(plotNeuralCharts && i%100==0)
-                    neuralCharts.get(0).getData().add(new XYChart.Data<>(i+1, normalizedValue));
+                    neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+1, normalizedValue));
             }
             else
             {
                 inputLine.add(0.0f);
                 if(plotNeuralCharts && i%100==0)
-                    neuralCharts.get(0).getData().add(new XYChart.Data<>(i+1, 0));
+                    neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+1, 0));
             }
         }
 
@@ -125,7 +134,7 @@ public class General {
             if(printNetworkValues)
                 System.out.println(resultOfFFT[i]);
             if(plotNeuralCharts && i%100==0)
-                neuralCharts.get(0).getData().add(new XYChart.Data<>(i+65637, resultOfFFT[i]));
+                neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+65637, resultOfFFT[i]));
         }
     }
 

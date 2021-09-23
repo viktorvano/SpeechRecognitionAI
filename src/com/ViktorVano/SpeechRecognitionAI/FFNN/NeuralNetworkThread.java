@@ -120,21 +120,11 @@ public class NeuralNetworkThread extends Thread {
 
                 if(plotNeuralCharts)
                 {
-                    while (displayNeuralChart)
-                    {
-                        try{
-                            Thread.sleep(1);
-                        }catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-
                     for (int layer = 1; layer < topology.size(); layer++)
                     {
-                        neuralCharts.add(new XYChart.Series<>());
+                        neuralChartSeries.add(new XYChart.Series<>());
                         for (int neuron = 0; neuron < topology.get(layer); neuron++)
-                            neuralCharts.get(layer).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
+                            neuralChartSeries.get(layer).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
                     }
                     chartClassifierName = classifierOutputs.get(maximumIndex).getName();
                     DecimalFormat df = new DecimalFormat("##.##");

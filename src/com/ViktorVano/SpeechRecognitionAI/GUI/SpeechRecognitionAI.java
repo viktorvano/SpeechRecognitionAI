@@ -167,10 +167,12 @@ public class SpeechRecognitionAI extends Application {
         displayLayout(2);//Speech Recognition Layout
 
         timelineDisplayNeuralChart = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            if(displayNeuralChart)
+            if(displayNeuralChart && !neuralChartBusy)
             {
-                new NeuralCharts(stageReference, neuralCharts, classifier, chartClassifierName, chartClassifierMatch);
+                neuralChartBusy = true;
+                new NeuralCharts(stageReference, neuralChartSeries, classifier, chartClassifierName, chartClassifierMatch);
                 displayNeuralChart = false;
+                neuralChartBusy = false;
             }
         }));
         timelineDisplayNeuralChart.setCycleCount(Timeline.INDEFINITE);
