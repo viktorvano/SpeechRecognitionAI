@@ -89,13 +89,13 @@ public class General {
                 if(printNetworkValues)
                     System.out.println(normalizedValue);
                 if(plotNeuralCharts && i%50==0)
-                    neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+1, normalizedValue));
+                    neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i, normalizedValue));
             }
             else
             {
                 inputLine.add(0.0f);
                 if(plotNeuralCharts && i%50==0)
-                    neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+1, 0));
+                    neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i, 0));
             }
         }
 
@@ -134,7 +134,7 @@ public class General {
             if(printNetworkValues)
                 System.out.println(resultOfFFT[i]);
             if(plotNeuralCharts && i%50==0)
-                neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+65637, resultOfFFT[i]));
+                neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+65636, resultOfFFT[i]));
         }
     }
 

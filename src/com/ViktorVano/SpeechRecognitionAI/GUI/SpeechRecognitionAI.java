@@ -86,8 +86,8 @@ public class SpeechRecognitionAI extends Application {
         recorderThreshold = loadIntegerFromFile("recorderThreshold.dat", recorderThreshold);
         wordThreshold = loadIntegerFromFile("wordThreshold.dat", wordThreshold);
         preWordSamples = loadIntegerFromFile("preWordSamples.dat", preWordSamples);
-        wordInertiaSamples = loadIntegerFromFile("wordInertiaSamples.dat", wordInertiaSamples);
         wordInertiaThreshold = loadIntegerFromFile("wordInertiaThreshold.dat", wordInertiaThreshold);
+        wordInertiaSamples = loadIntegerFromFile("wordInertiaSamples.dat", wordInertiaSamples);
         keepLongWords = loadBoolean("keepLongWords.dat", keepLongWords);
         plotNeuralCharts = loadBoolean("plotNeuralCharts.dat", plotNeuralCharts);
         printNetworkValues = loadBoolean("printNetworkValues.dat", printNetworkValues);

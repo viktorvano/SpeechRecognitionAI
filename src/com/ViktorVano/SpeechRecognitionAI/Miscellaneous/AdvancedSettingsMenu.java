@@ -5,6 +5,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -17,7 +18,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 public class AdvancedSettingsMenu {
     public AdvancedSettingsMenu(Stage stageReference)
     {
-        final int dialogWidth = 900;
+        final int dialogWidth = 700;
         final int dialogHeight = 600;
         final Stage dialog = new Stage();
         dialog.setTitle("Advanced Settings");
@@ -48,6 +49,14 @@ public class AdvancedSettingsMenu {
             }
         }
 
+        ImageView imageView = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/word_detection.png"));
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(350);
+        imageView.setFitHeight(350);
+        imageView.setLayoutX(300);
+        imageView.setLayoutY(30);
+        dialogPane.getChildren().add(imageView);
+
         Label labelWordDetection =  new Label("Word Detection");
         labelWordDetection.setLayoutX(30);
         labelWordDetection.setLayoutY(10);
@@ -59,8 +68,8 @@ public class AdvancedSettingsMenu {
                 "Start Recording\n\n" +
                     "Word Threshold\n\n" +
                     "Pre-Word Samples\n\n" +
-                    "Word Inertia Samples\n\n" +
-                    "Word Inertia Threshold");
+                    "Word Inertia Threshold\n\n" +
+                    "Word Inertia Samples");
         labelsForWordDetection.setLayoutX(30);
         labelsForWordDetection.setLayoutY(50);
         dialogPane.getChildren().add(labelsForWordDetection);
@@ -122,11 +131,30 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldPreWordSamples);
 
+        TextField textFieldWordInertiaThreshold = new TextField();
+        textFieldWordInertiaThreshold.setPromptText(Integer.toString(wordInertiaThreshold));
+        textFieldWordInertiaThreshold.setText(Integer.toString(wordInertiaThreshold));
+        textFieldWordInertiaThreshold.setLayoutX(200);
+        textFieldWordInertiaThreshold.setLayoutY(168);
+        textFieldWordInertiaThreshold.setPrefWidth(60);
+        textFieldWordInertiaThreshold.textProperty().addListener(observable -> {
+            if(textFieldWordInertiaThreshold.getText().length() > 0)
+                try{
+                    int value = Integer.parseInt(textFieldWordInertiaThreshold.getText());
+                    wordInertiaThreshold = value;
+                    saveIntegerToFile("wordInertiaThreshold.dat", value);
+                }catch (Exception e)
+                {
+                    textFieldWordInertiaThreshold.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldWordInertiaThreshold);
+
         TextField textFieldWordInertiaSamples = new TextField();
         textFieldWordInertiaSamples.setPromptText(Integer.toString(wordInertiaSamples));
         textFieldWordInertiaSamples.setText(Integer.toString(wordInertiaSamples));
         textFieldWordInertiaSamples.setLayoutX(200);
-        textFieldWordInertiaSamples.setLayoutY(168);
+        textFieldWordInertiaSamples.setLayoutY(209);
         textFieldWordInertiaSamples.setPrefWidth(60);
         textFieldWordInertiaSamples.textProperty().addListener(observable -> {
             if(textFieldWordInertiaSamples.getText().length() > 0)
@@ -140,25 +168,6 @@ public class AdvancedSettingsMenu {
             }
         });
         dialogPane.getChildren().add(textFieldWordInertiaSamples);
-
-        TextField textFieldWordInertiaThreshold = new TextField();
-        textFieldWordInertiaThreshold.setPromptText(Integer.toString(wordInertiaThreshold));
-        textFieldWordInertiaThreshold.setText(Integer.toString(wordInertiaThreshold));
-        textFieldWordInertiaThreshold.setLayoutX(200);
-        textFieldWordInertiaThreshold.setLayoutY(209);
-        textFieldWordInertiaThreshold.setPrefWidth(60);
-        textFieldWordInertiaThreshold.textProperty().addListener(observable -> {
-            if(textFieldWordInertiaThreshold.getText().length() > 0)
-            try{
-                int value = Integer.parseInt(textFieldWordInertiaThreshold.getText());
-                wordInertiaThreshold = value;
-                saveIntegerToFile("wordInertiaSamples.dat", value);
-            }catch (Exception e)
-            {
-                textFieldWordInertiaThreshold.setText("");
-            }
-        });
-        dialogPane.getChildren().add(textFieldWordInertiaThreshold);
 
         Label labelOtherSettings =  new Label("Other Settings");
         labelOtherSettings.setLayoutX(30);

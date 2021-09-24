@@ -70,7 +70,7 @@ public class NeuralCharts {
             }
             else
             {
-                lineChart.setTitle("Hidden Layer " + (i+1));
+                lineChart.setTitle("Hidden Layer " + i);
                 lineChart.setCreateSymbols(true);
             }
             lineChart.setLegendVisible(false);
