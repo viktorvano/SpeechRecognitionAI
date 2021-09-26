@@ -108,7 +108,7 @@ public class TrainingThread extends Thread {
                 System.out.println("Training stopped via Stop button.");
                 neuralNetwork.saveNeuronWeights();
                 break;
-            }else if (currentTrainingError < minimumTrainingError && trainingPass > minimumTrainingCycles)
+            }else if (currentTrainingError < exitTrainingError && trainingPass > minimumTrainingCycles)
             {
                 System.out.println("Exit due to low error :D\n\n");
                 neuralNetwork.saveNeuronWeights();

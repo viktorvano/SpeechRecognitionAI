@@ -1,4 +1,4 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.GUI;
 
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
@@ -12,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
@@ -197,37 +198,129 @@ public class AdvancedSettingsMenu {
         labelOtherSettings.setStyle("-fx-font-weight: bold");
         dialogPane.getChildren().add(labelOtherSettings);
 
-        printNetworkValues = loadBoolean("printNetworkValues.dat", printNetworkValues);
         CheckBox checkBoxPrintToConsole = new CheckBox("Print Neural Network Values To Console");
         checkBoxPrintToConsole.setSelected(printNetworkValues);
         checkBoxPrintToConsole.setOnAction(event -> {
             printNetworkValues = checkBoxPrintToConsole.isSelected();
-            saveBoolean("printNetworkValues.dat", printNetworkValues);
+            saveBooleanToFile("printNetworkValues.dat", printNetworkValues);
         });
         checkBoxPrintToConsole.setLayoutX(30);
         checkBoxPrintToConsole.setLayoutY(331);
         dialogPane.getChildren().add(checkBoxPrintToConsole);
 
-        plotNeuralCharts = loadBoolean("plotNeuralCharts.dat", plotNeuralCharts);
         CheckBox checkBoxPlotNeuralCharts = new CheckBox("Plot Neural Network Charts");
         checkBoxPlotNeuralCharts.setSelected(plotNeuralCharts);
         checkBoxPlotNeuralCharts.setOnAction(event -> {
             plotNeuralCharts = checkBoxPlotNeuralCharts.isSelected();
-            saveBoolean("plotNeuralCharts.dat", plotNeuralCharts);
+            saveBooleanToFile("plotNeuralCharts.dat", plotNeuralCharts);
         });
         checkBoxPlotNeuralCharts.setLayoutX(30);
         checkBoxPlotNeuralCharts.setLayoutY(361);
         dialogPane.getChildren().add(checkBoxPlotNeuralCharts);
 
-        keepLongWords = loadBoolean("keepLongWords.dat", keepLongWords);
         CheckBox checkBoxPlotKeepLongWords = new CheckBox("Keep Long Words (But Trim Them)");
         checkBoxPlotKeepLongWords.setSelected(keepLongWords);
         checkBoxPlotKeepLongWords.setOnAction(event -> {
             keepLongWords = checkBoxPlotKeepLongWords.isSelected();
-            saveBoolean("keepLongWords.dat", keepLongWords);
+            saveBooleanToFile("keepLongWords.dat", keepLongWords);
         });
         checkBoxPlotKeepLongWords.setLayoutX(30);
         checkBoxPlotKeepLongWords.setLayoutY(391);
         dialogPane.getChildren().add(checkBoxPlotKeepLongWords);
+
+        Label labelNeuralNetworkTraining =  new Label("Neural Network Training");
+        labelNeuralNetworkTraining.setLayoutX(350);
+        labelNeuralNetworkTraining.setLayoutY(370);
+        labelNeuralNetworkTraining.setFont(Font.font("Arial", 22));
+        labelNeuralNetworkTraining.setStyle("-fx-font-weight: bold");
+        dialogPane.getChildren().add(labelNeuralNetworkTraining);
+
+        Label labelsTraining = new Label(
+                "Velocity\n" +
+                    "(Eta - [0.0..1.0] overall network training rate)\n\n" +
+                    "Momentum\n" +
+                    "(Alpha - [0.0..n] multiplier of last weight change)\n\n" +
+                    "Exit Training Error");
+        labelsTraining.setLayoutX(350);
+        labelsTraining.setLayoutY(410);
+        dialogPane.getChildren().add(labelsTraining);
+
+        TextField textFieldVelocity = new TextField();
+        textFieldVelocity.setPromptText(Float.toString(velocity));
+        textFieldVelocity.setText(Float.toString(velocity));
+        textFieldVelocity.setLayoutX(500);
+        textFieldVelocity.setLayoutY(400);
+        textFieldVelocity.setPrefWidth(60);
+        textFieldVelocity.textProperty().addListener(observable -> {
+            if(textFieldVelocity.getText().length() > 0)
+                try{
+                    if(textFieldVelocity.getText().length() > 2)
+                    {
+                        float value = Float.parseFloat(textFieldVelocity.getText());
+                        if(value > 0.0)
+                        {
+                            saveFloatToFile("velocity.dat", value);
+                            velocity = value;
+                        }else
+                            textFieldVelocity.setText("");
+                    }
+                }catch (Exception e)
+                {
+                    textFieldVelocity.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldVelocity);
+
+        TextField textFieldMomentum = new TextField();
+        textFieldMomentum.setPromptText(Float.toString(momentum));
+        textFieldMomentum.setText(Float.toString(momentum));
+        textFieldMomentum.setLayoutX(500);
+        textFieldMomentum.setLayoutY(461);
+        textFieldMomentum.setPrefWidth(60);
+        textFieldMomentum.textProperty().addListener(observable -> {
+            if(textFieldMomentum.getText().length() > 0)
+                try{
+                    if(textFieldMomentum.getText().length() > 2)
+                    {
+                        float value = Float.parseFloat(textFieldMomentum.getText());
+                        if(value > 0.0)
+                        {
+                            saveFloatToFile("momentum.dat", value);
+                            momentum = value;
+                        }else
+                            textFieldMomentum.setText("");
+                    }
+                }catch (Exception e)
+                {
+                    textFieldMomentum.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldMomentum);
+
+        TextField textFieldExitTrainingLoss = new TextField();
+        textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingError));
+        textFieldExitTrainingLoss.setText(Float.toString(exitTrainingError));
+        textFieldExitTrainingLoss.setLayoutX(500);
+        textFieldExitTrainingLoss.setLayoutY(522);
+        textFieldExitTrainingLoss.setPrefWidth(60);
+        textFieldExitTrainingLoss.textProperty().addListener(observable -> {
+            if(textFieldExitTrainingLoss.getText().length() > 0)
+                try{
+                    if(textFieldExitTrainingLoss.getText().length() > 2)
+                    {
+                        float value = Float.parseFloat(textFieldExitTrainingLoss.getText());
+                        if(value > 0.0)
+                        {
+                            saveFloatToFile("exitTrainingError.dat", value);
+                            exitTrainingError = value;
+                        }else
+                            textFieldExitTrainingLoss.setText("");
+                    }
+                }catch (Exception e)
+                {
+                    textFieldExitTrainingLoss.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldExitTrainingLoss);
     }
 }

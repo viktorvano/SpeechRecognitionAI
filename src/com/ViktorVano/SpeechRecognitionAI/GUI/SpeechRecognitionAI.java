@@ -28,6 +28,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
@@ -88,9 +89,12 @@ public class SpeechRecognitionAI extends Application {
         preWordSamples = loadIntegerFromFile("preWordSamples.dat", preWordSamples);
         wordInertiaThreshold = loadIntegerFromFile("wordInertiaThreshold.dat", wordInertiaThreshold);
         wordInertiaSamples = loadIntegerFromFile("wordInertiaSamples.dat", wordInertiaSamples);
-        keepLongWords = loadBoolean("keepLongWords.dat", keepLongWords);
-        plotNeuralCharts = loadBoolean("plotNeuralCharts.dat", plotNeuralCharts);
-        printNetworkValues = loadBoolean("printNetworkValues.dat", printNetworkValues);
+        keepLongWords = loadBooleanFromFile("keepLongWords.dat", keepLongWords);
+        plotNeuralCharts = loadBooleanFromFile("plotNeuralCharts.dat", plotNeuralCharts);
+        printNetworkValues = loadBooleanFromFile("printNetworkValues.dat", printNetworkValues);
+        velocity = loadFloatFromFile("velocity.dat", velocity);
+        momentum = loadFloatFromFile("momentum.dat", momentum);
+        exitTrainingError = loadFloatFromFile("exitTrainingError.dat", exitTrainingError);
 
         final int width = 1200;
         final int height = 690;
@@ -576,7 +580,7 @@ public class SpeechRecognitionAI extends Application {
                 timelineTrainingLabelUpdate.stop();
             }else if(updateTrainingLabel)
             {
-                if (currentTrainingErrorLabel < minimumTrainingError && trainingPassLabel > minimumTrainingCycles
+                if (currentTrainingErrorLabel < exitTrainingError && trainingPassLabel > minimumTrainingCycles
                     || buttonStopTraining.isDisabled()){
                     trainingIsRunning = false;
                     labelTrainingStatus.setText("Training pass: " + trainingPassLabel
