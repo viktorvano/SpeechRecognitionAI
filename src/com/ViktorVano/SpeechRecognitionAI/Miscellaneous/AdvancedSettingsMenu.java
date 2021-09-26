@@ -84,8 +84,12 @@ public class AdvancedSettingsMenu {
             if(textFieldStartRecording.getText().length() > 0)
             try{
                 int value = Integer.parseInt(textFieldStartRecording.getText());
-                recorderThreshold = value;
-                saveIntegerToFile("recorderThreshold.dat", value);
+                if(value > 0)
+                {
+                    saveIntegerToFile("recorderThreshold.dat", value);
+                    recorderThreshold = value;
+                }else
+                    textFieldStartRecording.setText("");
             }catch (Exception e)
             {
                 textFieldStartRecording.setText("");
@@ -103,8 +107,12 @@ public class AdvancedSettingsMenu {
             if(textFieldWordThreshold.getText().length() > 0)
             try{
                 int value = Integer.parseInt(textFieldWordThreshold.getText());
-                wordThreshold = value;
-                saveIntegerToFile("wordThreshold.dat", value);
+                if(value > 0)
+                {
+                    saveIntegerToFile("wordThreshold.dat", value);
+                    wordThreshold = value;
+                }else
+                    textFieldWordThreshold.setText("");
             }catch (Exception e)
             {
                 textFieldWordThreshold.setText("");
@@ -122,8 +130,13 @@ public class AdvancedSettingsMenu {
             if(textFieldPreWordSamples.getText().length() > 0)
             try{
                 int value = Integer.parseInt(textFieldPreWordSamples.getText());
-                preWordSamples = value;
-                saveIntegerToFile("preWordSamples.dat", value);
+                if(value > 0)
+                {
+                    saveIntegerToFile("preWordSamples.dat", value);
+                    preWordSamples = value;
+                }else
+                    textFieldPreWordSamples.setText("");
+
             }catch (Exception e)
             {
                 textFieldPreWordSamples.setText("");
@@ -141,8 +154,12 @@ public class AdvancedSettingsMenu {
             if(textFieldWordInertiaThreshold.getText().length() > 0)
                 try{
                     int value = Integer.parseInt(textFieldWordInertiaThreshold.getText());
-                    wordInertiaThreshold = value;
-                    saveIntegerToFile("wordInertiaThreshold.dat", value);
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("wordInertiaThreshold.dat", value);
+                        wordInertiaThreshold = value;
+                    }else
+                        textFieldWordInertiaThreshold.setText("");
                 }catch (Exception e)
                 {
                     textFieldWordInertiaThreshold.setText("");
@@ -160,8 +177,12 @@ public class AdvancedSettingsMenu {
             if(textFieldWordInertiaSamples.getText().length() > 0)
             try{
                 int value = Integer.parseInt(textFieldWordInertiaSamples.getText());
-                wordInertiaSamples = value;
-                saveIntegerToFile("wordInertiaSamples.dat", value);
+                if(value > 0)
+                {
+                    saveIntegerToFile("wordInertiaSamples.dat", value);
+                    wordInertiaSamples = value;
+                }else
+                    textFieldWordInertiaSamples.setText("");
             }catch (Exception e)
             {
                 textFieldWordInertiaSamples.setText("");
