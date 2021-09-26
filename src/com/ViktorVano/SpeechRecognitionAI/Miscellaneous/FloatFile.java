@@ -29,9 +29,9 @@ public class FloatFile {
             String fileSeparator = System.getProperty("file.separator");
             File file = new File("res" + fileSeparator + filename);
             Scanner scanner = new Scanner(file);
-            if(scanner.hasNextFloat())
+            if(scanner.hasNextLine())
             {
-                value = scanner.nextFloat();
+                value = Float.parseFloat(scanner.nextLine());
             }else
             {
                 value = defaultValue;
