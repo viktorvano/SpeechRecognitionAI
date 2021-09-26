@@ -44,7 +44,7 @@ public class Variables {
     public static int minimumTrainingCycles;
     public static int trainingPassLabel, trainingLineLabel;
     public static float currentTrainingErrorLabel;
-    public static float classifierThreshold = 0.5f;
+    public static float classifierThreshold = 0.85f;
     public static boolean weightsLoaded = false;
     public static int loadingStep = 0;
 

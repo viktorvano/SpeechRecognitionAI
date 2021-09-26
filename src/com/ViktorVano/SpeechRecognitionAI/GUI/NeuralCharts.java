@@ -1,5 +1,6 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.GUI;
 
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.ScrollPane;

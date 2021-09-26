@@ -95,6 +95,7 @@ public class SpeechRecognitionAI extends Application {
         velocity = loadFloatFromFile("velocity.dat", velocity);
         momentum = loadFloatFromFile("momentum.dat", momentum);
         exitTrainingError = loadFloatFromFile("exitTrainingError.dat", exitTrainingError);
+        classifierThreshold = loadFloatFromFile("classifierThreshold.dat", classifierThreshold);
 
         final int width = 1200;
         final int height = 690;

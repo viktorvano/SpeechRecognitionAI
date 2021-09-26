@@ -20,7 +20,7 @@ public class AdvancedSettingsMenu {
     public AdvancedSettingsMenu(Stage stageReference)
     {
         final int dialogWidth = 700;
-        final int dialogHeight = 600;
+        final int dialogHeight = 620;
         final Stage dialog = new Stage();
         dialog.setTitle("Advanced Settings");
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -228,19 +228,20 @@ public class AdvancedSettingsMenu {
         checkBoxPlotKeepLongWords.setLayoutY(391);
         dialogPane.getChildren().add(checkBoxPlotKeepLongWords);
 
-        Label labelNeuralNetworkTraining =  new Label("Neural Network Training");
-        labelNeuralNetworkTraining.setLayoutX(350);
-        labelNeuralNetworkTraining.setLayoutY(370);
-        labelNeuralNetworkTraining.setFont(Font.font("Arial", 22));
-        labelNeuralNetworkTraining.setStyle("-fx-font-weight: bold");
-        dialogPane.getChildren().add(labelNeuralNetworkTraining);
+        Label labelNeuralNetwork =  new Label("Neural Network");
+        labelNeuralNetwork.setLayoutX(350);
+        labelNeuralNetwork.setLayoutY(370);
+        labelNeuralNetwork.setFont(Font.font("Arial", 22));
+        labelNeuralNetwork.setStyle("-fx-font-weight: bold");
+        dialogPane.getChildren().add(labelNeuralNetwork);
 
         Label labelsTraining = new Label(
                 "Velocity\n" +
                     "(Eta - [0.0..1.0] overall network training rate)\n\n" +
                     "Momentum\n" +
                     "(Alpha - [0.0..n] multiplier of last weight change)\n\n" +
-                    "Exit Training Error");
+                    "Exit Training Error\n\n" +
+                    "Classifier Match [%]");
         labelsTraining.setLayoutX(350);
         labelsTraining.setLayoutY(410);
         dialogPane.getChildren().add(labelsTraining);
@@ -257,8 +258,13 @@ public class AdvancedSettingsMenu {
                     if(textFieldVelocity.getText().length() > 2)
                     {
                         float value = Float.parseFloat(textFieldVelocity.getText());
-                        if(value > 0.0)
+                        if(value > 0.0f)
                         {
+                            if(value > 1.0f)
+                            {
+                                value = 1.0f;
+                                textFieldVelocity.setText(String.valueOf(value));
+                            }
                             saveFloatToFile("velocity.dat", value);
                             velocity = value;
                         }else
@@ -283,8 +289,13 @@ public class AdvancedSettingsMenu {
                     if(textFieldMomentum.getText().length() > 2)
                     {
                         float value = Float.parseFloat(textFieldMomentum.getText());
-                        if(value > 0.0)
+                        if(value > 0.0f)
                         {
+                            if(value > 1.0f)
+                            {
+                                value = 1.0f;
+                                textFieldMomentum.setText(String.valueOf(value));
+                            }
                             saveFloatToFile("momentum.dat", value);
                             momentum = value;
                         }else
@@ -301,7 +312,7 @@ public class AdvancedSettingsMenu {
         textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingError));
         textFieldExitTrainingLoss.setText(Float.toString(exitTrainingError));
         textFieldExitTrainingLoss.setLayoutX(500);
-        textFieldExitTrainingLoss.setLayoutY(522);
+        textFieldExitTrainingLoss.setLayoutY(532);
         textFieldExitTrainingLoss.setPrefWidth(60);
         textFieldExitTrainingLoss.textProperty().addListener(observable -> {
             if(textFieldExitTrainingLoss.getText().length() > 0)
@@ -309,8 +320,13 @@ public class AdvancedSettingsMenu {
                     if(textFieldExitTrainingLoss.getText().length() > 2)
                     {
                         float value = Float.parseFloat(textFieldExitTrainingLoss.getText());
-                        if(value > 0.0)
+                        if(value > 0.0f)
                         {
+                            if(value > 1.0f)
+                            {
+                                value = 1.0f;
+                                textFieldExitTrainingLoss.setText(String.valueOf(value));
+                            }
                             saveFloatToFile("exitTrainingError.dat", value);
                             exitTrainingError = value;
                         }else
@@ -322,5 +338,33 @@ public class AdvancedSettingsMenu {
                 }
         });
         dialogPane.getChildren().add(textFieldExitTrainingLoss);
+
+        TextField textFieldMatch = new TextField();
+        textFieldMatch.setPromptText(Integer.toString((int)(classifierThreshold*100.0f)));
+        textFieldMatch.setText(Integer.toString((int)(classifierThreshold*100.0f)));
+        textFieldMatch.setLayoutX(500);
+        textFieldMatch.setLayoutY(573);
+        textFieldMatch.setPrefWidth(60);
+        textFieldMatch.textProperty().addListener(observable -> {
+            if(textFieldMatch.getText().length() > 0)
+                try{
+                    int value = Integer.parseInt(textFieldMatch.getText());
+                    if(value >= 0)
+                    {
+                        if(value > 100)
+                        {
+                            value = 100;
+                            textFieldMatch.setText(String.valueOf(value));
+                        }
+                        classifierThreshold = (float)value/100.0f;
+                        saveFloatToFile("classifierThreshold.dat", classifierThreshold);
+                    }else
+                        textFieldMatch.setText("");
+                }catch (Exception e)
+                {
+                    textFieldMatch.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldMatch);
     }
 }
