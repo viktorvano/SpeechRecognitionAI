@@ -94,43 +94,40 @@ public class NeuralNetworkThread extends Thread {
                 neuralNetwork.feedForward(input);
                 neuralNetwork.getResults(result);
                 int maximumIndex = findMaximumValueIndex(result);
-                if (result.get(maximumIndex) > classifierThreshold)
-                {
-                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has " + (result.get(maximumIndex)*100.0f) + "% match.");
-                    if (recognizedMessage.length() == 0)
-                        recognizedMessage = classifierOutputs.get(maximumIndex).getName();
-                    else if(classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
-                        recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
-                }else {
-                    System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has low  match " + (result.get(maximumIndex)*100.0f) + "%.");
+                if(result.size() != 0) {
+                    if (result.get(maximumIndex) > classifierThreshold) {
+                        System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has " + (result.get(maximumIndex) * 100.0f) + "% match.");
+                        if (recognizedMessage.length() == 0)
+                            recognizedMessage = classifierOutputs.get(maximumIndex).getName();
+                        else if (classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
+                            recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
+                    } else {
+                        System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has low  match " + (result.get(maximumIndex) * 100.0f) + "%.");
+                    }
+
+                    if (printNetworkValues) {
+                        //From the fist hidden layer to the output layer. Input layer contains just a normalized data.
+                        for (int layer = 1; layer < topology.size(); layer++) {
+                            System.out.println("\nLayer " + layer);
+                            for (int neuron = 0; neuron < topology.get(layer); neuron++)
+                                System.out.println(neuralNetwork.getNeuronOutput(layer, neuron));
+                        }
+                        System.out.println();//just a new line after printing the last layer
+                    }
+
+                    if (plotNeuralCharts) {
+                        for (int layer = 1; layer < topology.size(); layer++) {
+                            neuralChartSeries.add(new XYChart.Series<>());
+                            for (int neuron = 0; neuron < topology.get(layer); neuron++)
+                                neuralChartSeries.get(layer).getData().add(new XYChart.Data<>(neuron + 1, neuralNetwork.getNeuronOutput(layer, neuron)));
+                        }
+                        chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                        DecimalFormat df = new DecimalFormat("##.##");
+                        chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
+                        displayNeuralChart = true;
+                    }
                 }
                 records.remove(0);
-
-                if(printNetworkValues)
-                {
-                    //From the fist hidden layer to the output layer. Input layer contains just a normalized data.
-                    for (int layer = 1; layer < topology.size(); layer++)
-                    {
-                        System.out.println("\nLayer " + layer);
-                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
-                            System.out.println(neuralNetwork.getNeuronOutput(layer, neuron));
-                    }
-                    System.out.println();//just a new line after printing the last layer
-                }
-
-                if(plotNeuralCharts)
-                {
-                    for (int layer = 1; layer < topology.size(); layer++)
-                    {
-                        neuralChartSeries.add(new XYChart.Series<>());
-                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
-                            neuralChartSeries.get(layer).getData().add(new XYChart.Data<>(neuron+1, neuralNetwork.getNeuronOutput(layer, neuron)));
-                    }
-                    chartClassifierName = classifierOutputs.get(maximumIndex).getName();
-                    DecimalFormat df = new DecimalFormat("##.##");
-                    chartClassifierMatch = df.format(result.get(maximumIndex)*100.0) + "%";
-                    displayNeuralChart = true;
-                }
             }
             System.out.println("Speech analysed.");
             runThread = false;
