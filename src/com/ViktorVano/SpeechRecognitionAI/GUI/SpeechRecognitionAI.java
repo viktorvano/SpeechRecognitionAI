@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
@@ -84,6 +85,7 @@ public class SpeechRecognitionAI extends Application {
         stageReference = stage;
         audioCapture = new AudioCapture();
         recordedAudio = new RecordedAudio();
+        createDirectoryIfNotExist("res");
         recorderThreshold = loadIntegerFromFile("recorderThreshold.dat", recorderThreshold);
         wordThreshold = loadIntegerFromFile("wordThreshold.dat", wordThreshold);
         preWordSamples = loadIntegerFromFile("preWordSamples.dat", preWordSamples);

@@ -3,6 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import javafx.scene.chart.XYChart;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -224,5 +225,14 @@ public class General {
                 x[i] /= n;
                 y[i] /= n;
             }
+    }
+
+    public static void createDirectoryIfNotExist(String directoryName)
+    {
+        File file = new File(directoryName);
+        if(file.mkdir())
+            System.out.println("New directory \"" + directoryName + "\" was created.");
+        else
+            System.out.println("Directory \"" + directoryName + "\" already exists.");
     }
 }
