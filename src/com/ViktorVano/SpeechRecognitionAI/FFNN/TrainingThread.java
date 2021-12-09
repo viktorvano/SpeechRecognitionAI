@@ -71,6 +71,7 @@ public class TrainingThread extends Thread {
         neuralNetwork.loadNeuronWeights();
         boolean repeatTrainingCycle = false;
         averageError = 1.0f;
+        float quickSaveErrorValue = 0.5f;
         float currentTrainingError;
         while (true)
         {
@@ -96,9 +97,10 @@ public class TrainingThread extends Thread {
 
             trainingLineLabel = trainingLine;
             trainingPassLabel = trainingPass;
-            updateTrainingLabel = true;
             currentTrainingError = neuralNetwork.getRecentAverageError();
             currentTrainingErrorLabel = currentTrainingError;
+            averageError = 0.99f*averageError + 0.01f*currentTrainingError;
+
 
             // Report how well the training is working, averaged over recent samples:
             System.out.println("Net current sample error: " + currentTrainingError);
@@ -113,9 +115,13 @@ public class TrainingThread extends Thread {
                 System.out.println("Exit due to low error :D\n\n");
                 neuralNetwork.saveNeuronWeights();
                 break;
+            }else if(averageError < quickSaveErrorValue)//must be average error, otherwise it would be ofter from start
+            {
+                quickSaveErrorValue = averageError/2f;
+                neuralNetwork.saveNeuronWeights();
             }
 
-            averageError = 0.99f*averageError + 0.01f*currentTrainingError;
+            updateTrainingLabel = true;
             System.out.println("Net average error: " + averageError + "\n\n");
             repeatTrainingCycle = currentTrainingError > averageError;
         }

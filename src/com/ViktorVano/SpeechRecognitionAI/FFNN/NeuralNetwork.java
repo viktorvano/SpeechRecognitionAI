@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.push_zeros_to_Weights;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.setRandomWeights;
 
 public class NeuralNetwork {
 
@@ -118,9 +118,12 @@ public class NeuralNetwork {
 
     public void saveNeuronWeights()
     {
+        Toolkit.getDefaultToolkit().beep();
         System.out.println("Saving Neuron Weights...");
+        savingWeightsPopUp = true;
+        updateTrainingLabel = true;
         neuronIndex = 0;
-        push_zeros_to_Weights();
+        setRandomWeights();
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
@@ -140,7 +143,7 @@ public class NeuralNetwork {
         System.out.println("Loading Weights...");
         loadingStep = 1;
         neuronIndex = 0;
-        push_zeros_to_Weights();
+        setRandomWeights();
 
         System.out.println("Reading file weights.dat...");
         try
@@ -169,25 +172,29 @@ public class NeuralNetwork {
         }
 
         loadingStep = 2;
-        if(neuronIndex == weights.size())//TODO: Works only when the topology matches. Need make it work for more words.
+        if(neuronIndex == weights.size())
         {
-            neuronIndex = 0;
-            // Forward propagate
-            for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
-            {
-                System.out.println("Loading Layer: " + layerNum);
-                Layer prevLayer = m_layers.get(layerNum - 1);
-                for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
-                {
-                    m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
-                }
-            }
             System.out.println("Weights loaded.");
         }else
         {
-            neuronIndex = weights.size();
-            System.out.println("Weights size did not match with the topology. Loading skipped!!!");
+            System.out.println("Weights size did not match with the topology.");
+            System.out.println("Loaded only what was there.");
+            System.out.println("The rest are random weights.");
         }
+
+        //Transfer Learning: Neural network will load as many neurons as it has in weights, rest are random weights.
+        neuronIndex = 0;
+        // Forward propagate
+        for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
+        {
+            System.out.println("Loading Layer: " + layerNum);
+            Layer prevLayer = m_layers.get(layerNum - 1);
+            for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
+            {
+                m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
+            }
+        }
+
         Toolkit.getDefaultToolkit().beep();
     }
 

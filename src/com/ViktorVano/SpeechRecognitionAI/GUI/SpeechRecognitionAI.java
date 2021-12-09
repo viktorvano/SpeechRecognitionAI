@@ -6,6 +6,7 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
+import com.sun.istack.internal.NotNull;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -23,6 +24,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -599,6 +601,11 @@ public class SpeechRecognitionAI extends Application {
                             + "\"\t\tError: " + currentTrainingErrorLabel
                             + "\t\tAverage: " + averageError);
                 }
+                if(savingWeightsPopUp)
+                {
+                    savingWeightsPopUp = false;
+                    customPrompt("Saving Weights", "Average training error: " + averageError, Alert.AlertType.INFORMATION);
+                }
 
                 updateTrainingLabel = false;
             }
@@ -1067,5 +1074,24 @@ public class SpeechRecognitionAI extends Application {
             labelTopology.setText("\n Topology:\n   Add more layers!");
             buttonTrain.setDisable(true);
         }
+    }
+
+    private static void customPrompt(@NotNull String title, @NotNull String message, @NotNull Alert.AlertType alertType)
+    {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> {
+            Alert alert = new Alert(alertType);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.show();
+            if(alertType.equals(Alert.AlertType.ERROR))
+                alert.setOnCloseRequest(event1 -> {
+                    System.out.println("Leaving app from Error Prompt Handler......");
+                    System.exit(-23);
+                });
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 }

@@ -13,8 +13,7 @@ public class Neuron {
 
         for (int c = 0; c < numOutputs; c++)
         {
-            m_outputWeights.add(new Connection());
-            m_outputWeights.get(m_outputWeights.size()-1).weight = randomWeight();
+            m_outputWeights.add(new Connection());//with a random weight +-1.0f
         }
 
         m_myIndex = myIndex;
@@ -98,7 +97,8 @@ public class Neuron {
     public void loadInputWeights(Layer prevLayer)
     {
         for (Neuron neuron : prevLayer) {
-            neuron.m_outputWeights.get(m_myIndex).weight = weights.get(neuronIndex);
+            if(weights.get(neuronIndex) != null)
+                neuron.m_outputWeights.get(m_myIndex).weight = weights.get(neuronIndex);
             neuronIndex++;
         }
     }
@@ -129,11 +129,6 @@ public class Neuron {
     {
         // tanh derivative
         return 1.0f - (float)Math.pow(Math.tanh(x), 2.0);// approximation return 1.0 - x*x;
-    }
-
-    private float randomWeight()
-    {
-        return (float)Math.random()-0.5f;
     }
 
     private float m_outputValue;
