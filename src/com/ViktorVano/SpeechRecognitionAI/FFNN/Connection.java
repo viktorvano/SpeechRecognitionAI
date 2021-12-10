@@ -6,7 +6,7 @@ public class Connection {
 
    public Connection()
    {
-      weight = 2f*(float)Math.random()-1f;//+-1.0f
+      weight = (float)Math.random()-0.5f;//+-0.5f
       deltaWeight = 0.0f;
    }
 }

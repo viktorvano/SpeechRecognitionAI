@@ -13,7 +13,7 @@ public class Neuron {
 
         for (int c = 0; c < numOutputs; c++)
         {
-            m_outputWeights.add(new Connection());//with a random weight +-1.0f
+            m_outputWeights.add(new Connection());//with a random weight +-0.5f
         }
 
         m_myIndex = myIndex;
