@@ -46,7 +46,7 @@ After this the application listens again and the whole process repeats.
   
 ### Word Examples Feedforwarded via Neural Network
   
-##### Words: "hello", "understand", "hi"
+##### Words: "understand", [artifact], "hello", "hi"
   
 ###### Raw audio sample
 <pre>         (understand)                      (artifact)                      (hello)                          (hi)   </pre>  
