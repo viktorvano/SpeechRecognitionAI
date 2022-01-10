@@ -44,11 +44,11 @@ After this the application listens again and the whole process repeats.
 8.) "SpeechRecognitionAI.jar" needs to have "res" folder in the same location. "res" folder must contain "database.dat", "printToConsole.dat", "topology.dat" and "wordRouting.dat".
   
   
-### Word Examples Feedforwarded via Neural Network
+### Neural Network Visualization Screenshot Examples
   
-##### Words: "understand", [artifact], "hello", "hi"
+##### Word Examples: "understand", [artifact], "hello", "hi"
   
-###### Raw audio sample
+###### Visualization screenshots
 <pre>         (understand)                      (artifact)                      (hello)                          (hi)   </pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand.png" width="240"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/artifact.png" width="240"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello.png" width="240"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi.png" width="240"/>  
   
