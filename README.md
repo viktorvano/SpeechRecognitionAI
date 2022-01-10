@@ -49,6 +49,6 @@ After this the application listens again and the whole process repeats.
 ##### Words: "hello", "understand", "hi"
   
 ###### Raw audio sample
-<pre>           (understand)          (artifact)               (hello)                             (hi)   </pre>  
+<pre>         (understand)                (artifact)                      (hello)                          (hi)   </pre>  
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/understand.png" width="240"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/artifact.png" width="240"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hello.png" width="240"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/hi.png" width="240"/>  
   
