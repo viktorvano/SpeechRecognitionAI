@@ -121,7 +121,7 @@ public class General {
         float maxFFT = -999;
         for(int i=0; i<samples; i++)//Calculate FFT magnitude and find maximum
         {
-            resultOfFFT[i] = (float)Math.sqrt(realSamples[i] * realSamples[i] + img[i] * img[i]);
+            resultOfFFT[i] = realSamples[i] * realSamples[i] + img[i] * img[i];//unnecessary to SQRT - CPU expensive
             if(resultOfFFT[i] > maxFFT)
                 maxFFT = resultOfFFT[i];
         }
