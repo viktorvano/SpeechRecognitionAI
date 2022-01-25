@@ -98,7 +98,7 @@ public class SpeechRecognitionAI extends Application {
         printNetworkValues = loadBooleanFromFile("printNetworkValues.dat", printNetworkValues);
         velocity = loadFloatFromFile("velocity.dat", velocity);
         momentum = loadFloatFromFile("momentum.dat", momentum);
-        exitTrainingError = loadFloatFromFile("exitTrainingError.dat", exitTrainingError);
+        exitTrainingLoss = loadFloatFromFile("exitTrainingLoss.dat", exitTrainingLoss);
         classifierThreshold = loadFloatFromFile("classifierThreshold.dat", classifierThreshold);
 
         final int width = 1200;
@@ -585,11 +585,11 @@ public class SpeechRecognitionAI extends Application {
                 timelineTrainingLabelUpdate.stop();
             }else if(updateTrainingLabel)
             {
-                if (currentTrainingErrorLabel < exitTrainingError && trainingPassLabel > minimumTrainingCycles
+                if (currentTrainingLossLabel < exitTrainingLoss && trainingPassLabel > minimumTrainingCycles
                     || buttonStopTraining.isDisabled()){
                     trainingIsRunning = false;
                     labelTrainingStatus.setText("Training pass: " + trainingPassLabel
-                            + "\t\tAverage: " + averageError
+                            + "\t\tAverage: " + averageLoss
                             + "\t\tTraining DONE");
                     buttonTrain.setDisable(false);
                     topologyList.setDisable(false);
@@ -598,13 +598,13 @@ public class SpeechRecognitionAI extends Application {
                 {
                     labelTrainingStatus.setText("Training pass: " + trainingPassLabel
                             + "\t\tSample[" + trainingLineLabel + "]=\"" + database.get(trainingLineLabel).name
-                            + "\"\t\tError: " + currentTrainingErrorLabel
-                            + "\t\tAverage: " + averageError);
+                            + "\"\t\tLoss: " + currentTrainingLossLabel
+                            + "\t\tAverage: " + averageLoss);
                 }
                 if(savingWeightsPopUp)
                 {
                     savingWeightsPopUp = false;
-                    customPrompt("Saving Weights", "Average training error: " + averageError, Alert.AlertType.INFORMATION);
+                    customPrompt("Saving Weights", "Average training loss: " + averageLoss, Alert.AlertType.INFORMATION);
                 }
 
                 updateTrainingLabel = false;

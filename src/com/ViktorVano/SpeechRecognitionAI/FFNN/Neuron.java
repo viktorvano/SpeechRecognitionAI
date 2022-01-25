@@ -110,7 +110,7 @@ public class Neuron {
     {
         float sum = 0.0f;
 
-        // Sum our contributions of the errors at the nodes we feed
+        // Sum our contributions of the losses at the nodes we feed
         for (int n = 0; n < nextLayer.size() - 1; n++)
         {
             sum += m_outputWeights.get(n).weight * nextLayer.get(n).m_gradient;

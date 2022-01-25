@@ -40,10 +40,10 @@ public class Variables {
     public static final int minimumLayerSize = 10;
     public static final int maximumTopologySize = 9;
     public static boolean trainingIsRunning = false, updateTrainingLabel = false, savingWeightsPopUp = false;
-    public static float averageError, exitTrainingError = 0.01f;
+    public static float averageLoss, exitTrainingLoss = 0.01f;
     public static int minimumTrainingCycles;
     public static int trainingPassLabel, trainingLineLabel;
-    public static float currentTrainingErrorLabel;
+    public static float currentTrainingLossLabel;
     public static float classifierThreshold = 0.85f;
     public static boolean weightsLoaded = false;
     public static int loadingStep = 0;

@@ -70,9 +70,9 @@ public class TrainingThread extends Thread {
         System.out.println("Training started\n");
         neuralNetwork.loadNeuronWeights();
         boolean repeatTrainingCycle = false;
-        averageError = 1.0f;
-        float quickSaveErrorValue = 0.5f;
-        float currentTrainingError;
+        averageLoss = 1.0f;
+        float quickSaveLossValue = 0.5f;
+        float currentTrainingLoss;
         while (true)
         {
             trainingPass++;
@@ -97,33 +97,33 @@ public class TrainingThread extends Thread {
 
             trainingLineLabel = trainingLine;
             trainingPassLabel = trainingPass;
-            currentTrainingError = neuralNetwork.getRecentAverageError();
-            currentTrainingErrorLabel = currentTrainingError;
-            averageError = 0.99f*averageError + 0.01f*currentTrainingError;
+            currentTrainingLoss = neuralNetwork.getRecentAverageLoss();
+            currentTrainingLossLabel = currentTrainingLoss;
+            averageLoss = 0.99f* averageLoss + 0.01f*currentTrainingLoss;
 
 
             // Report how well the training is working, averaged over recent samples:
-            System.out.println("Net current sample error: " + currentTrainingError);
+            System.out.println("Net current sample loss: " + currentTrainingLoss);
 
             if(!trainingFlag)
             {
                 System.out.println("Training stopped via Stop button.");
                 neuralNetwork.saveNeuronWeights();
                 break;
-            }else if (averageError < exitTrainingError && trainingPass > minimumTrainingCycles)
+            }else if (averageLoss < exitTrainingLoss && trainingPass > minimumTrainingCycles)
             {
-                System.out.println("Exit due to low error :D\n\n");
+                System.out.println("Exit due to low loss :D\n\n");
                 neuralNetwork.saveNeuronWeights();
                 break;
-            }else if(averageError < quickSaveErrorValue)//must be average error, otherwise it would be ofter from start
+            }else if(averageLoss < quickSaveLossValue)//must be average error, otherwise it would be ofter from start
             {
-                quickSaveErrorValue = averageError/2f;
+                quickSaveLossValue = averageLoss /2f;
                 neuralNetwork.saveNeuronWeights();
             }
 
             updateTrainingLabel = true;
-            System.out.println("Net average error: " + averageError + "\n\n");
-            repeatTrainingCycle = currentTrainingError > averageError;
+            System.out.println("Net average loss: " + averageLoss + "\n\n");
+            repeatTrainingCycle = currentTrainingLoss > averageLoss;
         }
         System.out.println("Training done.\n");
         System.out.println("Closing application.");

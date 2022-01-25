@@ -240,7 +240,7 @@ public class AdvancedSettingsMenu {
                     "(Eta - [0.0..1.0] overall network training rate)\n\n" +
                     "Momentum\n" +
                     "(Alpha - [0.0..n] multiplier of last weight change)\n\n" +
-                    "Exit Training Error\n\n" +
+                    "Exit Training Loss\n\n" +
                     "Classifier Match [%]");
         labelsTraining.setLayoutX(350);
         labelsTraining.setLayoutY(410);
@@ -309,8 +309,8 @@ public class AdvancedSettingsMenu {
         dialogPane.getChildren().add(textFieldMomentum);
 
         TextField textFieldExitTrainingLoss = new TextField();
-        textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingError));
-        textFieldExitTrainingLoss.setText(Float.toString(exitTrainingError));
+        textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingLoss));
+        textFieldExitTrainingLoss.setText(Float.toString(exitTrainingLoss));
         textFieldExitTrainingLoss.setLayoutX(500);
         textFieldExitTrainingLoss.setLayoutY(532);
         textFieldExitTrainingLoss.setPrefWidth(60);
@@ -327,8 +327,8 @@ public class AdvancedSettingsMenu {
                                 value = 1.0f;
                                 textFieldExitTrainingLoss.setText(String.valueOf(value));
                             }
-                            saveFloatToFile("exitTrainingError.dat", value);
-                            exitTrainingError = value;
+                            saveFloatToFile("exitTrainingLoss.dat", value);
+                            exitTrainingLoss = value;
                         }else
                             textFieldExitTrainingLoss.setText("");
                     }

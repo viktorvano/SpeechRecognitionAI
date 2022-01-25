@@ -12,8 +12,8 @@ public class NeuralNetwork {
 
     public NeuralNetwork(ArrayList<Integer> topology)
     {
-        m_error = 0;
-        m_recentAverageError = 0;
+        m_loss = 0;
+        m_recentAverageLoss = 0;
         int numLayers = topology.size();
         System.out.println("Number of layers: " + numLayers);
         m_layers = new ArrayList<>();
@@ -55,21 +55,21 @@ public class NeuralNetwork {
     }
     public void backProp(ArrayList<Float> targetValues)
     {
-        // Calculate overall net error (RMS of output neuron errors)
+        // Calculate overall net loss (RMS of output neuron losses)
         Layer outputLayer = m_layers.get(m_layers.size()-1);
-        m_error = 0.0f;
+        m_loss = 0.0f;
 
         for (int n = 0; n < outputLayer.size() - 1; n++)
         {
             float delta = targetValues.get(n) - outputLayer.get(n).getOutputValue();
-            m_error += delta * delta;
+            m_loss += delta * delta;
         }
-        m_error /= outputLayer.size() - 1; //get average errorsquared
-        m_error = (float)Math.sqrt(m_error); // RMS
+        m_loss /= outputLayer.size() - 1; //get average loss squared
+        m_loss = (float)Math.sqrt(m_loss); // RMS
 
         // Implement a recent average measurement;
 
-        m_recentAverageError = m_error;
+        m_recentAverageLoss = m_loss;
 
         // Calculate output layer gradients
         for (int n = 0; n < outputLayer.size() - 1; n++)
@@ -114,7 +114,7 @@ public class NeuralNetwork {
     {
         return m_layers.get(layer).get(neuron).getOutputValue();
     }
-    public float getRecentAverageError() { return m_recentAverageError; }
+    public float getRecentAverageLoss() { return m_recentAverageLoss; }
 
     public void saveNeuronWeights()
     {
@@ -199,6 +199,6 @@ public class NeuralNetwork {
     }
 
     private final ArrayList<Layer> m_layers; // m_layers[layerNum][neuronNum]
-    private float m_error;
-    private float m_recentAverageError;
+    private float m_loss;
+    private float m_recentAverageLoss;
 }
