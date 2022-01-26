@@ -117,7 +117,7 @@ public class TrainingThread extends Thread {
                 break;
             }else if(averageLoss < quickSaveLossValue)//must be average error, otherwise it would be ofter from start
             {
-                quickSaveLossValue = averageLoss /2f;
+                quickSaveLossValue = averageLoss / 2f;
                 neuralNetwork.saveNeuronWeights();
             }
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20220125;
+    public static int versionNumber = 20220126;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;

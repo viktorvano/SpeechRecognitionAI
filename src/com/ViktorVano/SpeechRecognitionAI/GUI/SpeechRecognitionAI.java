@@ -585,7 +585,7 @@ public class SpeechRecognitionAI extends Application {
                 timelineTrainingLabelUpdate.stop();
             }else if(updateTrainingLabel)
             {
-                if (currentTrainingLossLabel < exitTrainingLoss && trainingPassLabel > minimumTrainingCycles
+                if (averageLoss < exitTrainingLoss && trainingPassLabel > minimumTrainingCycles
                     || buttonStopTraining.isDisabled()){
                     trainingIsRunning = false;
                     labelTrainingStatus.setText("Training pass: " + trainingPassLabel
