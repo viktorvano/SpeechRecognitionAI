@@ -38,7 +38,7 @@ After this the application listens again and the whole process repeats.
 5.) If you want to analyse speech word by word, then you need to separate words with a short break.  
     It means that you need to speak like a sloth.  
 6.) If you want to speak more fluently you can, but the neural network has a 2.97 second word (phrase) buffer.  
-7.) For a good training data it is recommended to have about 50 training samples of each word you want to teach the neural network.  
+7.) For a good training data it is recommended to have about several training samples of each word you want to teach the neural network.  
 8.) It is also recommended to record an audio artifacts (random unwanted noises like chair sounds, typing, clicking...). 
     They should be named as an empty string "". This way the neural network will learn those sounds and will not be mistaken of a spoken word.  
 9.) "SpeechRecognitionAI.jar" needs to have "res" folder in the same location. "res" folder must contain "database.dat", "printToConsole.dat", "topology.dat" and "wordRouting.dat".
