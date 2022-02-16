@@ -41,7 +41,7 @@ After this the application listens again and the whole process repeats.
 7.) For a good training data it is recommended to have about several training samples of each word you want to teach the neural network.  
 8.) It is also recommended to record an audio artifacts (random unwanted noises like chair sounds, typing, clicking...). 
     They should be named as an empty string "". This way the neural network will learn those sounds and will not be mistaken of a spoken word.  
-9.) "SpeechRecognitionAI.jar" needs to have "res" folder in the same location. "res" folder must contain "database.dat", "printToConsole.dat", "topology.dat" and "wordRouting.dat".
+9.) "SpeechRecognitionAI.jar" automatically creates "res" folder in the same location, if it does not exist. In the "res" multiple files will be generated, if they do not exist like: "database.dat", "printToConsole.dat", "topology.dat" and "wordRouting.dat".
   
   
 ### Neural Network Visualization Screenshot Examples
