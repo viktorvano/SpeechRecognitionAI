@@ -7,7 +7,7 @@
  [Calling an Elevator demo - version 20210403](https://www.youtube.com/watch?v=aTKumJoA4KU)  
  [The First Demo - Controlling RGB LED Strip](https://www.youtube.com/watch?v=USob8uHvUNw)  
  
-###TODO List  
+### TODO List  
 - Weights Ironing: Set weight to zero of the first hidden layer of those connections which training has not altered.  
 - Extenf FFT to full FFT with Real and Imaginary values (now there is only an FFT magnitude Real x Imag)  
 - Remote Client IP Microphone as an Android App  
