@@ -225,6 +225,12 @@ public class General {
                 x[i] /= n;
                 y[i] /= n;
             }
+        
+        for(int q=0; q<n; q++)
+        {
+            x[q] *= 2.0f;
+            y[q] *= 2.0f;
+        }
     }
 
     public static void createDirectoryIfNotExist(String directoryName)
