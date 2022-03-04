@@ -32,7 +32,7 @@
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Advanced%20Settings.png?raw=true)  
   
 ###### Weights Quicksave Feature
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Weights%20Quicksave%20Feature%20.png?raw=true) 
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Weights%20Quicksave%20Feature.png?raw=true) 
   
   
 ## How does it work?
