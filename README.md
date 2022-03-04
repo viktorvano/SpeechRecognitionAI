@@ -28,6 +28,12 @@
 ###### Settings
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Settings%20Layout.png?raw=true)  
   
+###### Advanced Settings
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Advanced%20Settings.png?raw=true)  
+  
+###### Weights Quicksave Feature
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Weights%20Quicksave%20Feature%20.png?raw=true) 
+  
   
 ## How does it work?
   
