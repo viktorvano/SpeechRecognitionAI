@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20220126;
+    public static int versionNumber = 20220314;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -38,7 +38,7 @@ public class Variables {
 
     public static final int minWordLength = 6000, maxWordLength = 131072;//max length is binary (2^16)*2 (because of 16 bit)
     public static final int minimumLayerSize = 10;
-    public static final int maximumTopologySize = 9;
+    public static final int maximumTopologySize = 12;
     public static boolean trainingIsRunning = false, updateTrainingLabel = false, savingWeightsPopUp = false;
     public static float averageLoss, exitTrainingLoss = 0.01f;
     public static int minimumTrainingCycles;
