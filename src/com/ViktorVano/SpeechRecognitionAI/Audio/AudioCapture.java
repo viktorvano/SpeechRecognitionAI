@@ -1,5 +1,7 @@
 package com.ViktorVano.SpeechRecognitionAI.Audio;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.*;
 import javax.sound.sampled.*;
 
@@ -19,6 +21,18 @@ public class AudioCapture {
 
     public AudioCapture() {
         captureAudio();
+    }
+
+    public void stopAudioCapture()
+    {
+        this.recordAudioFlag = false;
+    }
+
+    public void setRecordedAudioBuffer(@NotNull byte[] audioBuffer, int bufferLength)
+    {
+        this.mainBuffer = audioBuffer;
+        this.mainBufferLength = bufferLength;
+        this.audioRecorded = true;
     }
 
     private void captureAudio() {
@@ -122,47 +136,50 @@ public class AudioCapture {
             {
                 while (recordAudioFlag)
                 {
-                    int cnt = targetDataLine.read(tempCaptureBuffer, 0, tempCaptureBuffer.length);
-                    if (cnt > 0 && mainBufferLength < 980000)
+                    if(useHardwareMicrophone)
                     {
-                        boolean addRecording = false;
-                        for(int i = 0; i< tempCaptureBuffer.length; i+=2)
+                        int cnt = targetDataLine.read(tempCaptureBuffer, 0, tempCaptureBuffer.length);
+                        if (cnt > 0 && mainBufferLength < 980000)
                         {
-                            if(Math.abs(tempCaptureBuffer[i] + tempCaptureBuffer[i+1]*256) > recorderThreshold) {
-                                addRecording = true;
-                                break;
+                            boolean addRecording = false;
+                            for(int i = 0; i< tempCaptureBuffer.length; i+=2)
+                            {
+                                if(Math.abs(tempCaptureBuffer[i] + tempCaptureBuffer[i+1]*256) > recorderThreshold) {
+                                    addRecording = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        if(addRecording && !audioRecorded)
-                        {
-                            System.out.println("Adding a packet");
-                            for(int i = 0; i< tempCaptureBuffer.length; i++)
+                            if(addRecording && !audioRecorded)
                             {
-                                mainBuffer[i + mainBufferLength] = tempCaptureBuffer[i];
-                            }
-                            mainBufferLength += cnt;
-                            System.out.println("Main Buffer Length: " + mainBufferLength);
-                            silenceCount = 0;
-                        }else if(mainBufferLength > 0 && silenceCount < 2 && mainBufferLength < 950000)
-                        {
-                            for(int i = 0; i< tempCaptureBuffer.length; i++)
+                                System.out.println("Adding a packet");
+                                for(int i = 0; i< tempCaptureBuffer.length; i++)
+                                {
+                                    mainBuffer[i + mainBufferLength] = tempCaptureBuffer[i];
+                                }
+                                mainBufferLength += cnt;
+                                System.out.println("Main Buffer Length: " + mainBufferLength);
+                                silenceCount = 0;
+                            }else if(mainBufferLength > 0 && silenceCount < 2 && mainBufferLength < 950000)
                             {
-                                mainBuffer[i + mainBufferLength] = tempCaptureBuffer[i];
+                                for(int i = 0; i< tempCaptureBuffer.length; i++)
+                                {
+                                    mainBuffer[i + mainBufferLength] = tempCaptureBuffer[i];
+                                }
+                                mainBufferLength += cnt;
+                                System.out.println("Main Buffer Length: " + mainBufferLength);
+                                silenceCount ++;
+                            }else if (mainBufferLength > 0 && !audioRecorded)
+                            {
+                                audioRecorded = true;
+                                System.out.println("Recording stopped.");
                             }
-                            mainBufferLength += cnt;
-                            System.out.println("Main Buffer Length: " + mainBufferLength);
-                            silenceCount ++;
-                        }else if (mainBufferLength > 0 && !audioRecorded)
+
+                        }else if(mainBufferLength >= 980000 && !audioRecorded)
                         {
                             audioRecorded = true;
-                            System.out.println("Recording stopped.");
+                            System.out.println("Buffer is full. Recording stopped.");
                         }
-
-                    }else if(mainBufferLength >= 980000 && !audioRecorded)
-                    {
-                        audioRecorded = true;
-                        System.out.println("Buffer is full. Recording stopped.");
                     }
                 }
             } catch (Exception e)

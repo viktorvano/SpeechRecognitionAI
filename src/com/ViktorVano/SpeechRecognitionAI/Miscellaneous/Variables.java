@@ -51,4 +51,5 @@ public class Variables {
     public static boolean printNetworkValues = false;
     public static boolean plotNeuralCharts = false;
     public static boolean keepLongWords = false;
+    public static boolean useHardwareMicrophone = false;
 }

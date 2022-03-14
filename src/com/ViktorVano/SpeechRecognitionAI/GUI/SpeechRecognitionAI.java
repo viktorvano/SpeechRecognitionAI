@@ -2,6 +2,7 @@ package com.ViktorVano.SpeechRecognitionAI.GUI;
 
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
+import com.ViktorVano.SpeechRecognitionAI.Audio.AudioServer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
@@ -75,6 +76,7 @@ public class SpeechRecognitionAI extends Application {
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
     private Button buttonAdvancedSettings;
+    private AudioServer audioServer;
 
     public static void main(String[] args)
     {
@@ -100,6 +102,8 @@ public class SpeechRecognitionAI extends Application {
         momentum = loadFloatFromFile("momentum.dat", momentum);
         exitTrainingLoss = loadFloatFromFile("exitTrainingLoss.dat", exitTrainingLoss);
         classifierThreshold = loadFloatFromFile("classifierThreshold.dat", classifierThreshold);
+        audioServer = new AudioServer(this, audioCapture, 7777);//TODO: Replace port with a parameter
+        audioServer.start();
 
         final int width = 1200;
         final int height = 690;
@@ -327,10 +331,12 @@ public class SpeechRecognitionAI extends Application {
     public void stop()
     {
         System.out.println("Leaving the app...");
+        this.audioServer.stopServer();
+        this.audioCapture.stopAudioCapture();
         System.exit(0);
     }
 
-    private void captureAudio()
+    public void captureAudio()
     {
         if(audioCapture.isAudioRecorded())
         {
