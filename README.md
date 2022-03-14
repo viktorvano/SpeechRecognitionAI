@@ -12,7 +12,7 @@
 - Extenf FFT to full FFT with Real and Imaginary values (now there is only an FFT magnitude Real x Imag)  
 - Remote Client IP Microphone as an Android App  
 - parallelStream.forchEach() for each neuron in a layer feedforward and backproapgation (layers must propagate in a sequence)  
-- increase the number of layers limit and decrease the font size of the topology  
+- increase the number of layers limit  
   
   
 ## Application Screenshots
