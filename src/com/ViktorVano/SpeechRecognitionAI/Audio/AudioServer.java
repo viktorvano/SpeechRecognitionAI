@@ -7,10 +7,11 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.useHardwareMicrophone;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class AudioServer extends Thread{
     private int port;
@@ -73,7 +74,9 @@ public class AudioServer extends Thread{
                 System.out.println("Waiting for a client ...");
 
                 socket = server.accept();
+                connectionIP = (((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");;
                 System.out.println("Client accepted");
+                System.out.println("Connection IP: " + connectionIP);
 
                 // takes input from the client socket
                 in = new DataInputStream(
