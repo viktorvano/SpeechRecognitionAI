@@ -102,8 +102,6 @@ public class SpeechRecognitionAI extends Application {
         momentum = loadFloatFromFile("momentum.dat", momentum);
         exitTrainingLoss = loadFloatFromFile("exitTrainingLoss.dat", exitTrainingLoss);
         classifierThreshold = loadFloatFromFile("classifierThreshold.dat", classifierThreshold);
-        audioServer = new AudioServer(this, audioCapture, 7777);//TODO: Replace port with a parameter
-        audioServer.start();
 
         final int width = 1200;
         final int height = 690;
@@ -151,6 +149,9 @@ public class SpeechRecognitionAI extends Application {
         initializeTrainingLayout();
         initializeRecognitionLayout();
         initializeSettingsLayout();
+
+        audioServer = new AudioServer(this, audioCapture, neuralNetworkThread, 7777);//TODO: Replace port with a parameter
+        audioServer.start();
 
         Scene scene = new Scene(borderPane, width, height);
 

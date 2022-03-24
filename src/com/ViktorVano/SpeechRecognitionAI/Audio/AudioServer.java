@@ -1,12 +1,10 @@
 package com.ViktorVano.SpeechRecognitionAI.Audio;
 
+import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI;
 import com.sun.istack.internal.NotNull;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,16 +17,19 @@ public class AudioServer extends Thread{
     private byte buffer[] = new byte[1000000];
     private AudioCapture audioCapture;
     private SpeechRecognitionAI speechRecognitionAI;
+    private NeuralNetworkThread neuralNetworkThread;
 
     //initialize socket and input stream
     private Socket		 socket = null;
     private ServerSocket server = null;
-    private DataInputStream in	 = null;
+    private DataInputStream in  = null;
+    private DataOutputStream out = null;
 
-    public AudioServer(@NotNull SpeechRecognitionAI speechRecognitionAI, @NotNull AudioCapture audioCapture, int port){
+    public AudioServer(@NotNull SpeechRecognitionAI speechRecognitionAI, @NotNull AudioCapture audioCapture, @NotNull NeuralNetworkThread neuralNetworkThread, int port){
         this.port = port;
         this.audioCapture = audioCapture;
         this.speechRecognitionAI = speechRecognitionAI;
+        this.neuralNetworkThread = neuralNetworkThread;
     }
 
     public void stopServer()
@@ -54,6 +55,13 @@ public class AudioServer extends Thread{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            if(out!=null)
+                out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -64,6 +72,7 @@ public class AudioServer extends Thread{
             socket = null;
             server = null;
             in	 = null;
+            out = null;
 
             // starts server and waits for a connection
             try
@@ -76,9 +85,9 @@ public class AudioServer extends Thread{
                 socket = server.accept();
                 System.out.println("Client accepted");
 
-                // takes input from the client socket
-                in = new DataInputStream(
-                        new BufferedInputStream(socket.getInputStream()));
+                in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+                out = new DataOutputStream(socket.getOutputStream());
 
                 int length = 0;
                 String receivedToken = "";
@@ -120,12 +129,16 @@ public class AudioServer extends Thread{
                                     e.printStackTrace();
                                 }
                             }
-                            System.out.println("Send response from NN back to Android app.");
+                            String message = neuralNetworkThread.getRecognizedMessage();
+                            System.out.println("Sending message: " + message);
+                            out.writeUTF(neuralNetworkThread.getRecognizedMessage());
+                            out.flush();
                         }
                         else
                         {
                             System.out.println("Invalid TOKEN.");
-                            System.out.println("Sending back: Invalid TOKEN.");
+                            out.writeUTF("Invalid TOKEN.");
+                            out.flush();
                         }
                     }else
                     {
@@ -163,6 +176,13 @@ public class AudioServer extends Thread{
             try {
                 if(in!=null)
                     in.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if(out!=null)
+                    out.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
