@@ -74,19 +74,19 @@ public class AudioServer extends Thread{
                 System.out.println("Waiting for a client ...");
 
                 socket = server.accept();
-                connectionIP = (((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress()).toString().replace("/","");;
                 System.out.println("Client accepted");
-                System.out.println("Connection IP: " + connectionIP);
 
                 // takes input from the client socket
                 in = new DataInputStream(
                         new BufferedInputStream(socket.getInputStream()));
 
                 int length = 0;
+                String receivedToken = "";
                 try
                 {
                     try
                     {
+                        receivedToken = in.readUTF();
                         length = in.readInt();
                         System.out.println("Got the Size: " + length);
                         int bytesRead ;
@@ -105,9 +105,28 @@ public class AudioServer extends Thread{
 
                     if(buffer.length == length && !useHardwareMicrophone)
                     {
-                        System.out.println("Recording received: " + buffer.length);
-                        speechRecognitionAI.captureAudio();
-                        audioCapture.setRecordedAudioBuffer(buffer, length);
+                        if(receivedToken.equals(token))
+                        {
+                            System.out.println("Recording received: " + buffer.length);
+                            speechRecognitionAI.captureAudio();
+                            audioCapture.setRecordedAudioBuffer(buffer, length);
+                            while (audioCapture.isAudioRecorded())
+                            {
+                                try
+                                {
+                                    Thread.sleep(100);
+                                }catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                            System.out.println("Send response from NN back to Android app.");
+                        }
+                        else
+                        {
+                            System.out.println("Invalid TOKEN.");
+                            System.out.println("Sending back: Invalid TOKEN.");
+                        }
                     }else
                     {
                         System.out.println("Error receiving a recording...");
