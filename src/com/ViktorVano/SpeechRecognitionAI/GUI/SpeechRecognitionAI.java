@@ -34,6 +34,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
@@ -102,6 +103,8 @@ public class SpeechRecognitionAI extends Application {
         momentum = loadFloatFromFile("momentum.dat", momentum);
         exitTrainingLoss = loadFloatFromFile("exitTrainingLoss.dat", exitTrainingLoss);
         classifierThreshold = loadFloatFromFile("classifierThreshold.dat", classifierThreshold);
+        audioServerPort = loadIntegerFromFile("audioServerPort.dat", audioServerPort);
+        token = loadStringFromFile("token.dat", token);
 
         final int width = 1200;
         final int height = 690;
@@ -150,7 +153,7 @@ public class SpeechRecognitionAI extends Application {
         initializeRecognitionLayout();
         initializeSettingsLayout();
 
-        audioServer = new AudioServer(this, audioCapture, neuralNetworkThread, 7777);//TODO: Replace port with a parameter
+        audioServer = new AudioServer(this, audioCapture, neuralNetworkThread, audioServerPort);
         audioServer.start();
 
         Scene scene = new Scene(borderPane, width, height);

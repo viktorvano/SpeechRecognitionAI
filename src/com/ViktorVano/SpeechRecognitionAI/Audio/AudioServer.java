@@ -25,7 +25,10 @@ public class AudioServer extends Thread{
     private DataInputStream in  = null;
     private DataOutputStream out = null;
 
-    public AudioServer(@NotNull SpeechRecognitionAI speechRecognitionAI, @NotNull AudioCapture audioCapture, @NotNull NeuralNetworkThread neuralNetworkThread, int port){
+    public AudioServer(@NotNull SpeechRecognitionAI speechRecognitionAI,
+                       @NotNull AudioCapture audioCapture,
+                       @NotNull NeuralNetworkThread neuralNetworkThread,
+                       int port){
         this.port = port;
         this.audioCapture = audioCapture;
         this.speechRecognitionAI = speechRecognitionAI;

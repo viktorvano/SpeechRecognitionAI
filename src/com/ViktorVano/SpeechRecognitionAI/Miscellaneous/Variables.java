@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20220324;
+    public static int versionNumber = 20220325;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -52,5 +52,6 @@ public class Variables {
     public static boolean plotNeuralCharts = false;
     public static boolean keepLongWords = false;
     public static boolean useHardwareMicrophone = false;
-    public static String token = "defaultToken";
+    public static String token = "defaultToken123";
+    public static int audioServerPort = 7777;
 }
