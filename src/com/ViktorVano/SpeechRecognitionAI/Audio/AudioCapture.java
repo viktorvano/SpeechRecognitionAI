@@ -55,7 +55,6 @@ public class AudioCapture {
         }
     }
 
-
     public boolean isAudioRecorded()
     {
         return audioRecorded;
