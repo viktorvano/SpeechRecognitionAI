@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class AdvancedSettingsMenu {
@@ -244,6 +245,62 @@ public class AdvancedSettingsMenu {
         checkBoxUseIpMic.setLayoutX(30);
         checkBoxUseIpMic.setLayoutY(480);
         dialogPane.getChildren().add(checkBoxUseIpMic);
+
+        Label labelToken = new Label("Token");
+        labelToken.setLayoutX(30);
+        labelToken.setLayoutY(520);
+        dialogPane.getChildren().add(labelToken);
+
+        TextField textFieldToken = new TextField();
+        textFieldToken.setPromptText(token);
+        textFieldToken.setText(token);
+        textFieldToken.setLayoutX(80);
+        textFieldToken.setLayoutY(516);
+        textFieldToken.setPrefWidth(240);
+        textFieldToken.textProperty().addListener(observable -> {
+            if(textFieldToken.getText().length() > 0)
+                try{
+                    String value = textFieldToken.getText();
+                    if(value.length() > 0)
+                    {
+                        saveStringToFile("token.dat", value);
+                        token = value;
+                    }else
+                        textFieldToken.setText("");
+                }catch (Exception e)
+                {
+                    textFieldToken.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldToken);
+
+        Label labelPort = new Label("Audio Server Port\t\t\t(restart needed)");
+        labelPort.setLayoutX(30);
+        labelPort.setLayoutY(560);
+        dialogPane.getChildren().add(labelPort);
+
+        TextField textFieldPort = new TextField();
+        textFieldPort.setPromptText(Integer.toString(audioServerPort));
+        textFieldPort.setText(Integer.toString(audioServerPort));
+        textFieldPort.setLayoutX(160);
+        textFieldPort.setLayoutY(556);
+        textFieldPort.setPrefWidth(60);
+        textFieldPort.textProperty().addListener(observable -> {
+            if(textFieldPort.getText().length() > 0)
+                try{
+                    int value = Integer.parseInt(textFieldPort.getText());
+                    if(value > 0 && value < 65535)
+                    {
+                        saveIntegerToFile("audioServerPort.dat", value);
+                        audioServerPort = value;
+                    }else
+                        textFieldPort.setText("");
+                }catch (Exception e)
+                {
+                    textFieldPort.setText("");
+                }
+        });
+        dialogPane.getChildren().add(textFieldPort);
 
         Label labelNeuralNetwork =  new Label("Neural Network");
         labelNeuralNetwork.setLayoutX(350);
