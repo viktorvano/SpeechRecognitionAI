@@ -105,6 +105,7 @@ public class SpeechRecognitionAI extends Application {
         classifierThreshold = loadFloatFromFile("classifierThreshold.dat", classifierThreshold);
         audioServerPort = loadIntegerFromFile("audioServerPort.dat", audioServerPort);
         token = loadStringFromFile("token.dat", token);
+        useIpMic = loadBooleanFromFile("useIpMic.dat", useIpMic);
 
         final int width = 1200;
         final int height = 690;

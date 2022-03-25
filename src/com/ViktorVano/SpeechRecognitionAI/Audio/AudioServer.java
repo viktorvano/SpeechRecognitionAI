@@ -5,7 +5,6 @@ import com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI;
 import com.sun.istack.internal.NotNull;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -115,7 +114,7 @@ public class AudioServer extends Thread{
                         e.printStackTrace();
                     }
 
-                    if(buffer.length == length && !useHardwareMicrophone)
+                    if(buffer.length == length && useIpMic)
                     {
                         if(receivedToken.equals(token))
                         {
@@ -145,7 +144,17 @@ public class AudioServer extends Thread{
                         }
                     }else
                     {
-                        System.out.println("Error receiving a recording...");
+                        if(buffer.length != length)
+                        {
+                            System.out.println("Error receiving a recording...");
+                            out.writeUTF("Error receiving a recording...");
+                            out.flush();
+                        }else if(!useIpMic)
+                        {
+                            System.out.println("Using Hardware Mic.");
+                            out.writeUTF("Using Hardware Mic.");
+                            out.flush();
+                        }
                     }
                 }
                 catch(Exception e)

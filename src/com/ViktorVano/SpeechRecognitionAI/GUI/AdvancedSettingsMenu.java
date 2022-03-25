@@ -228,6 +228,23 @@ public class AdvancedSettingsMenu {
         checkBoxPlotKeepLongWords.setLayoutY(391);
         dialogPane.getChildren().add(checkBoxPlotKeepLongWords);
 
+        Label labelIpMic =  new Label("IP Mic App");
+        labelIpMic.setLayoutX(30);
+        labelIpMic.setLayoutY(440);
+        labelIpMic.setFont(Font.font("Arial", 22));
+        labelIpMic.setStyle("-fx-font-weight: bold");
+        dialogPane.getChildren().add(labelIpMic);
+
+        CheckBox checkBoxUseIpMic = new CheckBox("Use IP Microphone");
+        checkBoxUseIpMic.setSelected(useIpMic);
+        checkBoxUseIpMic.setOnAction(event -> {
+            useIpMic = checkBoxUseIpMic.isSelected();
+            saveBooleanToFile("useIpMic.dat", useIpMic);
+        });
+        checkBoxUseIpMic.setLayoutX(30);
+        checkBoxUseIpMic.setLayoutY(480);
+        dialogPane.getChildren().add(checkBoxUseIpMic);
+
         Label labelNeuralNetwork =  new Label("Neural Network");
         labelNeuralNetwork.setLayoutX(350);
         labelNeuralNetwork.setLayoutY(370);

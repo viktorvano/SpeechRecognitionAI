@@ -136,7 +136,7 @@ public class AudioCapture {
             {
                 while (recordAudioFlag)
                 {
-                    if(useHardwareMicrophone)
+                    if(!useIpMic)
                     {
                         int cnt = targetDataLine.read(tempCaptureBuffer, 0, tempCaptureBuffer.length);
                         if (cnt > 0 && mainBufferLength < 980000)
