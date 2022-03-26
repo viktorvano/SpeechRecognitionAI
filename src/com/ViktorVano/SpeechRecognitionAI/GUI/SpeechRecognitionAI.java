@@ -529,10 +529,13 @@ public class SpeechRecognitionAI extends Application {
             if (updateData && audioCapture.isAudioRecorded()) {
                 updateData = false;
                 recordedAudio.audioRecord = audioCapture.getRecord();
-                int step = recordedAudio.audioRecord.length/20000;//To achieve constant data points in the chart.
+                int step = recordedAudio.audioRecord.length/5000;//To achieve constant data points in the chart.
                 displayedSeries.getData().clear();
                 recordedAudio.audioRecordLength = audioCapture.getRecordLength();
                 for (int i = 0; i < recordedAudio.audioRecordLength - 1; i+=step) {
+                    if(i%2 == 1)
+                        i++;
+                    
                     if (i < recordedAudio.audioRecordLength - 1)
                         displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                 }

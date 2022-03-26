@@ -180,6 +180,15 @@ public class AudioCapture {
                             System.out.println("Buffer is full. Recording stopped.");
                         }
                     }
+                    else
+                    {
+                        try{
+                            Thread.sleep(50);
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             } catch (Exception e)
             {
