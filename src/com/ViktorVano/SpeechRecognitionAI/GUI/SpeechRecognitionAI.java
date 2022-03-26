@@ -535,7 +535,7 @@ public class SpeechRecognitionAI extends Application {
                 for (int i = 0; i < recordedAudio.audioRecordLength - 1; i+=step) {
                     if(i%2 == 1)
                         i++;
-                    
+
                     if (i < recordedAudio.audioRecordLength - 1)
                         displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                 }
