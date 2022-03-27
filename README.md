@@ -8,11 +8,11 @@
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_1.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_2.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_3.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_4.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_Icon.jpg" width="150"/>  
    
  Videos:  
+ [Speech Recognition AI v20220126 - Review](https://www.youtube.com/watch?v=cy86pgSeL5c)  
  [Short Demo - version 20210927 - IoT Moon Lamp](https://www.youtube.com/watch?v=7-QHbnDm6Ds)  
  [Update Review - version 20210927](https://www.youtube.com/watch?v=0sCcgp6zsAU)  
  [Calling an Elevator demo - version 20210403](https://www.youtube.com/watch?v=aTKumJoA4KU)  
  [The First Demo - Controlling RGB LED Strip](https://www.youtube.com/watch?v=USob8uHvUNw)  
- [Speech Recognition AI v20220126 - Review](https://www.youtube.com/watch?v=cy86pgSeL5c)  
  
 ### TODO List  
 - Weights Ironing: Set weight to zero of the first hidden layer of those connections which training has not altered.  
