@@ -66,15 +66,10 @@ public class AdvancedSettingsMenu {
         labelWordDetection.setStyle("-fx-font-weight: bold");
         dialogPane.getChildren().add(labelWordDetection);
 
-        Label labelsForWordDetection = new Label(
-                "Start Recording\n\n" +
-                    "Word Threshold\n\n" +
-                    "Pre-Word Samples\n\n" +
-                    "Word Inertia Threshold\n\n" +
-                    "Word Inertia Samples");
-        labelsForWordDetection.setLayoutX(30);
-        labelsForWordDetection.setLayoutY(50);
-        dialogPane.getChildren().add(labelsForWordDetection);
+        Label labelStartRecording = new Label("Start Recording");
+        labelStartRecording.setLayoutX(30);
+        labelStartRecording.setLayoutY(50);
+        dialogPane.getChildren().add(labelStartRecording);
 
         TextField textFieldStartRecording = new TextField();
         textFieldStartRecording.setPromptText(Integer.toString(recorderThreshold));
@@ -99,6 +94,11 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldStartRecording);
 
+        Label labelWordThreshold = new Label("Word Threshold");
+        labelWordThreshold.setLayoutX(30);
+        labelWordThreshold.setLayoutY(91);
+        dialogPane.getChildren().add(labelWordThreshold);
+
         TextField textFieldWordThreshold = new TextField();
         textFieldWordThreshold.setPromptText(Integer.toString(wordThreshold));
         textFieldWordThreshold.setText(Integer.toString(wordThreshold));
@@ -121,6 +121,11 @@ public class AdvancedSettingsMenu {
             }
         });
         dialogPane.getChildren().add(textFieldWordThreshold);
+
+        Label labelPreWordSamples = new Label("Pre-Word Samples");
+        labelPreWordSamples.setLayoutX(30);
+        labelPreWordSamples.setLayoutY(132);
+        dialogPane.getChildren().add(labelPreWordSamples);
 
         TextField textFieldPreWordSamples = new TextField();
         textFieldPreWordSamples.setPromptText(Integer.toString(preWordSamples));
@@ -146,6 +151,11 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldPreWordSamples);
 
+        Label labelWordInertiaThreshold = new Label("Word Inertia Threshold");
+        labelWordInertiaThreshold.setLayoutX(30);
+        labelWordInertiaThreshold.setLayoutY(173);
+        dialogPane.getChildren().add(labelWordInertiaThreshold);
+
         TextField textFieldWordInertiaThreshold = new TextField();
         textFieldWordInertiaThreshold.setPromptText(Integer.toString(wordInertiaThreshold));
         textFieldWordInertiaThreshold.setText(Integer.toString(wordInertiaThreshold));
@@ -168,6 +178,11 @@ public class AdvancedSettingsMenu {
                 }
         });
         dialogPane.getChildren().add(textFieldWordInertiaThreshold);
+
+        Label labelWordInertiaSamples = new Label("Word Inertia Samples");
+        labelWordInertiaSamples.setLayoutX(30);
+        labelWordInertiaSamples.setLayoutY(214);
+        dialogPane.getChildren().add(labelWordInertiaSamples);
 
         TextField textFieldWordInertiaSamples = new TextField();
         textFieldWordInertiaSamples.setPromptText(Integer.toString(wordInertiaSamples));
@@ -274,7 +289,7 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldToken);
 
-        Label labelPort = new Label("Audio Server Port\t\t\t(restart needed)");
+        Label labelPort = new Label("Audio Server Port\n(restart required)");
         labelPort.setLayoutX(30);
         labelPort.setLayoutY(560);
         dialogPane.getChildren().add(labelPort);
