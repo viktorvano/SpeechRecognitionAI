@@ -2,17 +2,20 @@
  Speech Recognition AI based on FFNN in Java.  
  This Speech Recognition AI converts speech to text and it can communicate with other applications, servers and hardware.  
  Tested on Windows and on Linux.  
+   
+ Android App on Google Play Store: [IP Mic](https://play.google.com/store/apps/details?id=eu.cyberpunktech.IpMic)  
+   
+ Videos:  
  [Short Demo - version 20210927 - IoT Moon Lamp](https://www.youtube.com/watch?v=7-QHbnDm6Ds)  
  [Update Review - version 20210927](https://www.youtube.com/watch?v=0sCcgp6zsAU)  
  [Calling an Elevator demo - version 20210403](https://www.youtube.com/watch?v=aTKumJoA4KU)  
  [The First Demo - Controlling RGB LED Strip](https://www.youtube.com/watch?v=USob8uHvUNw)  
+ [Speech Recognition AI v20220126 - Review](https://www.youtube.com/watch?v=cy86pgSeL5c)  
  
 ### TODO List  
 - Weights Ironing: Set weight to zero of the first hidden layer of those connections which training has not altered.  
 - Extenf FFT to full FFT with Real and Imaginary values (now there is only an FFT magnitude Real x Imag)  
-- Remote Client IP Microphone as an Android App  
 - parallelStream.forchEach() for each neuron in a layer feedforward and backproapgation (layers must propagate in a sequence)  
-- increase the number of layers limit  
   
   
 ## Application Screenshots
