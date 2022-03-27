@@ -324,16 +324,11 @@ public class AdvancedSettingsMenu {
         labelNeuralNetwork.setStyle("-fx-font-weight: bold");
         dialogPane.getChildren().add(labelNeuralNetwork);
 
-        Label labelsTraining = new Label(
-                "Velocity\n" +
-                    "(Eta - [0.0..1.0] overall network training rate)\n\n" +
-                    "Momentum\n" +
-                    "(Alpha - [0.0..n] multiplier of last weight change)\n\n" +
-                    "Exit Training Loss\n\n" +
-                    "Classifier Match [%]");
-        labelsTraining.setLayoutX(350);
-        labelsTraining.setLayoutY(410);
-        dialogPane.getChildren().add(labelsTraining);
+        Label labelVelocity = new Label("Velocity\n" +
+                                            "(Eta - [0.0..1.0] overall network training rate)");
+        labelVelocity.setLayoutX(350);
+        labelVelocity.setLayoutY(410);
+        dialogPane.getChildren().add(labelVelocity);
 
         TextField textFieldVelocity = new TextField();
         textFieldVelocity.setPromptText(Float.toString(velocity));
@@ -366,6 +361,12 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldVelocity);
 
+        Label labelMomentum = new Label("Momentum\n" +
+                                            "(Alpha - [0.0..n] multiplier of last weight change)");
+        labelMomentum.setLayoutX(350);
+        labelMomentum.setLayoutY(474);
+        dialogPane.getChildren().add(labelMomentum);
+
         TextField textFieldMomentum = new TextField();
         textFieldMomentum.setPromptText(Float.toString(momentum));
         textFieldMomentum.setText(Float.toString(momentum));
@@ -397,6 +398,11 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldMomentum);
 
+        Label labelExitTrainingLoss = new Label("Exit Training Loss");
+        labelExitTrainingLoss.setLayoutX(350);
+        labelExitTrainingLoss.setLayoutY(536);
+        dialogPane.getChildren().add(labelExitTrainingLoss);
+
         TextField textFieldExitTrainingLoss = new TextField();
         textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingLoss));
         textFieldExitTrainingLoss.setText(Float.toString(exitTrainingLoss));
@@ -427,6 +433,11 @@ public class AdvancedSettingsMenu {
                 }
         });
         dialogPane.getChildren().add(textFieldExitTrainingLoss);
+
+        Label labelClassifierMatch = new Label("Classifier Match [%]");
+        labelClassifierMatch.setLayoutX(350);
+        labelClassifierMatch.setLayoutY(577);
+        dialogPane.getChildren().add(labelClassifierMatch);
 
         TextField textFieldMatch = new TextField();
         textFieldMatch.setPromptText(Integer.toString((int)(classifierThreshold*100.0f)));
