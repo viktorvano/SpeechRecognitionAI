@@ -59,6 +59,21 @@ public class TrainingThread extends Thread {
         }
     }
 
+    private int findMaxIndex(ArrayList<Float> data)
+    {
+        float max = data.get(0);
+        int index = 0;
+        for(int i=1; i<data.size(); i++)
+        {
+            if(data.get(i) > max)
+            {
+                max = data.get(i);
+                index = i;
+            }
+        }
+        return index;
+    }
+
     public void stopTraining()
     {
         trainingFlag = false;
@@ -123,7 +138,7 @@ public class TrainingThread extends Thread {
 
             updateTrainingLabel = true;
             System.out.println("Net average loss: " + averageLoss + "\n\n");
-            repeatTrainingCycle = currentTrainingLoss > averageLoss;
+            repeatTrainingCycle = currentTrainingLoss > averageLoss || findMaxIndex(result) != findMaxIndex(target);
         }
         System.out.println("Training done.\n");
         System.out.println("Closing application.");
