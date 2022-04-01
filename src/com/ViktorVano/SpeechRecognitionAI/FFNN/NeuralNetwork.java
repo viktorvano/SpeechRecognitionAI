@@ -35,6 +35,7 @@ public class NeuralNetwork {
             m_layers.get(m_layers.size()-1).peekLast().setOutputValue(1.0f);
         }
     }
+
     public void feedForward(ArrayList<Float> inputValues)
     {
         assert(inputValues.size() == m_layers.get(0).size() - 1);
@@ -42,24 +43,18 @@ public class NeuralNetwork {
         // Assign (latch) the input values into the input neurons
         IntStream.range(0, inputValues.size()).parallel().
                 forEach(i -> m_layers.get(0).get(i).setOutputValue(inputValues.get(i)));
-        /*for (int i = 0; i < inputValues.size(); i++)
-        {
-            m_layers.get(0).get(i).setOutputValue(inputValues.get(i));
-        }*/
 
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
             Layer prevLayer = m_layers.get(layerNum - 1);
+
             final int finalLayerNum = layerNum;
             IntStream.range(0, m_layers.get(layerNum).size() - 1).parallel().
                     forEach(n -> m_layers.get(finalLayerNum).get(n).feedForward(prevLayer));
-            /*for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
-            {
-                m_layers.get(layerNum).get(n).feedForward(prevLayer);
-            }*/
         }
     }
+
     public void backProp(ArrayList<Float> targetValues)
     {
         // Calculate overall net loss (RMS of output neuron losses)
@@ -108,6 +103,7 @@ public class NeuralNetwork {
             }
         }
     }
+
     public void getResults(ArrayList<Float> resultValues)
     {
         resultValues.clear();
@@ -117,10 +113,12 @@ public class NeuralNetwork {
             resultValues.add(m_layers.get(m_layers.size()-1).get(n).getOutputValue());
         }
     }
+
     public float getNeuronOutput(int layer, int neuron)
     {
         return m_layers.get(layer).get(neuron).getOutputValue();
     }
+
     public float getRecentAverageLoss() { return m_recentAverageLoss; }
 
     public void saveNeuronWeights()
