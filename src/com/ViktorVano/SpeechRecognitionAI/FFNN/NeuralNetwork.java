@@ -61,11 +61,11 @@ public class NeuralNetwork {
         Layer outputLayer = m_layers.get(m_layers.size()-1);
         m_loss = 0.0f;
 
-        for (int n = 0; n < outputLayer.size() - 1; n++)
+        IntStream.range(0, outputLayer.size() - 1).parallel().forEach(n ->
         {
             float delta = targetValues.get(n) - outputLayer.get(n).getOutputValue();
             m_loss += delta * delta;
-        }
+        });
         m_loss /= outputLayer.size() - 1; //get average loss squared
         m_loss = (float)Math.sqrt(m_loss); // RMS
 
@@ -74,10 +74,10 @@ public class NeuralNetwork {
         m_recentAverageLoss = m_loss;
 
         // Calculate output layer gradients
-        for (int n = 0; n < outputLayer.size() - 1; n++)
+        IntStream.range(0, outputLayer.size() - 1).parallel().forEach(n ->
         {
             outputLayer.get(n).calcOutputGradients(targetValues.get(n));
-        }
+        });
 
         // Calculate gradients on hidden layers
         for (int layerNum = m_layers.size() - 2; layerNum > 0; layerNum--)
@@ -85,8 +85,7 @@ public class NeuralNetwork {
             Layer hiddenLayer = m_layers.get(layerNum);
             Layer nextLayer = m_layers.get(layerNum + 1);
 
-            for (Neuron neuron : hiddenLayer)
-                neuron.calcHiddenGradients(nextLayer);
+            hiddenLayer.parallelStream().forEach(neuron -> neuron.calcHiddenGradients(nextLayer));
         }
 
         // For all layers from outputs to first hidden layer.
@@ -97,10 +96,7 @@ public class NeuralNetwork {
             Layer layer = m_layers.get(layerNum);
             Layer prevLayer = m_layers.get(layerNum - 1);
 
-            for (int n = 0; n < layer.size() - 1; n++)
-            {
-                layer.get(n).updateInputWeights(prevLayer);
-            }
+            IntStream.range(0, layer.size() - 1).parallel().forEach(n -> layer.get(n).updateInputWeights(prevLayer));
         }
     }
 
