@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
+
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.setRandomWeights;
 
@@ -38,19 +40,24 @@ public class NeuralNetwork {
         assert(inputValues.size() == m_layers.get(0).size() - 1);
 
         // Assign (latch) the input values into the input neurons
-        for (int i = 0; i < inputValues.size(); i++)
+        IntStream.range(0, inputValues.size()).parallel().
+                forEach(i -> m_layers.get(0).get(i).setOutputValue(inputValues.get(i)));
+        /*for (int i = 0; i < inputValues.size(); i++)
         {
             m_layers.get(0).get(i).setOutputValue(inputValues.get(i));
-        }
+        }*/
 
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
             Layer prevLayer = m_layers.get(layerNum - 1);
-            for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
+            final int finalLayerNum = layerNum;
+            IntStream.range(0, m_layers.get(layerNum).size() - 1).parallel().
+                    forEach(n -> m_layers.get(finalLayerNum).get(n).feedForward(prevLayer));
+            /*for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
             {
                 m_layers.get(layerNum).get(n).feedForward(prevLayer);
-            }
+            }*/
         }
     }
     public void backProp(ArrayList<Float> targetValues)
