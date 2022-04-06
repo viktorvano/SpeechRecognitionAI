@@ -3,6 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 
@@ -115,7 +116,15 @@ public class TrainingThread extends Thread {
             currentTrainingLoss = neuralNetwork.getRecentAverageLoss();
             currentTrainingLossLabel = currentTrainingLoss;
             averageLoss = 0.99f* averageLoss + 0.01f*currentTrainingLoss;
-
+            if(averageLoss < velocity)
+                velocity = averageLoss;
+            if(averageLoss < momentum)
+                momentum = averageLoss;
+            if(trainingPass%16 == 0)
+            {
+                trainingChartSeries.get(0).getData().add(new XYChart.Data<>(trainingPass, currentTrainingLoss));
+                trainingChartSeries.get(1).getData().add(new XYChart.Data<>(trainingPass, averageLoss));
+            }
 
             // Report how well the training is working, averaged over recent samples:
             System.out.println("Net current sample loss: " + currentTrainingLoss);
