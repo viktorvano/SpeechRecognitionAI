@@ -122,8 +122,8 @@ public class TrainingThread extends Thread {
                 momentum = averageLoss;
             if(trainingPass%16 == 0)
             {
-                trainingChartSeries.get(0).getData().add(new XYChart.Data<>(trainingPass, currentTrainingLoss));
-                trainingChartSeries.get(1).getData().add(new XYChart.Data<>(trainingPass, averageLoss));
+                currentLossSeries.getData().add(new XYChart.Data<>(trainingPass, currentTrainingLoss));
+                averageLossSeries.getData().add(new XYChart.Data<>(trainingPass, averageLoss));
             }
 
             // Report how well the training is working, averaged over recent samples:

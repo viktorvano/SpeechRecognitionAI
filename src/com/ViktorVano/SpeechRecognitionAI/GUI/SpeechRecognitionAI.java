@@ -106,8 +106,6 @@ public class SpeechRecognitionAI extends Application {
         audioServerPort = loadIntegerFromFile("audioServerPort.dat", audioServerPort);
         token = loadStringFromFile("token.dat", token);
         useIpMic = loadBooleanFromFile("useIpMic.dat", useIpMic);
-        trainingChartSeries.add(new XYChart.Series<>());//current loss
-        trainingChartSeries.add(new XYChart.Series<>());//average loss
 
         final int width = 1200;
         final int height = 690;

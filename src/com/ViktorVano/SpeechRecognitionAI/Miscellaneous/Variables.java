@@ -35,7 +35,6 @@ public class Variables {
     public static int trainingLine = 0;// Has to be initialized 0
     public static ArrayList<Float> input, target, result;
     public static int trainingPass = 0;
-    public static ArrayList<XYChart.Series<Number, Number>> trainingChartSeries = new ArrayList<>();
     public static XYChart.Series<Number, Number> currentLossSeries, averageLossSeries;
 
     public static final int minWordLength = 6000, maxWordLength = 131072;//max length is binary (2^16)*2 (because of 16 bit)
