@@ -734,7 +734,9 @@ public class SpeechRecognitionAI extends Application {
 
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
+        xAxis.setForceZeroInRange(false);
         final NumberAxis yAxis = new NumberAxis();
+        yAxis.setForceZeroInRange(true);
         //creating the chart
         lineChartLoss = new LineChart<>(xAxis,yAxis);
 
