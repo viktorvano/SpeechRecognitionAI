@@ -59,7 +59,7 @@ public class SpeechRecognitionAI extends Application {
     private ObservableList<String> databaseItem, recordItem, trainingItem, topologyItem;
     private TextField txtDetectedWord, txtDatabaseWord, txtHiddenLayer;
     private int recordedWordIndex = -1, databaseWordIndex = -1, wordRoutingIndex = -1;
-    private LineChart<Number,Number> lineChart;
+    private LineChart<Number,Number> lineChartAudio, lineChartLoss;
     private Button buttonPlay, buttonRecord, buttonPlayDatabaseWord, buttonRemoveDatabaseWord;
     private Button buttonPlayWord, buttonRemoveWord, buttonAddWord;
     private Button buttonTrain, buttonStopTraining, buttonRemoveTopologyLayer, buttonAddHiddenLayer;
@@ -508,19 +508,19 @@ public class SpeechRecognitionAI extends Application {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         //creating the chart
-        lineChart = new LineChart<>(xAxis,yAxis);
+        lineChartAudio = new LineChart<>(xAxis,yAxis);
 
-        lineChart.setTitle("Audio Data");
+        lineChartAudio.setTitle("Audio Data");
         //defining a series
         displayedSeries = new XYChart.Series<>();
         displayedSeries.setName("Recorded Audio");
         detectedWordsSeries = new XYChart.Series<>();
         detectedWordsSeries.setName("Detected Words");
-        lineChart.setCreateSymbols(false);
+        lineChartAudio.setCreateSymbols(false);
         //populating the series with data
-        lineChart.getData().add(displayedSeries);
-        lineChart.getData().add(detectedWordsSeries);
-        lineChart.setAnimated(false);
+        lineChartAudio.getData().add(displayedSeries);
+        lineChartAudio.getData().add(detectedWordsSeries);
+        lineChartAudio.setAnimated(false);
 
         //Also sets displayMessageCounter to 0
         //How long it should keep the displayed message. X*0.25s
@@ -644,6 +644,8 @@ public class SpeechRecognitionAI extends Application {
             buttonRemoveTopologyLayer.setDisable(true);
             buttonAddHiddenLayer.setDisable(true);
             buttonStopTraining.setDisable(false);
+            stackPaneCenter.getChildren().remove(trainingList);
+            stackPaneCenter.getChildren().add(lineChartLoss);
         });
 
         buttonStopTraining = new Button("Stop");
@@ -729,6 +731,26 @@ public class SpeechRecognitionAI extends Application {
         labelTopology.setFont(Font.font("Arial", 14));
         countWords();
         calculateTopology();
+
+        //defining the axes
+        final NumberAxis xAxis = new NumberAxis();
+        xAxis.setForceZeroInRange(false);
+        final NumberAxis yAxis = new NumberAxis();
+        yAxis.setForceZeroInRange(true);
+        //creating the chart
+        lineChartLoss = new LineChart<>(xAxis,yAxis);
+
+        lineChartLoss.setTitle("Training Loss");
+        //defining a series
+        currentLossSeries = new XYChart.Series<>();
+        currentLossSeries.setName("Current Loss");
+        averageLossSeries = new XYChart.Series<>();
+        averageLossSeries.setName("Average Loss");
+        lineChartLoss.setCreateSymbols(false);
+        //populating the series with data
+        lineChartLoss.getData().add(currentLossSeries);
+        lineChartLoss.getData().add(averageLossSeries);
+        lineChartLoss.setAnimated(false);
     }
 
     private void initializeRecognitionLayout()
@@ -891,7 +913,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonPlayWord);
         hBoxBottom.getChildren().add(buttonRemoveWord);
         hBoxBottom.getChildren().add(buttonAddWord);
-        stackPaneCenter.getChildren().add(lineChart);
+        stackPaneCenter.getChildren().add(lineChartAudio);
         displayedLayout = 0;
         System.out.println("Data Layout displayed.");
     }
@@ -909,7 +931,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(buttonPlayWord);
         hBoxBottom.getChildren().remove(buttonRemoveWord);
         hBoxBottom.getChildren().remove(buttonAddWord);
-        stackPaneCenter.getChildren().remove(lineChart);
+        stackPaneCenter.getChildren().remove(lineChartAudio);
     }
 
     private void displayTrainingLayout()
@@ -950,7 +972,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void displayRecognitionLayout()
     {
-        stackPaneCenter.getChildren().add(lineChart);
+        stackPaneCenter.getChildren().add(lineChartAudio);
         hBoxBottom.getChildren().add(speechRecognitionStatus);
         hBoxBottom.getChildren().add(speechRecognitionOutput);
         displayedLayout = 2;
@@ -959,7 +981,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void hideRecognitionLayout()
     {
-        stackPaneCenter.getChildren().remove(lineChart);
+        stackPaneCenter.getChildren().remove(lineChartAudio);
         hBoxBottom.getChildren().remove(speechRecognitionStatus);
         hBoxBottom.getChildren().remove(speechRecognitionOutput);
     }

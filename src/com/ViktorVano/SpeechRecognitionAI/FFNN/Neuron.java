@@ -55,11 +55,11 @@ public class Neuron {
 
             float newDeltaWeight =
                     // Individual input, magnified by the gradient and train rate:
-                    eta // 0.0==slowlearner; 0.2==medium learner; 1.0==reckless learner
+                    velocity // 0.0==slowlearner; 0.2==medium learner; 1.0==reckless learner
                             * neuron.getOutputValue()
                             * m_gradient
                             // Also add momentum = a fraction of the previous delta weight
-                            + alpha // 0.0==no momentum; 0.5==moderate momentum
+                            + momentum // 0.0==no momentum; 0.5==moderate momentum
                             * oldDeltaWeight;
             neuron.m_outputWeights.get(m_myIndex).deltaWeight = newDeltaWeight;
             neuron.m_outputWeights.get(m_myIndex).weight += newDeltaWeight;
@@ -102,9 +102,6 @@ public class Neuron {
             neuronIndex++;
         }
     }
-
-    private static final float eta = velocity; // [0.0..1.0] overall network training rate
-    private static final float alpha = momentum; // [0.0..n] multiplier of last weight change (momentum)
 
     private float sumDOW(Layer nextLayer)
     {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20220330;
+    public static int versionNumber = 20220409;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -35,6 +35,7 @@ public class Variables {
     public static int trainingLine = 0;// Has to be initialized 0
     public static ArrayList<Float> input, target, result;
     public static int trainingPass = 0;
+    public static XYChart.Series<Number, Number> currentLossSeries, averageLossSeries;
 
     public static final int minWordLength = 6000, maxWordLength = 131072;//max length is binary (2^16)*2 (because of 16 bit)
     public static final int minimumLayerSize = 10;
