@@ -30,10 +30,10 @@
 Vocabulary
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Train%20AI%20Layout%20Vocabulary.png?raw=true)  
   
-New Training
+New Training (learning from scratch)
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Train%20AI%20Layout%20New%20Training.png?raw=true)  
 
-Transfer Learning
+Transfer Learning (learning continuation)
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Train%20AI%20Layout%20Transfer%20Learning.png?raw=true)  
   
 ###### Speech Recognition
