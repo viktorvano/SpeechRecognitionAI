@@ -28,7 +28,7 @@
   
 ###### Train AI
 Vocabulary
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Train%20AI%20Layout%20Wocabulary.png?raw=true)  
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Train%20AI%20Layout%20Vocabulary.png?raw=true)  
   
 New Training
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Train%20AI%20Layout%20New%20Training.png?raw=true)  
