@@ -18,7 +18,6 @@
 ### TODO List  
 - Weights Ironing: Set weight to zero of the first hidden layer of those connections which training has not altered.  
 - Extenf FFT to full FFT with Real and Imaginary values (now there is only an FFT magnitude Real x Imag)  
-- parallelStream.forchEach() for each neuron in a layer feedforward and backproapgation (layers must propagate in a sequence)  
   
   
 ## Application Screenshots
