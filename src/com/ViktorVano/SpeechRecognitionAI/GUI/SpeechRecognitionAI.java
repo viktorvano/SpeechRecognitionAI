@@ -76,7 +76,7 @@ public class SpeechRecognitionAI extends Application {
     private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonAdvancedSettings;
+    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses;
     private AudioServer audioServer;
 
     public static void main(String[] args)
@@ -898,6 +898,16 @@ public class SpeechRecognitionAI extends Application {
         buttonAdvancedSettings.setOnAction(event -> {
             new AdvancedSettingsMenu(stageReference);
         });
+
+        buttonWordCommands = new Button("Word Commands");
+        buttonWordCommands.setOnAction(event -> {
+            new WordCommandSettings(stageReference);
+        });
+
+        buttonWordResponses = new Button("Word Responses");
+        buttonWordResponses.setOnAction(event -> {
+            new WordResponseSettings(stageReference);
+        });
     }
 
     private void displayDataLayout()
@@ -1001,6 +1011,8 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(buttonUpdateWordRouting);
         hBoxBottom.getChildren().add(buttonRemoveWordRouting);
         hBoxBottom.getChildren().add(buttonAdvancedSettings);
+        hBoxBottom.getChildren().add(buttonWordCommands);
+        hBoxBottom.getChildren().add(buttonWordResponses);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -1020,6 +1032,8 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(buttonUpdateWordRouting);
         hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
         hBoxBottom.getChildren().remove(buttonAdvancedSettings);
+        hBoxBottom.getChildren().remove(buttonWordCommands);
+        hBoxBottom.getChildren().remove(buttonWordResponses);
     }
 
     private void displayLayout(int layoutIndex)
