@@ -38,6 +38,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.loadWordResponses;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
 
@@ -78,6 +79,9 @@ public class SpeechRecognitionAI extends Application {
     private TrainingThread trainingThread;
     private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses;
     private AudioServer audioServer;
+
+    private ObservableList<WordResponse> wordResponsesDatabase;
+    private ListView<String> wordResponsesList;
 
     public static void main(String[] args)
     {
@@ -906,8 +910,11 @@ public class SpeechRecognitionAI extends Application {
 
         buttonWordResponses = new Button("Word Responses");
         buttonWordResponses.setOnAction(event -> {
-            new WordResponseSettings(stageReference);
+            new WordResponseSettings(stageReference, wordResponsesDatabase, wordResponsesList);
         });
+
+        wordResponsesDatabase = loadWordResponses();
+        wordResponsesList = new ListView<>();
     }
 
     private void displayDataLayout()

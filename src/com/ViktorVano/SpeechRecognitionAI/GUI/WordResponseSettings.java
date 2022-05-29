@@ -30,7 +30,7 @@ public class WordResponseSettings {
     private final TextField txtNewWord;
     private TextField txtNewResponse;
 
-    public WordResponseSettings(Stage stageReference)
+    public WordResponseSettings(Stage stageReference, ObservableList<WordResponse> wordResponsesDatabase, ListView<String> wordResponsesList)
     {
         final int dialogWidth = 700;
         final int dialogHeight = 620;
@@ -40,8 +40,6 @@ public class WordResponseSettings {
         dialog.initOwner(stageReference);
         BorderPane borderPane = new BorderPane();
 
-        ObservableList<WordResponse> wordResponsesDatabase = loadWordResponses();
-        ListView<String> wordResponsesList = new ListView<>();
         ObservableList<String> wordResponseItem = FXCollections.observableArrayList();
         for (WordResponse wordResponse : wordResponsesDatabase)
             wordResponseItem.add(wordResponse.word + "\t\t-->\t\t" + wordResponse.response);
