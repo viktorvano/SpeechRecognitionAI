@@ -560,6 +560,7 @@ public class SpeechRecognitionAI extends Application {
                         displayMessageCounter++;
                     else {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
