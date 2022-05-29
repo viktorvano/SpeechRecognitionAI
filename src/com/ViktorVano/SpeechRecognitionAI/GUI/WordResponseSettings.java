@@ -44,14 +44,14 @@ public class WordResponseSettings {
         ListView<String> wordResponsesList = new ListView<>();
         ObservableList<String> wordResponseItem = FXCollections.observableArrayList();
         for (WordResponse wordResponse : wordResponsesDatabase)
-            wordResponseItem.add(wordResponse.word + "\t\t-->\t" + wordResponse.response);
+            wordResponseItem.add(wordResponse.word + "\t\t-->\t\t" + wordResponse.response);
         wordResponsesList.setItems(wordResponseItem);
         wordResponsesList.setOnMouseClicked(event -> {
             if(wordResponsesList.getSelectionModel().getSelectedIndex() != -1)
             {
                 wordResponseIndex = wordResponsesList.getSelectionModel().getSelectedIndex();
                 buttonRemoveWordResponse.setDisable(false);
-                String[] strings = wordResponsesList.getItems().get(wordResponseIndex).split("\t\t-->\t");
+                String[] strings = wordResponsesList.getItems().get(wordResponseIndex).split("\t\t-->\t\t");
                 txtEditWord.setText(strings[0]);
                 txtEditResponse.setText(strings[1]);
             }else
@@ -107,7 +107,7 @@ public class WordResponseSettings {
             tempWordResponse.response = txtNewResponse.getText();
             txtNewWord.setText("");
             txtNewResponse.setText("");
-            String tempString =  tempWordResponse.word + "\t\t-->\t" +
+            String tempString =  tempWordResponse.word + "\t\t-->\t\t" +
                     tempWordResponse.response;
             wordResponsesList.getItems().add(tempString);
             wordResponsesDatabase.add(wordResponsesDatabase.size(), tempWordResponse);
@@ -140,7 +140,7 @@ public class WordResponseSettings {
             tempWordResponse.response = txtEditResponse.getText();
             txtEditWord.setText("");
             txtEditResponse.setText("");
-            String tempString =  tempWordResponse.word + "\t\t-->\t" +
+            String tempString =  tempWordResponse.word + "\t\t-->\t\t" +
                     tempWordResponse.response;
             wordResponsesList.getItems().set(wordResponseIndex, tempString);
             wordResponsesDatabase.set(wordResponseIndex, tempWordResponse);
