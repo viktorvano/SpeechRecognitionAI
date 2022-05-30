@@ -36,7 +36,7 @@ public class WordCommandSettings {
 
     public WordCommandSettings(Stage stageReference, ObservableList<WordCommand> wordCommandsDatabase, ListView<String> wordCommandsList)
     {
-        final int dialogWidth = 700;
+        final int dialogWidth = 1200;
         final int dialogHeight = 620;
         final Stage dialog = new Stage();
         dialog.setTitle("Word Commands");
