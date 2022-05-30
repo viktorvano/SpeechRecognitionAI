@@ -115,7 +115,7 @@ public class WordCommandSettings {
                         txtNewPort.getText().length() == 0));
 
         txtNewAddress = new TextField();
-        txtNewAddress.setPromptText("Address");
+        txtNewAddress.setPromptText("IP Address/URL");
         txtNewAddress.textProperty().addListener((observable, oldValue, newValue) ->
                 buttonAddWordCommand.setDisable(txtNewWord.getText().length() == 0 ||
                         txtNewCommand.getText().length() == 0 ||
@@ -183,7 +183,7 @@ public class WordCommandSettings {
                         wordCommandIndex == -1));
 
         txtEditPort = new TextField();
-        txtEditPort.setPromptText("Command");
+        txtEditPort.setPromptText("Port");
         txtEditPort.textProperty().addListener((observable, oldValue, newValue) ->
                 buttonUpdateWordCommand.setDisable(txtEditWord.getText().length() == 0 ||
                         txtEditCommand.getText().length() == 0 ||
