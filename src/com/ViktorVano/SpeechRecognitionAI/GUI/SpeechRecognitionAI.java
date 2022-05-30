@@ -908,7 +908,7 @@ public class SpeechRecognitionAI extends Application {
 
         buttonWordCommands = new Button("Word Commands");
         buttonWordCommands.setOnAction(event -> {
-            new WordCommandSettings(stageReference);
+            new WordCommandSettings(stageReference, wordCommandsDatabase, wordCommandsList);
         });
 
         buttonWordResponses = new Button("Word Responses");
