@@ -26,9 +26,13 @@ public class WordCommandSettings {
     private Button buttonAddWordCommand;
     private TextField txtEditWord;
     private TextField txtEditCommand;
+    private TextField txtEditAddress;
+    private TextField txtEditPort;
 
     private final TextField txtNewWord;
     private TextField txtNewCommand;
+    private TextField txtNewAddress;
+    private TextField txtNewPort;
 
     public WordCommandSettings(Stage stageReference, ObservableList<WordCommand> wordCommandsDatabase, ListView<String> wordCommandsList)
     {
@@ -89,13 +93,33 @@ public class WordCommandSettings {
         txtNewWord.setPromptText("Word/Phrase");
         txtNewWord.textProperty().addListener((observable, oldValue, newValue) ->
                 buttonAddWordCommand.setDisable(txtNewWord.getText().length() == 0 ||
-                        txtNewCommand.getText().length() == 0));
+                        txtNewCommand.getText().length() == 0 ||
+                        txtNewAddress.getText().length() == 0 ||
+                        txtNewPort.getText().length() == 0));
 
         txtNewCommand = new TextField();
         txtNewCommand.setPromptText("Command");
         txtNewCommand.textProperty().addListener((observable, oldValue, newValue) ->
                 buttonAddWordCommand.setDisable(txtNewWord.getText().length() == 0 ||
-                        txtNewCommand.getText().length() == 0));
+                        txtNewCommand.getText().length() == 0 ||
+                        txtNewAddress.getText().length() == 0 ||
+                        txtNewPort.getText().length() == 0));
+
+        txtNewAddress = new TextField();
+        txtNewAddress.setPromptText("Address");
+        txtNewAddress.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonAddWordCommand.setDisable(txtNewWord.getText().length() == 0 ||
+                        txtNewCommand.getText().length() == 0 ||
+                        txtNewAddress.getText().length() == 0 ||
+                        txtNewPort.getText().length() == 0));
+
+        txtNewPort = new TextField();
+        txtNewPort.setPromptText("Port");
+        txtNewPort.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonAddWordCommand.setDisable(txtNewWord.getText().length() == 0 ||
+                        txtNewCommand.getText().length() == 0 ||
+                        txtNewAddress.getText().length() == 0 ||
+                        txtNewPort.getText().length() == 0));
 
         buttonAddWordCommand = new Button("Add Word Command");
         buttonAddWordCommand.setDisable(true);
@@ -121,6 +145,8 @@ public class WordCommandSettings {
         txtEditWord.textProperty().addListener((observable, oldValue, newValue) ->
                 buttonUpdateWordCommand.setDisable(txtEditWord.getText().length() == 0 ||
                         txtEditCommand.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 ||
+                        txtEditPort.getText().length() == 0 ||
                         wordCommandIndex == -1));
 
         txtEditCommand = new TextField();
@@ -128,6 +154,26 @@ public class WordCommandSettings {
         txtEditCommand.textProperty().addListener((observable, oldValue, newValue) ->
                 buttonUpdateWordCommand.setDisable(txtEditWord.getText().length() == 0 ||
                         txtEditCommand.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 ||
+                        txtEditPort.getText().length() == 0 ||
+                        wordCommandIndex == -1));
+
+        txtEditAddress = new TextField();
+        txtEditAddress.setPromptText("IP Address/URL");
+        txtEditAddress.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonUpdateWordCommand.setDisable(txtEditWord.getText().length() == 0 ||
+                        txtEditCommand.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 ||
+                        txtEditPort.getText().length() == 0 ||
+                        wordCommandIndex == -1));
+
+        txtEditPort = new TextField();
+        txtEditPort.setPromptText("Command");
+        txtEditPort.textProperty().addListener((observable, oldValue, newValue) ->
+                buttonUpdateWordCommand.setDisable(txtEditWord.getText().length() == 0 ||
+                        txtEditCommand.getText().length() == 0 ||
+                        txtEditAddress.getText().length() == 0 ||
+                        txtEditPort.getText().length() == 0 ||
                         wordCommandIndex == -1));
 
         buttonUpdateWordCommand = new Button("Update Word Command");
