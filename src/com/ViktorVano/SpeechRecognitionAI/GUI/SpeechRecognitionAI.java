@@ -160,7 +160,12 @@ public class SpeechRecognitionAI extends Application {
         initializeRecognitionLayout();
         initializeSettingsLayout();
 
-        audioServer = new AudioServer(this, audioCapture, neuralNetworkThread, audioServerPort);
+        audioServer = new AudioServer(
+                this,
+                wordResponsesDatabase,
+                audioCapture,
+                neuralNetworkThread,
+                audioServerPort);
         audioServer.start();
 
         Scene scene = new Scene(borderPane, width, height);
