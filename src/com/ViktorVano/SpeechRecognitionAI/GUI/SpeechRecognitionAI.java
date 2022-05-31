@@ -38,6 +38,8 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommandsFile.loadWordCommands;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.loadWordResponses;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
 
@@ -76,8 +78,12 @@ public class SpeechRecognitionAI extends Application {
     private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonAdvancedSettings;
+    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses;
     private AudioServer audioServer;
+    private ObservableList<WordResponse> wordResponsesDatabase;
+    private ListView<String> wordResponsesList;
+    private ObservableList<WordCommand> wordCommandsDatabase;
+    private ListView<String> wordCommandsList;
 
     public static void main(String[] args)
     {
@@ -154,7 +160,12 @@ public class SpeechRecognitionAI extends Application {
         initializeRecognitionLayout();
         initializeSettingsLayout();
 
-        audioServer = new AudioServer(this, audioCapture, neuralNetworkThread, audioServerPort);
+        audioServer = new AudioServer(
+                this,
+                wordResponsesDatabase,
+                audioCapture,
+                neuralNetworkThread,
+                audioServerPort);
         audioServer.start();
 
         Scene scene = new Scene(borderPane, width, height);
@@ -554,6 +565,7 @@ public class SpeechRecognitionAI extends Application {
                         displayMessageCounter++;
                     else {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -898,6 +910,22 @@ public class SpeechRecognitionAI extends Application {
         buttonAdvancedSettings.setOnAction(event -> {
             new AdvancedSettingsMenu(stageReference);
         });
+
+        buttonWordCommands = new Button("Word Commands");
+        buttonWordCommands.setOnAction(event -> {
+            new WordCommandSettings(stageReference, wordCommandsDatabase, wordCommandsList);
+        });
+
+        buttonWordResponses = new Button("Word Responses");
+        buttonWordResponses.setOnAction(event -> {
+            new WordResponseSettings(stageReference, wordResponsesDatabase, wordResponsesList);
+        });
+
+        wordResponsesDatabase = loadWordResponses();
+        wordResponsesList = new ListView<>();
+
+        wordCommandsDatabase = loadWordCommands();
+        wordCommandsList = new ListView<>();
     }
 
     private void displayDataLayout()
@@ -1001,6 +1029,8 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(buttonUpdateWordRouting);
         hBoxBottom.getChildren().add(buttonRemoveWordRouting);
         hBoxBottom.getChildren().add(buttonAdvancedSettings);
+        hBoxBottom.getChildren().add(buttonWordCommands);
+        hBoxBottom.getChildren().add(buttonWordResponses);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -1020,6 +1050,8 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(buttonUpdateWordRouting);
         hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
         hBoxBottom.getChildren().remove(buttonAdvancedSettings);
+        hBoxBottom.getChildren().remove(buttonWordCommands);
+        hBoxBottom.getChildren().remove(buttonWordResponses);
     }
 
     private void displayLayout(int layoutIndex)

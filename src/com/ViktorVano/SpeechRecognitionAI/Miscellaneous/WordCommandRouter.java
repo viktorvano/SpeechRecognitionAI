@@ -7,37 +7,37 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class WordRouter extends Thread{
+public class WordCommandRouter extends Thread {
     private String message;
-    private ObservableList<WordRouting> wordRoutingList;
+    private ObservableList<WordCommand> wordCommandsList;
 
-    public WordRouter(ObservableList<WordRouting> wordRoutingDatabase, String recognizedMessage)
+    public WordCommandRouter(ObservableList<WordCommand> wordCommandsDatabase, String recognizedMessage)
     {
         this.message = recognizedMessage;
-        this.wordRoutingList = wordRoutingDatabase;
+        this.wordCommandsList = wordCommandsDatabase;
         this.start();
     }
 
     @Override
     public void run() {
         super.run();
-        for(int i=0; i<wordRoutingList.size(); i++)
+        for(int i = 0; i< wordCommandsList.size(); i++)
         {
-            if(message.contains(wordRoutingList.get(i).word))
+            if(message.contains(wordCommandsList.get(i).word))
             {
                 try {
-                    sendDataToServer(wordRoutingList.get(i).address, Integer.parseInt(wordRoutingList.get(i).port));
+                    sendDataToServer(wordCommandsList.get(i).command, wordCommandsList.get(i).address, Integer.parseInt(wordCommandsList.get(i).port));
                 }catch (Exception e)
                 {
                     e.printStackTrace();
-                    System.out.println("Invalid socket!!!\nIP: " + wordRoutingList.get(i).address +
-                            "\nPort: " + wordRoutingList.get(i).port);
+                    System.out.println("Invalid socket!!!\nIP: " + wordCommandsList.get(i).address +
+                            "\nPort: " + wordCommandsList.get(i).port);
                 }
             }
         }
     }
 
-    private void sendDataToServer(String address, int port)
+    private void sendDataToServer(String command, String address, int port)
     {
         try
         {
@@ -55,7 +55,7 @@ public class WordRouter extends Thread{
             System.out.println("Sending string to the ServerSocket: " + address + " : " + port);
 
             // write the message we want to send
-            dataOutputStream.writeUTF(message);
+            dataOutputStream.writeUTF(command);
             dataOutputStream.flush(); // send the message
             dataOutputStream.close(); // close the output stream when we're done.
 

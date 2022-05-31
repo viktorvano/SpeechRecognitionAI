@@ -2,7 +2,9 @@ package com.ViktorVano.SpeechRecognitionAI.Audio;
 
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI;
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponse;
 import com.sun.istack.internal.NotNull;
+import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -17,6 +19,7 @@ public class AudioServer extends Thread{
     private AudioCapture audioCapture;
     private SpeechRecognitionAI speechRecognitionAI;
     private NeuralNetworkThread neuralNetworkThread;
+    private ObservableList<WordResponse> wordResponsesDatabase;
 
     //initialize socket and input stream
     private Socket		 socket = null;
@@ -25,6 +28,7 @@ public class AudioServer extends Thread{
     private DataOutputStream out = null;
 
     public AudioServer(@NotNull SpeechRecognitionAI speechRecognitionAI,
+                       @NotNull ObservableList<WordResponse> wordResponsesDatabase,
                        @NotNull AudioCapture audioCapture,
                        @NotNull NeuralNetworkThread neuralNetworkThread,
                        int port){
@@ -32,6 +36,7 @@ public class AudioServer extends Thread{
         this.audioCapture = audioCapture;
         this.speechRecognitionAI = speechRecognitionAI;
         this.neuralNetworkThread = neuralNetworkThread;
+        this.wordResponsesDatabase = wordResponsesDatabase;
     }
 
     public void stopServer()
@@ -132,8 +137,27 @@ public class AudioServer extends Thread{
                                 }
                             }
                             String message = neuralNetworkThread.getRecognizedMessage();
-                            System.out.println("Sending message: " + message);
-                            out.writeUTF(neuralNetworkThread.getRecognizedMessage());
+                            String response = "";
+                            for (WordResponse wordResponse : wordResponsesDatabase)
+                            {
+                                if(message.contains(wordResponse.word))
+                                {
+                                    if(response.length() == 0)
+                                        response += wordResponse.response;
+                                    else
+                                        response += " " + wordResponse.response;
+                                }
+                            }
+                            String outputMessage;
+                            if(response.length() == 0)
+                                outputMessage = message;
+                            else
+                                outputMessage = response;
+
+                            if(outputMessage.length() == 0)
+                                outputMessage = "No words were recognized.";
+                            System.out.println("Sending Response: " + outputMessage);
+                            out.writeUTF(outputMessage);
                             out.flush();
                         }
                         else
