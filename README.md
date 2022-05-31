@@ -45,6 +45,12 @@ Transfer Learning (learning continuation)
 ###### Advanced Settings
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Advanced%20Settings.png?raw=true)  
   
+###### Word Commands
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/WordCommands.png?raw=true)  
+  
+###### Word Responses
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/WordResponses.png?raw=true)  
+  
 ###### Weights Quicksave Feature
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Weights%20Quicksave%20Feature.png?raw=true) 
   
