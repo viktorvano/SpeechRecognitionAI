@@ -1027,7 +1027,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(txtEditAddress);
         vBoxRight.getChildren().add(txtEditPort);
         vBoxRight.getChildren().add(buttonUpdateWordRouting);
-        hBoxBottom.getChildren().add(buttonRemoveWordRouting);
+        vBoxRight.getChildren().add(buttonRemoveWordRouting);
         hBoxBottom.getChildren().add(buttonAdvancedSettings);
         hBoxBottom.getChildren().add(buttonWordCommands);
         hBoxBottom.getChildren().add(buttonWordResponses);
@@ -1048,7 +1048,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(txtEditAddress);
         vBoxRight.getChildren().remove(txtEditPort);
         vBoxRight.getChildren().remove(buttonUpdateWordRouting);
-        hBoxBottom.getChildren().remove(buttonRemoveWordRouting);
+        vBoxRight.getChildren().remove(buttonRemoveWordRouting);
         hBoxBottom.getChildren().remove(buttonAdvancedSettings);
         hBoxBottom.getChildren().remove(buttonWordCommands);
         hBoxBottom.getChildren().remove(buttonWordResponses);
