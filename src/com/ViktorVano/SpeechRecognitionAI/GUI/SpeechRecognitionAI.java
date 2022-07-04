@@ -49,7 +49,7 @@ public class SpeechRecognitionAI extends Application {
     private RecordedAudio recordedAudio;
     private XYChart.Series<Number, Number> displayedSeries, detectedWordsSeries;
     private Timeline timelineTrainingLabelUpdate, timelineDisplayNeuralChart;
-    private boolean updateData = true, sameWordCount = false;
+    private boolean updateData = true, goodWordCount = false;
     private final BorderPane borderPane = new BorderPane();
     private final StackPane stackPaneCenter = new StackPane();
     private final VBox vBoxRight = new VBox();
@@ -967,7 +967,7 @@ public class SpeechRecognitionAI extends Application {
         countWords();
         calculateTopology();
         stackPaneCenter.getChildren().add(trainingList);
-        buttonTrain.setDisable(!sameWordCount || topology.size() < 3);
+        buttonTrain.setDisable(!goodWordCount || topology.size() < 3);
         hBoxBottom.getChildren().add(buttonTrain);
         buttonStopTraining.setDisable(true);
         hBoxBottom.getChildren().add(buttonStopTraining);
@@ -1099,17 +1099,17 @@ public class SpeechRecognitionAI extends Application {
         }
 
         int maximum = -1;
-        sameWordCount = true;
+        goodWordCount = true;
         for (Classifier value : classifier)
             if (value.getCount() > maximum)
                 maximum = value.getCount();
         trainingItem.clear();
         for (Classifier value : classifier) {
-            if (value.getCount() == maximum)
+            if (value.getCount() == maximum && value.getCount()%2 == 0)
                 trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tOK");
             else {
                 trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tMore specimens required!");
-                sameWordCount = false;
+                goodWordCount = false;
             }
         }
     }
@@ -1136,7 +1136,7 @@ public class SpeechRecognitionAI extends Application {
                 text += topology.get(i);
             }
             labelTopology.setText(text);
-            buttonTrain.setDisable(!sameWordCount);
+            buttonTrain.setDisable(!goodWordCount);
         } else
         {
             labelTopology.setText("\n Topology:\n   Add more layers!");
