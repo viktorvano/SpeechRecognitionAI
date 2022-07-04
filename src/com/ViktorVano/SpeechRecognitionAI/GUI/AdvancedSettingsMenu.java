@@ -21,7 +21,7 @@ public class AdvancedSettingsMenu {
     public AdvancedSettingsMenu(Stage stageReference)
     {
         final int dialogWidth = 700;
-        final int dialogHeight = 620;
+        final int dialogHeight = 640;
         final Stage dialog = new Stage();
         dialog.setTitle("Advanced Settings");
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -299,10 +299,15 @@ public class AdvancedSettingsMenu {
         });
         dialogPane.getChildren().add(textFieldToken);
 
-        Label labelPort = new Label("Audio Server Port\n(restart required)");
-        labelPort.setLayoutX(30);
-        labelPort.setLayoutY(560);
-        dialogPane.getChildren().add(labelPort);
+        Label labelMicPort = new Label("Audio Server Port\n(restart required)");
+        labelMicPort.setLayoutX(30);
+        labelMicPort.setLayoutY(560);
+        dialogPane.getChildren().add(labelMicPort);
+
+        Label labelTextPort = new Label("Text Server Port       " + (audioServerPort+1));
+        labelTextPort.setLayoutX(30);
+        labelTextPort.setLayoutY(595);
+        dialogPane.getChildren().add(labelTextPort);
 
         TextField textFieldPort = new TextField();
         textFieldPort.setPromptText(Integer.toString(audioServerPort));
@@ -318,6 +323,7 @@ public class AdvancedSettingsMenu {
                     {
                         saveIntegerToFile("audioServerPort.dat", value);
                         audioServerPort = value;
+                        labelTextPort.setText("Text Server Port       " + (audioServerPort+1));
                     }else
                         textFieldPort.setText("");
                 }catch (Exception e)
