@@ -16,11 +16,10 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.useIpMi
 public class TextServer extends Thread{
     private int port;
     private boolean run = true;
-    private byte buffer[] = new byte[1000000];
-    private AudioCapture audioCapture;
-    private SpeechRecognitionAI speechRecognitionAI;
-    private NeuralNetworkThread neuralNetworkThread;
+    private String message = "";
     private ObservableList<WordResponse> wordResponsesDatabase;
+    private ObservableList<WordRouting> wordRoutingDatabase;
+    private ObservableList<WordCommand> wordCommandsDatabase;
 
     //initialize socket and input stream
     private Socket socket = null;
@@ -28,16 +27,14 @@ public class TextServer extends Thread{
     private DataInputStream in  = null;
     private DataOutputStream out = null;
 
-    public TextServer(@NotNull SpeechRecognitionAI speechRecognitionAI,
-                       @NotNull ObservableList<WordResponse> wordResponsesDatabase,
-                       @NotNull AudioCapture audioCapture,
-                       @NotNull NeuralNetworkThread neuralNetworkThread,
+    public TextServer(@NotNull ObservableList<WordRouting> wordRoutingDatabase,
+                       @NotNull ObservableList<WordCommand> wordCommandsDatabase,
+                      @NotNull ObservableList<WordResponse> wordResponsesDatabase,
                        int port){
-        this.port = port;
-        this.audioCapture = audioCapture;
-        this.speechRecognitionAI = speechRecognitionAI;
-        this.neuralNetworkThread = neuralNetworkThread;
+        this.wordRoutingDatabase = wordRoutingDatabase;
+        this.wordCommandsDatabase = wordCommandsDatabase;
         this.wordResponsesDatabase = wordResponsesDatabase;
+        this.port = port;
     }
 
     public void stopServer()
@@ -97,89 +94,51 @@ public class TextServer extends Thread{
 
                 out = new DataOutputStream(socket.getOutputStream());
 
-                int length = 0;
                 String receivedToken = "";
                 try
                 {
                     try
                     {
                         receivedToken = in.readUTF();
-                        length = in.readInt();
-                        System.out.println("Got the Size: " + length);
-                        int bytesRead ;
-                        int len = 0;
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        while (len<length)
-                        {
-                            bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, length-len));
-                            len = len + bytesRead;
-                            byteArrayOutputStream.write(buffer, 0, bytesRead);
-                        }
-                        buffer = byteArrayOutputStream.toByteArray();
+                        this.message = in.readUTF();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    if(buffer.length == length && useIpMic)
+                    if(receivedToken.equals(token))
                     {
-                        if(receivedToken.equals(token))
+                        System.out.println("Got the message: " + this.message);
+                        new WordRouter(this.wordRoutingDatabase, this.message);
+                        new WordCommandRouter(this.wordCommandsDatabase, this.message);
+                        String response = "";
+                        for (WordResponse wordResponse : wordResponsesDatabase)
                         {
-                            System.out.println("Recording received: " + buffer.length);
-                            speechRecognitionAI.captureAudio();
-                            audioCapture.setRecordedAudioBuffer(buffer, length);
-                            while (audioCapture.isAudioRecorded())
+                            if(message.contains(wordResponse.word))
                             {
-                                try
-                                {
-                                    Thread.sleep(100);
-                                }catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
+                                if(response.length() == 0)
+                                    response += wordResponse.response;
+                                else
+                                    response += " " + wordResponse.response;
                             }
-                            String message = neuralNetworkThread.getRecognizedMessage();
-                            String response = "";
-                            for (WordResponse wordResponse : wordResponsesDatabase)
-                            {
-                                if(message.contains(wordResponse.word))
-                                {
-                                    if(response.length() == 0)
-                                        response += wordResponse.response;
-                                    else
-                                        response += " " + wordResponse.response;
-                                }
-                            }
-                            String outputMessage;
-                            if(response.length() == 0)
-                                outputMessage = message;
-                            else
-                                outputMessage = response;
-
-                            if(outputMessage.length() == 0)
-                                outputMessage = "No words were recognized.";
-                            System.out.println("Sending Response: " + outputMessage);
-                            out.writeUTF(outputMessage);
-                            out.flush();
                         }
+                        String outputMessage;
+                        if(response.length() == 0)
+                            outputMessage = message;
                         else
-                        {
-                            System.out.println("Invalid TOKEN.");
-                            out.writeUTF("Invalid TOKEN.");
-                            out.flush();
-                        }
-                    }else
+                            outputMessage = response;
+
+                        if(outputMessage.length() == 0)
+                            outputMessage = "No words were recognized.";
+
+                        System.out.println("Sending Response: " + outputMessage);
+                        out.writeUTF(outputMessage);
+                        out.flush();
+                    }
+                    else
                     {
-                        if(buffer.length != length)
-                        {
-                            System.out.println("Error receiving a recording...");
-                            out.writeUTF("Error receiving a recording...");
-                            out.flush();
-                        }else if(!useIpMic)
-                        {
-                            System.out.println("Using Hardware Mic.");
-                            out.writeUTF("Using Hardware Mic.");
-                            out.flush();
-                        }
+                        System.out.println("Invalid TOKEN.");
+                        out.writeUTF("Invalid TOKEN.");
+                        out.flush();
                     }
                 }
                 catch(Exception e)

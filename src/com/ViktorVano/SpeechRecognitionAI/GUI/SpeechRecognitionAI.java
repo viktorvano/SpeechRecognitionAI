@@ -170,10 +170,9 @@ public class SpeechRecognitionAI extends Application {
         audioServer.start();
 
         textServer = new TextServer(
-                this,
-                wordResponsesDatabase,
-                audioCapture,
-                neuralNetworkThread,
+                this.wordRoutingDatabase,
+                this.wordCommandsDatabase,
+                this.wordResponsesDatabase,
                 audioServerPort+1);
         textServer.start();
 
