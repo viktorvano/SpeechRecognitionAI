@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.stream.IntStream;
 
 public class WordRouter extends Thread{
     private String message;
@@ -20,21 +21,20 @@ public class WordRouter extends Thread{
 
     @Override
     public void run() {
-        super.run();
-        for(int i=0; i<wordRoutingList.size(); i++)
-        {
-            if(message.contains(wordRoutingList.get(i).word))
-            {
-                try {
-                    sendDataToServer(wordRoutingList.get(i).address, Integer.parseInt(wordRoutingList.get(i).port));
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                    System.out.println("Invalid socket!!!\nIP: " + wordRoutingList.get(i).address +
-                            "\nPort: " + wordRoutingList.get(i).port);
-                }
-            }
-        }
+        IntStream.range(0, wordRoutingList.size()).parallel().
+                forEach(i -> {
+                    if(message.contains(wordRoutingList.get(i).word))
+                    {
+                        try {
+                            sendDataToServer(wordRoutingList.get(i).address, Integer.parseInt(wordRoutingList.get(i).port));
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                            System.out.println("Invalid socket!!!\nIP: " + wordRoutingList.get(i).address +
+                                    "\nPort: " + wordRoutingList.get(i).port);
+                        }
+                    }
+                });
     }
 
     private void sendDataToServer(String address, int port)
@@ -43,8 +43,8 @@ public class WordRouter extends Thread{
         {
             // need host and port, we want to connect to the ServerSocket at port X
             Socket socket = new Socket();
-            socket.setSoTimeout(800);
-            socket.connect(new InetSocketAddress(address, port), 800);
+            socket.setSoTimeout(3000);
+            socket.connect(new InetSocketAddress(address, port), 3000);
             System.out.println("Connected!");
 
             // get the output stream from the socket.

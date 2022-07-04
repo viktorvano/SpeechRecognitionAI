@@ -79,17 +79,19 @@ public class AdvancedSettingsMenu {
         textFieldStartRecording.setPrefWidth(60);
         textFieldStartRecording.textProperty().addListener(observable -> {
             if(textFieldStartRecording.getText().length() > 0)
-            try{
-                int value = Integer.parseInt(textFieldStartRecording.getText());
-                if(value > 0)
-                {
-                    saveIntegerToFile("recorderThreshold.dat", value);
-                    recorderThreshold = value;
-                }else
-                    textFieldStartRecording.setText("");
-            }catch (Exception e)
             {
-                textFieldStartRecording.setText("");
+                try{
+                    int value = Integer.parseInt(textFieldStartRecording.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("recorderThreshold.dat", value);
+                        recorderThreshold = value;
+                    }else
+                        textFieldStartRecording.setText("");
+                }catch (Exception e)
+                {
+                    textFieldStartRecording.setText("");
+                }
             }
         });
         dialogPane.getChildren().add(textFieldStartRecording);
@@ -107,17 +109,19 @@ public class AdvancedSettingsMenu {
         textFieldWordThreshold.setPrefWidth(60);
         textFieldWordThreshold.textProperty().addListener(observable -> {
             if(textFieldWordThreshold.getText().length() > 0)
-            try{
-                int value = Integer.parseInt(textFieldWordThreshold.getText());
-                if(value > 0)
-                {
-                    saveIntegerToFile("wordThreshold.dat", value);
-                    wordThreshold = value;
-                }else
-                    textFieldWordThreshold.setText("");
-            }catch (Exception e)
             {
-                textFieldWordThreshold.setText("");
+                try{
+                    int value = Integer.parseInt(textFieldWordThreshold.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("wordThreshold.dat", value);
+                        wordThreshold = value;
+                    }else
+                        textFieldWordThreshold.setText("");
+                }catch (Exception e)
+                {
+                    textFieldWordThreshold.setText("");
+                }
             }
         });
         dialogPane.getChildren().add(textFieldWordThreshold);
@@ -135,18 +139,20 @@ public class AdvancedSettingsMenu {
         textFieldPreWordSamples.setPrefWidth(60);
         textFieldPreWordSamples.textProperty().addListener(observable -> {
             if(textFieldPreWordSamples.getText().length() > 0)
-            try{
-                int value = Integer.parseInt(textFieldPreWordSamples.getText());
-                if(value > 0)
-                {
-                    saveIntegerToFile("preWordSamples.dat", value);
-                    preWordSamples = value;
-                }else
-                    textFieldPreWordSamples.setText("");
-
-            }catch (Exception e)
             {
-                textFieldPreWordSamples.setText("");
+                try{
+                    int value = Integer.parseInt(textFieldPreWordSamples.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("preWordSamples.dat", value);
+                        preWordSamples = value;
+                    }else
+                        textFieldPreWordSamples.setText("");
+
+                }catch (Exception e)
+                {
+                    textFieldPreWordSamples.setText("");
+                }
             }
         });
         dialogPane.getChildren().add(textFieldPreWordSamples);
@@ -164,6 +170,7 @@ public class AdvancedSettingsMenu {
         textFieldWordInertiaThreshold.setPrefWidth(60);
         textFieldWordInertiaThreshold.textProperty().addListener(observable -> {
             if(textFieldWordInertiaThreshold.getText().length() > 0)
+            {
                 try{
                     int value = Integer.parseInt(textFieldWordInertiaThreshold.getText());
                     if(value > 0)
@@ -176,6 +183,7 @@ public class AdvancedSettingsMenu {
                 {
                     textFieldWordInertiaThreshold.setText("");
                 }
+            }
         });
         dialogPane.getChildren().add(textFieldWordInertiaThreshold);
 
@@ -192,17 +200,19 @@ public class AdvancedSettingsMenu {
         textFieldWordInertiaSamples.setPrefWidth(60);
         textFieldWordInertiaSamples.textProperty().addListener(observable -> {
             if(textFieldWordInertiaSamples.getText().length() > 0)
-            try{
-                int value = Integer.parseInt(textFieldWordInertiaSamples.getText());
-                if(value > 0)
-                {
-                    saveIntegerToFile("wordInertiaSamples.dat", value);
-                    wordInertiaSamples = value;
-                }else
-                    textFieldWordInertiaSamples.setText("");
-            }catch (Exception e)
             {
-                textFieldWordInertiaSamples.setText("");
+                try{
+                    int value = Integer.parseInt(textFieldWordInertiaSamples.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("wordInertiaSamples.dat", value);
+                        wordInertiaSamples = value;
+                    }else
+                        textFieldWordInertiaSamples.setText("");
+                }catch (Exception e)
+                {
+                    textFieldWordInertiaSamples.setText("");
+                }
             }
         });
         dialogPane.getChildren().add(textFieldWordInertiaSamples);

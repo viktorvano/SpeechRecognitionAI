@@ -80,6 +80,7 @@ public class SpeechRecognitionAI extends Application {
     private TrainingThread trainingThread;
     private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses;
     private AudioServer audioServer;
+    private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
@@ -167,6 +168,14 @@ public class SpeechRecognitionAI extends Application {
                 neuralNetworkThread,
                 audioServerPort);
         audioServer.start();
+
+        textServer = new TextServer(
+                this,
+                wordResponsesDatabase,
+                audioCapture,
+                neuralNetworkThread,
+                audioServerPort+1);
+        textServer.start();
 
         Scene scene = new Scene(borderPane, width, height);
 
@@ -347,6 +356,7 @@ public class SpeechRecognitionAI extends Application {
     public void stop()
     {
         System.out.println("Leaving the app...");
+        this.textServer.stopServer();
         this.audioServer.stopServer();
         this.audioCapture.stopAudioCapture();
         System.exit(0);
