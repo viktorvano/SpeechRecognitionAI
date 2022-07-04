@@ -5,7 +5,7 @@
    
  Android App on Google Play Store: [IP Mic](https://play.google.com/store/apps/details?id=eu.cyberpunktech.IpMic)  
    
-<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_1.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_2.png" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_3.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_4.png" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_Icon.jpg" width="150"/>  
+<img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_1.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_2.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_3.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_4.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_Icon.jpg" width="150"/>  
    
  Videos:  
  [Speech Recognition AI v20220409 - Review: Boosted Training Performance, Training Loss Charts](https://www.youtube.com/watch?v=w7dV-2AxO0s)  
