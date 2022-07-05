@@ -19,6 +19,7 @@
 ### TODO List  
 - Weights Ironing: Set weight to zero of the first hidden layer of those connections which training has not altered.  
 - Extenf FFT to full FFT with Real and Imaginary values (now there is only an FFT magnitude Real x Imag)  
+- Change architecture to a multi neural network model with a judge neural network and two step training.
   
   
 ## Application Screenshots
