@@ -89,6 +89,7 @@ public class TextServer extends Thread{
 
                 socket = server.accept();
                 System.out.println("Client accepted");
+                socket.setSoTimeout(10000);
 
                 in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
@@ -183,6 +184,6 @@ public class TextServer extends Thread{
                 e.printStackTrace();
             }
         }
-        System.out.println("Server stopped successfully.");
+        System.out.println("Text server stopped successfully.");
     }
 }
