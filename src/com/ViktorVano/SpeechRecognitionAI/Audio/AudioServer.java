@@ -91,6 +91,7 @@ public class AudioServer extends Thread{
 
                 socket = server.accept();
                 System.out.println("Client accepted");
+                socket.setSoTimeout(20000);
 
                 in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
@@ -223,6 +224,6 @@ public class AudioServer extends Thread{
                 e.printStackTrace();
             }
         }
-        System.out.println("Server stopped successfully.");
+        System.out.println("Mic server stopped successfully.");
     }
 }
