@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20220707;
+    public static int versionNumber = 20220719;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -55,4 +55,6 @@ public class Variables {
     public static boolean useIpMic = false;
     public static String token = "defaultToken123";
     public static int audioServerPort = 7777;
+
+    public static boolean useIpMicOnly = false;
 }

@@ -1,10 +1,13 @@
 package com.ViktorVano.SpeechRecognitionAI.Audio;
 
 import com.sun.istack.internal.NotNull;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import javax.sound.sampled.*;
 
+import static com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI.customPrompt;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.saveBooleanToFile;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class AudioCapture {
@@ -47,11 +50,11 @@ public class AudioCapture {
             captureThread.start();
             System.out.println("Started listening.");
         } catch (Exception e) {
-            StackTraceElement stackEle[] = e.getStackTrace();
-            for (StackTraceElement val : stackEle) {
-                System.out.println(val);
-            }
-            System.exit(0);
+            e.printStackTrace();
+            useIpMicOnly = true;
+            useIpMic = true;
+            saveBooleanToFile("useIpMic.dat", true);
+            customPrompt("No Hardware Microphone", "Only IP Microphone can be used.", Alert.AlertType.WARNING);
         }
     }
 

@@ -1153,7 +1153,7 @@ public class SpeechRecognitionAI extends Application {
         }
     }
 
-    private static void customPrompt(@NotNull String title, @NotNull String message, @NotNull Alert.AlertType alertType)
+    public static void customPrompt(@NotNull String title, @NotNull String message, @NotNull Alert.AlertType alertType)
     {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), event -> {
             Alert alert = new Alert(alertType);

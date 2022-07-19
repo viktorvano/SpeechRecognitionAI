@@ -263,6 +263,7 @@ public class AdvancedSettingsMenu {
 
         CheckBox checkBoxUseIpMic = new CheckBox("Use IP Microphone");
         checkBoxUseIpMic.setSelected(useIpMic);
+        checkBoxUseIpMic.setDisable(useIpMicOnly);
         checkBoxUseIpMic.setOnAction(event -> {
             useIpMic = checkBoxUseIpMic.isSelected();
             saveBooleanToFile("useIpMic.dat", useIpMic);
