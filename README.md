@@ -8,6 +8,7 @@
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_1.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_2.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_3.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_4.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_Icon.jpg" width="150"/>  
    
  Videos:  
+ [Speech Recognition AI v20220707 - Android App Text Query, Custom Reponses, Word Commands](https://www.youtube.com/watch?v=bid33Fv7ONc)  
  [Speech Recognition AI v20220409 - Review: Boosted Training Performance, Training Loss Charts](https://www.youtube.com/watch?v=w7dV-2AxO0s)  
  [Speech Recognition AI v20220327 - IP Mic Android App Update](https://www.youtube.com/watch?v=94wzIKT2vC8)  
  [Speech Recognition AI v20220126 - Review](https://www.youtube.com/watch?v=cy86pgSeL5c)  
