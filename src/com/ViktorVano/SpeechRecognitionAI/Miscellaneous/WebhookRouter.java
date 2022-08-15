@@ -77,9 +77,6 @@ public class WebhookRouter extends Thread {
             {
                 throw new RuntimeException(e);
             }
-
-            System.out.println(content);
-
         } catch (Exception e)
         {
             e.printStackTrace();

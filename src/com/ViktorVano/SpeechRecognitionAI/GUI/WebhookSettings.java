@@ -70,12 +70,17 @@ public class WebhookSettings {
                 webhooksList.getItems().remove(webhookIndex);
                 webhooksDatabase.remove(webhookIndex);
                 webhookIndex = webhooksList.getSelectionModel().getSelectedIndex();
-                buttonRemoveWebhook.setDisable(webhookIndex == -1);
                 if(webhookIndex == -1)
                 {
                     txtEditWord.setText("");
                     txtEditURL.setText("");
                     buttonUpdateWebhook.setDisable(true);
+                    buttonRemoveWebhook.setDisable(true);
+                }else {
+                    txtEditWord.setText(webhooksDatabase.get(webhookIndex).word);
+                    txtEditURL.setText(webhooksDatabase.get(webhookIndex).url);
+                    buttonUpdateWebhook.setDisable(false);
+                    buttonRemoveWebhook.setDisable(false);
                 }
                 saveWebhooks(webhooksDatabase);
             }
@@ -133,6 +138,8 @@ public class WebhookSettings {
             Webhook tempWebhook = new Webhook();
             tempWebhook.word = txtEditWord.getText();
             tempWebhook.url = txtEditURL.getText();
+            buttonUpdateWebhook.setDisable(true);
+            buttonRemoveWebhook.setDisable(true);
             txtEditWord.setText("");
             txtEditURL.setText("");
             String tempString =  tempWebhook.word + "\t\t-->\t\t" + tempWebhook.url;
