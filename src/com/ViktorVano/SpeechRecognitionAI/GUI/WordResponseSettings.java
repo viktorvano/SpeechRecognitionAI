@@ -141,6 +141,8 @@ public class WordResponseSettings {
             WordResponse tempWordResponse = new WordResponse();
             tempWordResponse.word = txtEditWord.getText();
             tempWordResponse.response = txtEditResponse.getText();
+            buttonUpdateWordResponse.setDisable(true);
+            buttonRemoveWordResponse.setDisable(true);
             txtEditWord.setText("");
             txtEditResponse.setText("");
             String tempString =  tempWordResponse.word + "\t\t-->\t\t" +
