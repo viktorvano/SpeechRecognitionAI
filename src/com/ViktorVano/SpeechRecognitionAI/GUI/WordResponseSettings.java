@@ -70,12 +70,17 @@ public class WordResponseSettings {
                 wordResponsesList.getItems().remove(wordResponseIndex);
                 wordResponsesDatabase.remove(wordResponseIndex);
                 wordResponseIndex = wordResponsesList.getSelectionModel().getSelectedIndex();
-                buttonRemoveWordResponse.setDisable(wordResponseIndex == -1);
                 if(wordResponseIndex == -1)
                 {
                     txtEditWord.setText("");
                     txtEditResponse.setText("");
                     buttonUpdateWordResponse.setDisable(true);
+                    buttonRemoveWordResponse.setDisable(true);
+                }else {
+                    txtEditWord.setText(wordResponsesDatabase.get(wordResponseIndex).word);
+                    txtEditResponse.setText(wordResponsesDatabase.get(wordResponseIndex).response);
+                    buttonUpdateWordResponse.setDisable(false);
+                    buttonRemoveWordResponse.setDisable(false);
                 }
                 saveWordResponses(wordResponsesDatabase);
             }
