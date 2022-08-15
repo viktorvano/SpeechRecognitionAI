@@ -827,13 +827,19 @@ public class SpeechRecognitionAI extends Application {
                 wordRoutingList.getItems().remove(wordRoutingIndex);
                 wordRoutingDatabase.remove(wordRoutingIndex);
                 wordRoutingIndex = wordRoutingList.getSelectionModel().getSelectedIndex();
-                buttonRemoveWordRouting.setDisable(wordRoutingIndex == -1);
                 if(wordRoutingIndex == -1)
                 {
                     txtEditWord.setText("");
                     txtEditAddress.setText("");
                     txtEditPort.setText("");
                     buttonUpdateWordRouting.setDisable(true);
+                    buttonRemoveWordRouting.setDisable(true);
+                }else {
+                    txtEditWord.setText(wordRoutingDatabase.get(wordRoutingIndex).word);
+                    txtEditAddress.setText(wordRoutingDatabase.get(wordRoutingIndex).address);
+                    txtEditPort.setText(wordRoutingDatabase.get(wordRoutingIndex).port);
+                    buttonUpdateWordRouting.setDisable(false);
+                    buttonRemoveWordRouting.setDisable(false);
                 }
                 saveWordRouting(wordRoutingDatabase);
             }
@@ -910,6 +916,8 @@ public class SpeechRecognitionAI extends Application {
             tempWordRouting.word = txtEditWord.getText();
             tempWordRouting.address = txtEditAddress.getText();
             tempWordRouting.port = txtEditPort.getText();
+            buttonUpdateWordRouting.setDisable(true);
+            buttonRemoveWordRouting.setDisable(true);
             txtEditWord.setText("");
             txtEditAddress.setText("");
             txtEditPort.setText("");
