@@ -38,6 +38,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WebhooksFile.loadWebhooks;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommandsFile.loadWordCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.loadWordResponses;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
@@ -78,13 +79,15 @@ public class SpeechRecognitionAI extends Application {
     private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses;
+    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks;
     private AudioServer audioServer;
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
+    private ObservableList<Webhook> webhooksDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ListView<String> wordCommandsList;
+    private ListView<String> webhooksList;
 
     public static void main(String[] args)
     {
@@ -173,6 +176,7 @@ public class SpeechRecognitionAI extends Application {
                 this.wordRoutingDatabase,
                 this.wordCommandsDatabase,
                 this.wordResponsesDatabase,
+                this.webhooksDatabase,
                 audioServerPort+1);
         textServer.start();
 
@@ -575,6 +579,7 @@ public class SpeechRecognitionAI extends Application {
                     else {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -822,13 +827,19 @@ public class SpeechRecognitionAI extends Application {
                 wordRoutingList.getItems().remove(wordRoutingIndex);
                 wordRoutingDatabase.remove(wordRoutingIndex);
                 wordRoutingIndex = wordRoutingList.getSelectionModel().getSelectedIndex();
-                buttonRemoveWordRouting.setDisable(wordRoutingIndex == -1);
                 if(wordRoutingIndex == -1)
                 {
                     txtEditWord.setText("");
                     txtEditAddress.setText("");
                     txtEditPort.setText("");
                     buttonUpdateWordRouting.setDisable(true);
+                    buttonRemoveWordRouting.setDisable(true);
+                }else {
+                    txtEditWord.setText(wordRoutingDatabase.get(wordRoutingIndex).word);
+                    txtEditAddress.setText(wordRoutingDatabase.get(wordRoutingIndex).address);
+                    txtEditPort.setText(wordRoutingDatabase.get(wordRoutingIndex).port);
+                    buttonUpdateWordRouting.setDisable(false);
+                    buttonRemoveWordRouting.setDisable(false);
                 }
                 saveWordRouting(wordRoutingDatabase);
             }
@@ -905,6 +916,8 @@ public class SpeechRecognitionAI extends Application {
             tempWordRouting.word = txtEditWord.getText();
             tempWordRouting.address = txtEditAddress.getText();
             tempWordRouting.port = txtEditPort.getText();
+            buttonUpdateWordRouting.setDisable(true);
+            buttonRemoveWordRouting.setDisable(true);
             txtEditWord.setText("");
             txtEditAddress.setText("");
             txtEditPort.setText("");
@@ -930,11 +943,19 @@ public class SpeechRecognitionAI extends Application {
             new WordResponseSettings(stageReference, wordResponsesDatabase, wordResponsesList);
         });
 
+        buttonWebhooks = new Button("Webhooks");
+        buttonWebhooks.setOnAction(event -> {
+            new WebhookSettings(stageReference, webhooksDatabase, webhooksList);
+        });
+
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
 
         wordCommandsDatabase = loadWordCommands();
         wordCommandsList = new ListView<>();
+
+        webhooksDatabase = loadWebhooks();
+        webhooksList = new ListView<>();
     }
 
     private void displayDataLayout()
@@ -1040,6 +1061,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonAdvancedSettings);
         hBoxBottom.getChildren().add(buttonWordCommands);
         hBoxBottom.getChildren().add(buttonWordResponses);
+        hBoxBottom.getChildren().add(buttonWebhooks);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -1061,6 +1083,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(buttonAdvancedSettings);
         hBoxBottom.getChildren().remove(buttonWordCommands);
         hBoxBottom.getChildren().remove(buttonWordResponses);
+        hBoxBottom.getChildren().remove(buttonWebhooks);
     }
 
     private void displayLayout(int layoutIndex)

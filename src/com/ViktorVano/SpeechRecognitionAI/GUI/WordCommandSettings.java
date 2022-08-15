@@ -44,13 +44,13 @@ public class WordCommandSettings {
         dialog.initOwner(stageReference);
         BorderPane borderPane = new BorderPane();
 
-        ObservableList<String> wordCommandItem = FXCollections.observableArrayList();
+        ObservableList<String> wordCommandItems = FXCollections.observableArrayList();
         for (WordCommand wordCommand : wordCommandsDatabase)
-            wordCommandItem.add(wordCommand.word + "\t\t-->\t\t" +
+            wordCommandItems.add(wordCommand.word + "\t\t-->\t\t" +
                     wordCommand.command + "\t\t-->\t\t" +
                     wordCommand.address + "\t\t-->\t\t" +
                     wordCommand.port);
-        wordCommandsList.setItems(wordCommandItem);
+        wordCommandsList.setItems(wordCommandItems);
         wordCommandsList.setOnMouseClicked(event -> {
             if(wordCommandsList.getSelectionModel().getSelectedIndex() != -1)
             {
@@ -81,7 +81,6 @@ public class WordCommandSettings {
                 wordCommandsList.getItems().remove(wordCommandIndex);
                 wordCommandsDatabase.remove(wordCommandIndex);
                 wordCommandIndex = wordCommandsList.getSelectionModel().getSelectedIndex();
-                buttonRemoveWordCommand.setDisable(wordCommandIndex == -1);
                 if(wordCommandIndex == -1)
                 {
                     txtEditWord.setText("");
@@ -89,6 +88,14 @@ public class WordCommandSettings {
                     txtEditAddress.setText("");
                     txtEditPort.setText("");
                     buttonUpdateWordCommand.setDisable(true);
+                    buttonRemoveWordCommand.setDisable(true);
+                }else {
+                    txtEditWord.setText(wordCommandsDatabase.get(wordCommandIndex).word);
+                    txtEditCommand.setText(wordCommandsDatabase.get(wordCommandIndex).command);
+                    txtEditAddress.setText(wordCommandsDatabase.get(wordCommandIndex).address);
+                    txtEditPort.setText(wordCommandsDatabase.get(wordCommandIndex).port);
+                    buttonUpdateWordCommand.setDisable(false);
+                    buttonRemoveWordCommand.setDisable(false);
                 }
                 saveWordCommands(wordCommandsDatabase);
             }
@@ -199,6 +206,8 @@ public class WordCommandSettings {
             tempWordCommand.command = txtEditCommand.getText();
             tempWordCommand.address = txtEditAddress.getText();
             tempWordCommand.port = txtEditPort.getText();
+            buttonUpdateWordCommand.setDisable(true);
+            buttonRemoveWordCommand.setDisable(true);
             txtEditWord.setText("");
             txtEditCommand.setText("");
             txtEditAddress.setText("");
