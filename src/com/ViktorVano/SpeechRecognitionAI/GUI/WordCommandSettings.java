@@ -44,13 +44,13 @@ public class WordCommandSettings {
         dialog.initOwner(stageReference);
         BorderPane borderPane = new BorderPane();
 
-        ObservableList<String> wordCommandItem = FXCollections.observableArrayList();
+        ObservableList<String> wordCommandItems = FXCollections.observableArrayList();
         for (WordCommand wordCommand : wordCommandsDatabase)
-            wordCommandItem.add(wordCommand.word + "\t\t-->\t\t" +
+            wordCommandItems.add(wordCommand.word + "\t\t-->\t\t" +
                     wordCommand.command + "\t\t-->\t\t" +
                     wordCommand.address + "\t\t-->\t\t" +
                     wordCommand.port);
-        wordCommandsList.setItems(wordCommandItem);
+        wordCommandsList.setItems(wordCommandItems);
         wordCommandsList.setOnMouseClicked(event -> {
             if(wordCommandsList.getSelectionModel().getSelectedIndex() != -1)
             {

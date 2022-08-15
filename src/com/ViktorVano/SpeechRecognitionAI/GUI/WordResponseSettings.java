@@ -40,10 +40,10 @@ public class WordResponseSettings {
         dialog.initOwner(stageReference);
         BorderPane borderPane = new BorderPane();
 
-        ObservableList<String> wordResponseItem = FXCollections.observableArrayList();
+        ObservableList<String> wordResponseItems = FXCollections.observableArrayList();
         for (WordResponse wordResponse : wordResponsesDatabase)
-            wordResponseItem.add(wordResponse.word + "\t\t-->\t\t" + wordResponse.response);
-        wordResponsesList.setItems(wordResponseItem);
+            wordResponseItems.add(wordResponse.word + "\t\t-->\t\t" + wordResponse.response);
+        wordResponsesList.setItems(wordResponseItems);
         wordResponsesList.setOnMouseClicked(event -> {
             if(wordResponsesList.getSelectionModel().getSelectedIndex() != -1)
             {
