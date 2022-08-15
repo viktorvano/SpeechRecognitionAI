@@ -20,6 +20,7 @@ public class TextServer extends Thread{
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ObservableList<WordRouting> wordRoutingDatabase;
     private ObservableList<WordCommand> wordCommandsDatabase;
+    private ObservableList<Webhook> webhookDatabase;
 
     //initialize socket and input stream
     private Socket socket = null;
@@ -28,12 +29,15 @@ public class TextServer extends Thread{
     private DataOutputStream out = null;
 
     public TextServer(@NotNull ObservableList<WordRouting> wordRoutingDatabase,
-                       @NotNull ObservableList<WordCommand> wordCommandsDatabase,
+                      @NotNull ObservableList<WordCommand> wordCommandsDatabase,
                       @NotNull ObservableList<WordResponse> wordResponsesDatabase,
-                       int port){
+                      @NotNull ObservableList<Webhook> webhookDatabase,
+                      int port)
+    {
         this.wordRoutingDatabase = wordRoutingDatabase;
         this.wordCommandsDatabase = wordCommandsDatabase;
         this.wordResponsesDatabase = wordResponsesDatabase;
+        this.webhookDatabase = webhookDatabase;
         this.port = port;
     }
 
@@ -111,6 +115,7 @@ public class TextServer extends Thread{
                         System.out.println("Got the message: " + this.message);
                         new WordRouter(this.wordRoutingDatabase, this.message);
                         new WordCommandRouter(this.wordCommandsDatabase, this.message);
+                        new WebhookRouter(this.webhookDatabase, this.message);
                         String response = "";
                         for (WordResponse wordResponse : wordResponsesDatabase)
                         {

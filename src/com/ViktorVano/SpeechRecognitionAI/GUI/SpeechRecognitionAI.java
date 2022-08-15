@@ -176,6 +176,7 @@ public class SpeechRecognitionAI extends Application {
                 this.wordRoutingDatabase,
                 this.wordCommandsDatabase,
                 this.wordResponsesDatabase,
+                this.webhooksDatabase,
                 audioServerPort+1);
         textServer.start();
 
@@ -578,6 +579,7 @@ public class SpeechRecognitionAI extends Application {
                     else {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
