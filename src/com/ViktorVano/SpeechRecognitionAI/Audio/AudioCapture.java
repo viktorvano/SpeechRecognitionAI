@@ -97,7 +97,17 @@ public class AudioCapture {
             sourceLine.start();
             playThread = new PlayThread(inputStream);
             playThread.start();
-            while (playThread.isAlive());
+            while (playThread.isAlive())
+            {
+                try{
+                    Thread.sleep(100);
+                }catch (Exception e)
+                {
+                    System.out.println("Cannot sleep");
+                }
+            }
+            sourceLine.stop();
+            sourceLine.close();
             System.out.println("Recording played.");
         } catch (Exception e) {
             System.out.println(e);
@@ -119,7 +129,16 @@ public class AudioCapture {
             sourceLine.start();
             playThread = new PlayThread(inputStream);
             playThread.start();
-            while (playThread.isAlive());
+            while (playThread.isAlive())
+            {
+                try{
+                    Thread.sleep(100);
+                }catch (Exception e)
+                {
+                    System.out.println("Cannot sleep");
+                }
+            }
+            sourceLine.stop();
             sourceLine.close();
             System.out.println("Recording played.");
         } catch (Exception e) {
