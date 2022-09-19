@@ -20,7 +20,6 @@ public class AudioCapture {
     private boolean recordAudioFlag = true;
 
     SourceDataLine sourceLine;
-    AudioInputStream inputStream;
 
     public AudioCapture() {
         captureAudio();
@@ -92,11 +91,11 @@ public class AudioCapture {
         System.out.println("Playing: " + mainBufferLength);
         try {
             byteInputStream = new ByteArrayInputStream(mainBuffer);
-            inputStream = new AudioInputStream(byteInputStream, adFormat, mainBufferLength / adFormat.getFrameSize());
+            AudioInputStream inputStream = new AudioInputStream(byteInputStream, adFormat, mainBufferLength / adFormat.getFrameSize());
             sourceLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
             sourceLine.open(adFormat);
             sourceLine.start();
-            playThread = new PlayThread();
+            playThread = new PlayThread(inputStream);
             playThread.start();
             while (playThread.isAlive());
             System.out.println("Recording played.");
@@ -114,11 +113,11 @@ public class AudioCapture {
         System.out.println("Playing: " + recordedAudio.audioRecordLength);
         try {
             byteInputStream = new ByteArrayInputStream(recordedAudio.audioRecord);
-            inputStream = new AudioInputStream(byteInputStream, adFormat, recordedAudio.audioRecordLength / adFormat.getFrameSize());
+            AudioInputStream inputStream = new AudioInputStream(byteInputStream, adFormat, recordedAudio.audioRecordLength / adFormat.getFrameSize());
             sourceLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
             sourceLine.open(adFormat);
             sourceLine.start();
-            playThread = new PlayThread();
+            playThread = new PlayThread(inputStream);
             playThread.start();
             while (playThread.isAlive());
             System.out.println("Recording played.");
@@ -207,6 +206,13 @@ public class AudioCapture {
 
         byte[] tempPlayBuffer = new byte[1000000];
 
+        private AudioInputStream inputStream;
+
+        public PlayThread(AudioInputStream inputStream)
+        {
+            this.inputStream = inputStream;
+        }
+
         public void run() {
             try {
                 int cnt;
@@ -216,9 +222,10 @@ public class AudioCapture {
                         sourceLine.write(tempPlayBuffer, 0, cnt);
                     }
                 }
+                inputStream.close();
             } catch (Exception e) {
                 System.out.println(e);
-                System.exit(0);
+                customPrompt("Problem playing audio", e.toString(), Alert.AlertType.WARNING);
             }
         }
     }
