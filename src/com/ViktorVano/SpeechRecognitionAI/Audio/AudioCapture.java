@@ -120,10 +120,12 @@ public class AudioCapture {
             playThread = new PlayThread(inputStream);
             playThread.start();
             while (playThread.isAlive());
+            sourceLine.close();
             System.out.println("Recording played.");
         } catch (Exception e) {
-            System.out.println(e);
-            System.exit(0);
+            System.out.println("playRecord: " + e);
+            e.printStackTrace();
+            customPrompt("Problem playing audio", e.toString(), Alert.AlertType.WARNING);
         }
     }
 
@@ -224,7 +226,8 @@ public class AudioCapture {
                 }
                 inputStream.close();
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("PlayThread: " + e);
+                e.printStackTrace();
                 customPrompt("Problem playing audio", e.toString(), Alert.AlertType.WARNING);
             }
         }
