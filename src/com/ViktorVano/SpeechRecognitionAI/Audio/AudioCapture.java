@@ -224,6 +224,15 @@ public class AudioCapture {
                         sourceLine.write(tempPlayBuffer, 0, cnt);
                     }
                 }
+                while (sourceLine.isRunning())
+                {
+                    try{
+                        Thread.sleep(250);
+                    }catch (Exception e)
+                    {
+                        System.out.println("Cannot sleep");
+                    }
+                }
                 inputStream.close();
             } catch (Exception e) {
                 System.out.println("PlayThread: " + e);
