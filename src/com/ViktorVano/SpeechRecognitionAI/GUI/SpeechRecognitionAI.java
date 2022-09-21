@@ -79,7 +79,7 @@ public class SpeechRecognitionAI extends Application {
     private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks;
+    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks, buttonShellCommands;
     private AudioServer audioServer;
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
@@ -948,6 +948,12 @@ public class SpeechRecognitionAI extends Application {
             new WebhookSettings(stageReference, webhooksDatabase, webhooksList);
         });
 
+        buttonShellCommands = new Button("Shell Commands");
+        buttonShellCommands.setOnAction(event -> {
+            //TODO: open new shell settings
+            System.out.println("TEMP: Opening Shell Commands settings window.");
+        });
+
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
 
@@ -1062,6 +1068,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonWordCommands);
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
+        hBoxBottom.getChildren().add(buttonShellCommands);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -1084,6 +1091,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(buttonWordCommands);
         hBoxBottom.getChildren().remove(buttonWordResponses);
         hBoxBottom.getChildren().remove(buttonWebhooks);
+        hBoxBottom.getChildren().remove(buttonShellCommands);
     }
 
     private void displayLayout(int layoutIndex)
