@@ -41,6 +41,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WebhooksFile.loadWebhooks;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommandsFile.loadWordCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.loadWordResponses;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.ShellCommandsFile.loadShellCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
 
@@ -84,10 +85,12 @@ public class SpeechRecognitionAI extends Application {
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ObservableList<Webhook> webhooksDatabase;
+    private ObservableList<ShellCommand> shellCommandsDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ListView<String> wordCommandsList;
     private ListView<String> webhooksList;
+    private ListView<String> shellCommandsList;
 
     public static void main(String[] args)
     {
@@ -177,6 +180,7 @@ public class SpeechRecognitionAI extends Application {
                 this.wordCommandsDatabase,
                 this.wordResponsesDatabase,
                 this.webhooksDatabase,
+                this.shellCommandsDatabase,
                 audioServerPort+1);
         textServer.start();
 
@@ -580,6 +584,7 @@ public class SpeechRecognitionAI extends Application {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new ShellCommandExecuter(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -950,8 +955,7 @@ public class SpeechRecognitionAI extends Application {
 
         buttonShellCommands = new Button("Shell Commands");
         buttonShellCommands.setOnAction(event -> {
-            //TODO: open new shell settings
-            System.out.println("TEMP: Opening Shell Commands settings window.");
+            new ShellCommandsSettings(stageReference, shellCommandsDatabase, shellCommandsList);
         });
 
         wordResponsesDatabase = loadWordResponses();
@@ -962,6 +966,9 @@ public class SpeechRecognitionAI extends Application {
 
         webhooksDatabase = loadWebhooks();
         webhooksList = new ListView<>();
+
+        shellCommandsDatabase = loadShellCommands();
+        shellCommandsList = new ListView<>();
     }
 
     private void displayDataLayout()

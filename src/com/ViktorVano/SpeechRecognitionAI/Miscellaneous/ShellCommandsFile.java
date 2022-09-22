@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import java.io.*;
 
 public class ShellCommandsFile {
-    public static void saveShellCommands(ObservableList<Webhook> shellCommands)
+    public static void saveShellCommands(ObservableList<ShellCommand> shellCommands)
     {
         try
         {

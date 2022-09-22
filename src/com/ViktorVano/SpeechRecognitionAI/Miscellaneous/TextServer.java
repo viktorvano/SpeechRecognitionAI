@@ -21,6 +21,7 @@ public class TextServer extends Thread{
     private ObservableList<WordRouting> wordRoutingDatabase;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ObservableList<Webhook> webhookDatabase;
+    private ObservableList<ShellCommand> shellCommandDatabase;
 
     //initialize socket and input stream
     private Socket socket = null;
@@ -32,12 +33,14 @@ public class TextServer extends Thread{
                       @NotNull ObservableList<WordCommand> wordCommandsDatabase,
                       @NotNull ObservableList<WordResponse> wordResponsesDatabase,
                       @NotNull ObservableList<Webhook> webhookDatabase,
+                      @NotNull ObservableList<ShellCommand> shellCommandDatabase,
                       int port)
     {
         this.wordRoutingDatabase = wordRoutingDatabase;
         this.wordCommandsDatabase = wordCommandsDatabase;
         this.wordResponsesDatabase = wordResponsesDatabase;
         this.webhookDatabase = webhookDatabase;
+        this.shellCommandDatabase = shellCommandDatabase;
         this.port = port;
     }
 
@@ -116,6 +119,7 @@ public class TextServer extends Thread{
                         new WordRouter(this.wordRoutingDatabase, this.message);
                         new WordCommandRouter(this.wordCommandsDatabase, this.message);
                         new WebhookRouter(this.webhookDatabase, this.message);
+                        new ShellCommandExecuter(this.shellCommandDatabase, this.message);
                         String response = "";
                         for (WordResponse wordResponse : wordResponsesDatabase)
                         {
