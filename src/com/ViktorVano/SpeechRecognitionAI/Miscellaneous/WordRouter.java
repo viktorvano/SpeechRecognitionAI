@@ -21,20 +21,20 @@ public class WordRouter extends Thread{
 
     @Override
     public void run() {
-        IntStream.range(0, wordRoutingList.size()).parallel().
-                forEach(i -> {
-                    if(message.contains(wordRoutingList.get(i).word))
-                    {
-                        try {
-                            sendDataToServer(wordRoutingList.get(i).address, Integer.parseInt(wordRoutingList.get(i).port));
-                        }catch (Exception e)
-                        {
-                            e.printStackTrace();
-                            System.out.println("Invalid socket!!!\nIP: " + wordRoutingList.get(i).address +
-                                    "\nPort: " + wordRoutingList.get(i).port);
-                        }
-                    }
-                });
+        wordRoutingList.parallelStream().forEach(wordRouting ->
+        {
+            if(message.contains(wordRouting.word))
+            {
+                try {
+                    sendDataToServer(wordRouting.address, Integer.parseInt(wordRouting.port));
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                    System.out.println("Invalid socket!!!\nIP: " + wordRouting.address +
+                            "\nPort: " + wordRouting.port);
+                }
+            }
+        });
     }
 
     private void sendDataToServer(String address, int port)

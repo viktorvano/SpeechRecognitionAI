@@ -41,6 +41,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WebhooksFile.loadWebhooks;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommandsFile.loadWordCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.loadWordResponses;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.ShellCommandsFile.loadShellCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
 
 
@@ -79,15 +80,17 @@ public class SpeechRecognitionAI extends Application {
     private TextField txtEditWord, txtEditAddress, txtEditPort;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks;
+    private Button buttonAdvancedSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks, buttonShellCommands;
     private AudioServer audioServer;
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ObservableList<Webhook> webhooksDatabase;
+    private ObservableList<ShellCommand> shellCommandsDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ListView<String> wordCommandsList;
     private ListView<String> webhooksList;
+    private ListView<String> shellCommandsList;
 
     public static void main(String[] args)
     {
@@ -177,6 +180,7 @@ public class SpeechRecognitionAI extends Application {
                 this.wordCommandsDatabase,
                 this.wordResponsesDatabase,
                 this.webhooksDatabase,
+                this.shellCommandsDatabase,
                 audioServerPort+1);
         textServer.start();
 
@@ -580,6 +584,7 @@ public class SpeechRecognitionAI extends Application {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -948,6 +953,11 @@ public class SpeechRecognitionAI extends Application {
             new WebhookSettings(stageReference, webhooksDatabase, webhooksList);
         });
 
+        buttonShellCommands = new Button("Shell Commands");
+        buttonShellCommands.setOnAction(event -> {
+            new ShellCommandsSettings(stageReference, shellCommandsDatabase, shellCommandsList);
+        });
+
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
 
@@ -956,6 +966,9 @@ public class SpeechRecognitionAI extends Application {
 
         webhooksDatabase = loadWebhooks();
         webhooksList = new ListView<>();
+
+        shellCommandsDatabase = loadShellCommands();
+        shellCommandsList = new ListView<>();
     }
 
     private void displayDataLayout()
@@ -1062,6 +1075,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonWordCommands);
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
+        hBoxBottom.getChildren().add(buttonShellCommands);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -1084,6 +1098,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(buttonWordCommands);
         hBoxBottom.getChildren().remove(buttonWordResponses);
         hBoxBottom.getChildren().remove(buttonWebhooks);
+        hBoxBottom.getChildren().remove(buttonShellCommands);
     }
 
     private void displayLayout(int layoutIndex)
