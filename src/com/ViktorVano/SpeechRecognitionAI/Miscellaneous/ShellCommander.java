@@ -17,20 +17,19 @@ public class ShellCommander extends Thread {
 
     @Override
     public void run() {
-        super.run();
-        for(int i = 0; i< shellCommandList.size(); i++)
+        shellCommandList.parallelStream().forEach(shellCommand ->
         {
-            if(message.contains(shellCommandList.get(i).word))
+            if(message.contains(shellCommand.word))
             {
                 try {
-                    executeShellCommand(shellCommandList.get(i).command);
+                    executeShellCommand(shellCommand.command);
                 }catch (Exception e)
                 {
                     e.printStackTrace();
-                    System.out.println("Invalid Shell Command!!!\nCommand: " + shellCommandList.get(i).command);
+                    System.out.println("Invalid Shell Command!!!\nCommand: " + shellCommand.command);
                 }
             }
-        }
+        });
     }
 
     private void executeShellCommand(String cmd) throws Exception

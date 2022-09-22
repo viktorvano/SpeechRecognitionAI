@@ -20,20 +20,19 @@ public class WebhookRouter extends Thread {
 
     @Override
     public void run() {
-        super.run();
-        for(int i = 0; i< webhookList.size(); i++)
+        webhookList.parallelStream().forEach(webhook ->
         {
-            if(message.contains(webhookList.get(i).word))
+            if(message.contains(webhook.word))
             {
                 try {
-                    postToWebhook(webhookList.get(i).url);
+                    postToWebhook(webhook.url);
                 }catch (Exception e)
                 {
                     e.printStackTrace();
-                    System.out.println("Invalid Webhook!!!\nURL: " + webhookList.get(i).url);
+                    System.out.println("Invalid Webhook!!!\nURL: " + webhook.url);
                 }
             }
-        }
+        });
     }
 
     private void postToWebhook(String url)

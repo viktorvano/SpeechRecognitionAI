@@ -20,21 +20,20 @@ public class WordCommandRouter extends Thread {
 
     @Override
     public void run() {
-        super.run();
-        for(int i = 0; i< wordCommandsList.size(); i++)
+        wordCommandsList.parallelStream().forEach(wordCommand ->
         {
-            if(message.contains(wordCommandsList.get(i).word))
+            if(message.contains(wordCommand.word))
             {
                 try {
-                    sendDataToServer(wordCommandsList.get(i).command, wordCommandsList.get(i).address, Integer.parseInt(wordCommandsList.get(i).port));
+                    sendDataToServer(wordCommand.command, wordCommand.address, Integer.parseInt(wordCommand.port));
                 }catch (Exception e)
                 {
                     e.printStackTrace();
-                    System.out.println("Invalid socket!!!\nIP: " + wordCommandsList.get(i).address +
-                            "\nPort: " + wordCommandsList.get(i).port);
+                    System.out.println("Invalid socket!!!\nIP: " + wordCommand.address +
+                            "\nPort: " + wordCommand.port);
                 }
             }
-        }
+        });
     }
 
     private void sendDataToServer(String command, String address, int port)
