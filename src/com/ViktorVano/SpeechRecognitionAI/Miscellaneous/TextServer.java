@@ -1,8 +1,5 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
-import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
-import com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
 
@@ -11,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.token;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.useIpMic;
 
 public class TextServer extends Thread{
     private int port;
@@ -119,7 +115,7 @@ public class TextServer extends Thread{
                         new WordRouter(this.wordRoutingDatabase, this.message);
                         new WordCommandRouter(this.wordCommandsDatabase, this.message);
                         new WebhookRouter(this.webhookDatabase, this.message);
-                        new ShellCommandExecuter(this.shellCommandDatabase, this.message);
+                        new ShellCommander(this.shellCommandDatabase, this.message);
                         String response = "";
                         for (WordResponse wordResponse : wordResponsesDatabase)
                         {

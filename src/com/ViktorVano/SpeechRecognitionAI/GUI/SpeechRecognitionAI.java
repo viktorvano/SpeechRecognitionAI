@@ -584,7 +584,7 @@ public class SpeechRecognitionAI extends Application {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new ShellCommandExecuter(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");

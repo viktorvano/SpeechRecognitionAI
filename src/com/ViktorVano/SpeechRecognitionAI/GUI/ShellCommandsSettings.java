@@ -20,10 +20,10 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.ShellCommandsFile
 
 public class ShellCommandsSettings {
     private int shellCommandIndex = -1;
-    private Button buttonUpdateWebhook;
+    private Button buttonUpdateShellCommand;
     private Button buttonRemoveShellCommand;
 
-    private Button buttonAddWebhook;
+    private Button buttonAddShellCommand;
     private TextField txtEditWord;
     private TextField txtEditCommand;
 
@@ -40,10 +40,10 @@ public class ShellCommandsSettings {
         dialog.initOwner(stageReference);
         BorderPane borderPane = new BorderPane();
 
-        ObservableList<String> webhookItems = FXCollections.observableArrayList();
+        ObservableList<String> shellCommandItems = FXCollections.observableArrayList();
         for (ShellCommand shellCommand : shellCommandsDatabase)
-            webhookItems.add(shellCommand.word + "\t\t-->\t\t" + shellCommand.command);
-        shellCommandsList.setItems(webhookItems);
+            shellCommandItems.add(shellCommand.word + "\t\t-->\t\t" + shellCommand.command);
+        shellCommandsList.setItems(shellCommandItems);
         shellCommandsList.setOnMouseClicked(event -> {
             if(shellCommandsList.getSelectionModel().getSelectedIndex() != -1)
             {
@@ -58,7 +58,7 @@ public class ShellCommandsSettings {
                 buttonRemoveShellCommand.setDisable(true);
                 txtEditWord.setText("");
                 txtEditCommand.setText("");
-                buttonUpdateWebhook.setDisable(true);
+                buttonUpdateShellCommand.setDisable(true);
             }
         });
 
@@ -74,35 +74,35 @@ public class ShellCommandsSettings {
                 {
                     txtEditWord.setText("");
                     txtEditCommand.setText("");
-                    buttonUpdateWebhook.setDisable(true);
+                    buttonUpdateShellCommand.setDisable(true);
                     buttonRemoveShellCommand.setDisable(true);
                 }else {
                     txtEditWord.setText(shellCommandsDatabase.get(shellCommandIndex).word);
                     txtEditCommand.setText(shellCommandsDatabase.get(shellCommandIndex).command);
-                    buttonUpdateWebhook.setDisable(false);
+                    buttonUpdateShellCommand.setDisable(false);
                     buttonRemoveShellCommand.setDisable(false);
                 }
                 saveShellCommands(shellCommandsDatabase);
             }
         });
 
-        Label labelNewWebhook = new Label("\n New Webhook \n\n");
-        labelNewWebhook.setFont(Font.font("Arial", 20));
-        labelNewWebhook.setStyle("-fx-font-weight: bold");
+        Label labelNewShellCommand = new Label("\n New ShellCommand \n\n");
+        labelNewShellCommand.setFont(Font.font("Arial", 20));
+        labelNewShellCommand.setStyle("-fx-font-weight: bold");
 
         txtNewWord = new TextField();
         txtNewWord.setPromptText("Word/Phrase");
         txtNewWord.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWebhook.setDisable(txtNewWord.getText().length() == 0 || txtNewCommand.getText().length() == 0));
+                buttonAddShellCommand.setDisable(txtNewWord.getText().length() == 0 || txtNewCommand.getText().length() == 0));
 
         txtNewCommand = new TextField();
         txtNewCommand.setPromptText("Shell Command");
         txtNewCommand.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWebhook.setDisable(txtNewWord.getText().length() == 0 || txtNewCommand.getText().length() == 0));
+                buttonAddShellCommand.setDisable(txtNewWord.getText().length() == 0 || txtNewCommand.getText().length() == 0));
 
-        buttonAddWebhook = new Button("Add Shell Command");
-        buttonAddWebhook.setDisable(true);
-        buttonAddWebhook.setOnAction(event -> {
+        buttonAddShellCommand = new Button("Add Shell Command");
+        buttonAddShellCommand.setDisable(true);
+        buttonAddShellCommand.setOnAction(event -> {
             ShellCommand tempShellCommand = new ShellCommand();
             tempShellCommand.word = txtNewWord.getText();
             tempShellCommand.command = txtNewCommand.getText();
@@ -114,31 +114,31 @@ public class ShellCommandsSettings {
             saveShellCommands(shellCommandsDatabase);
         });
 
-        Label labelEditWebhook = new Label("\n Edit Webhook \n\n");
-        labelEditWebhook.setFont(Font.font("Arial", 20));
-        labelEditWebhook.setStyle("-fx-font-weight: bold");
+        Label labelEditShellCommand = new Label("\n Edit Shell Command \n\n");
+        labelEditShellCommand.setFont(Font.font("Arial", 20));
+        labelEditShellCommand.setStyle("-fx-font-weight: bold");
 
         txtEditWord = new TextField();
         txtEditWord.setPromptText("Word/Phrase");
         txtEditWord.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonUpdateWebhook.setDisable(txtEditWord.getText().length() == 0 ||
+                buttonUpdateShellCommand.setDisable(txtEditWord.getText().length() == 0 ||
                         txtEditCommand.getText().length() == 0 ||
                         shellCommandIndex == -1));
 
         txtEditCommand = new TextField();
         txtEditCommand.setPromptText("Shell Command");
         txtEditCommand.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonUpdateWebhook.setDisable(txtEditWord.getText().length() == 0 ||
+                buttonUpdateShellCommand.setDisable(txtEditWord.getText().length() == 0 ||
                         txtEditCommand.getText().length() == 0 ||
                         shellCommandIndex == -1));
 
-        buttonUpdateWebhook = new Button("Update Shell Command");
-        buttonUpdateWebhook.setDisable(true);
-        buttonUpdateWebhook.setOnAction(event -> {
+        buttonUpdateShellCommand = new Button("Update Shell Command");
+        buttonUpdateShellCommand.setDisable(true);
+        buttonUpdateShellCommand.setOnAction(event -> {
             ShellCommand tempShellCommand = new ShellCommand();
             tempShellCommand.word = txtEditWord.getText();
             tempShellCommand.command = txtEditCommand.getText();
-            buttonUpdateWebhook.setDisable(true);
+            buttonUpdateShellCommand.setDisable(true);
             buttonRemoveShellCommand.setDisable(true);
             txtEditWord.setText("");
             txtEditCommand.setText("");
@@ -152,14 +152,14 @@ public class ShellCommandsSettings {
         stackPaneCenter.getChildren().add(shellCommandsList);
 
         VBox vBoxRight = new VBox();
-        vBoxRight.getChildren().add(labelNewWebhook);
+        vBoxRight.getChildren().add(labelNewShellCommand);
         vBoxRight.getChildren().add(txtNewWord);
         vBoxRight.getChildren().add(txtNewCommand);
-        vBoxRight.getChildren().add(buttonAddWebhook);
-        vBoxRight.getChildren().add(labelEditWebhook);
+        vBoxRight.getChildren().add(buttonAddShellCommand);
+        vBoxRight.getChildren().add(labelEditShellCommand);
         vBoxRight.getChildren().add(txtEditWord);
         vBoxRight.getChildren().add(txtEditCommand);
-        vBoxRight.getChildren().add(buttonUpdateWebhook);
+        vBoxRight.getChildren().add(buttonUpdateShellCommand);
         vBoxRight.getChildren().add(buttonRemoveShellCommand);
 
         borderPane.setCenter(stackPaneCenter);

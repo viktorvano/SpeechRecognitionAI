@@ -4,11 +4,11 @@ import javafx.collections.ObservableList;
 
 import java.io.*;
 
-public class ShellCommandExecuter  extends Thread {
+public class ShellCommander extends Thread {
     private String message;
     private ObservableList<ShellCommand> shellCommandList;
 
-    public ShellCommandExecuter(ObservableList<ShellCommand> shellCommandsDatabase, String recognizedMessage)
+    public ShellCommander(ObservableList<ShellCommand> shellCommandsDatabase, String recognizedMessage)
     {
         this.message = recognizedMessage;
         this.shellCommandList = shellCommandsDatabase;
