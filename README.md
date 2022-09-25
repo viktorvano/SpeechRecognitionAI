@@ -13,7 +13,7 @@
 - Word Responses: If a phrase is detected, a proper reply message is send back to the client (IP Mic for Android)
 - Webhooks: You can trigger an automation in [Home Assistant](https://www.home-assistant.io/)
 - Shell Commands: You can use the same commands like in "command prompt" in Windows or "console" in Linux.
-- Transfer Learning: The neural network will retrain itself faster if the wocabulary is changed, because of the previous experience.
+- Transfer Learning: The neural network will retrain itself faster if the wocabulary is changed, because of the previous experience. Or you can simply continue the training of the neural network with new extra data. It also works when the last hidden layers are changed, added or removed.
 - High Performance: The neural network runs neurons in each layer in parallel threads for feed forward (speech recognition) and backprop (training).
    
  Videos:  
