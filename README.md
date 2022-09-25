@@ -6,6 +6,15 @@
  Android App on Google Play Store: [IP Mic](https://play.google.com/store/apps/details?id=eu.cyberpunktech.IpMic)  
    
 <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_1.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_2.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_3.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_4.jpg" width="150"/> <img src="https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Android_App_Icon.jpg" width="150"/>  
+  
+### Features  
+- Word Routing: If a phrase is detected, forwards the whole recognized message to another server socket (IP + port)
+- Word Commands: If a phrase is detected, another command is send to a server socket (IP + port)
+- Word Responses: If a phrase is detected, a proper reply message is send back to the client (IP Mic for Android)
+- Webhooks: You can trigger an automation in [Home Assistant](https://www.home-assistant.io/)
+- Shell Commands: You can use the same commands like in "command prompt" in Windows or "console" in Linux.
+- Transfer Learning: The neural network will retrain itself faster if the wocabulary is changed, because of the previous experience.
+- High Performance: The neural network runs neurons in each layer in parallel threads for feed forward (speech recognition) and backprop (training).
    
  Videos:  
  [Speech Recognition AI v20220707 - Android App Text Query, Custom Reponses, Word Commands](https://www.youtube.com/watch?v=bid33Fv7ONc)  
