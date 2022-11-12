@@ -832,14 +832,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(labelWordDetection);
 
         Label labelStartRecording = new Label("Start Recording");
-        labelStartRecording.setLayoutX(30);
+        labelStartRecording.setLayoutX(dialogWidth * 0.03);
         labelStartRecording.setLayoutY(50);
         settingsPane.getChildren().add(labelStartRecording);
 
         TextField textFieldStartRecording = new TextField();
         textFieldStartRecording.setPromptText(Integer.toString(recorderThreshold));
         textFieldStartRecording.setText(Integer.toString(recorderThreshold));
-        textFieldStartRecording.setLayoutX(200);
+        textFieldStartRecording.setLayoutX(dialogWidth * 0.185);
         textFieldStartRecording.setLayoutY(45);
         textFieldStartRecording.setPrefWidth(60);
         textFieldStartRecording.textProperty().addListener(observable -> {
@@ -862,14 +862,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldStartRecording);
 
         Label labelWordThreshold = new Label("Word Threshold");
-        labelWordThreshold.setLayoutX(30);
+        labelWordThreshold.setLayoutX(dialogWidth * 0.03);
         labelWordThreshold.setLayoutY(91);
         settingsPane.getChildren().add(labelWordThreshold);
 
         TextField textFieldWordThreshold = new TextField();
         textFieldWordThreshold.setPromptText(Integer.toString(wordThreshold));
         textFieldWordThreshold.setText(Integer.toString(wordThreshold));
-        textFieldWordThreshold.setLayoutX(200);
+        textFieldWordThreshold.setLayoutX(dialogWidth * 0.185);
         textFieldWordThreshold.setLayoutY(86);
         textFieldWordThreshold.setPrefWidth(60);
         textFieldWordThreshold.textProperty().addListener(observable -> {
@@ -892,14 +892,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldWordThreshold);
 
         Label labelPreWordSamples = new Label("Pre-Word Samples");
-        labelPreWordSamples.setLayoutX(30);
+        labelPreWordSamples.setLayoutX(dialogWidth * 0.03);
         labelPreWordSamples.setLayoutY(132);
         settingsPane.getChildren().add(labelPreWordSamples);
 
         TextField textFieldPreWordSamples = new TextField();
         textFieldPreWordSamples.setPromptText(Integer.toString(preWordSamples));
         textFieldPreWordSamples.setText(Integer.toString(preWordSamples));
-        textFieldPreWordSamples.setLayoutX(200);
+        textFieldPreWordSamples.setLayoutX(dialogWidth * 0.185);
         textFieldPreWordSamples.setLayoutY(127);
         textFieldPreWordSamples.setPrefWidth(60);
         textFieldPreWordSamples.textProperty().addListener(observable -> {
@@ -923,14 +923,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldPreWordSamples);
 
         Label labelWordInertiaThreshold = new Label("Word Inertia Threshold");
-        labelWordInertiaThreshold.setLayoutX(30);
+        labelWordInertiaThreshold.setLayoutX(dialogWidth * 0.03);
         labelWordInertiaThreshold.setLayoutY(173);
         settingsPane.getChildren().add(labelWordInertiaThreshold);
 
         TextField textFieldWordInertiaThreshold = new TextField();
         textFieldWordInertiaThreshold.setPromptText(Integer.toString(wordInertiaThreshold));
         textFieldWordInertiaThreshold.setText(Integer.toString(wordInertiaThreshold));
-        textFieldWordInertiaThreshold.setLayoutX(200);
+        textFieldWordInertiaThreshold.setLayoutX(dialogWidth * 0.185);
         textFieldWordInertiaThreshold.setLayoutY(168);
         textFieldWordInertiaThreshold.setPrefWidth(60);
         textFieldWordInertiaThreshold.textProperty().addListener(observable -> {
@@ -953,14 +953,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldWordInertiaThreshold);
 
         Label labelWordInertiaSamples = new Label("Word Inertia Samples");
-        labelWordInertiaSamples.setLayoutX(30);
+        labelWordInertiaSamples.setLayoutX(dialogWidth * 0.03);
         labelWordInertiaSamples.setLayoutY(214);
         settingsPane.getChildren().add(labelWordInertiaSamples);
 
         TextField textFieldWordInertiaSamples = new TextField();
         textFieldWordInertiaSamples.setPromptText(Integer.toString(wordInertiaSamples));
         textFieldWordInertiaSamples.setText(Integer.toString(wordInertiaSamples));
-        textFieldWordInertiaSamples.setLayoutX(200);
+        textFieldWordInertiaSamples.setLayoutX(dialogWidth * 0.185);
         textFieldWordInertiaSamples.setLayoutY(209);
         textFieldWordInertiaSamples.setPrefWidth(60);
         textFieldWordInertiaSamples.textProperty().addListener(observable -> {
@@ -1255,6 +1255,16 @@ public class SpeechRecognitionAI extends Application {
                 double dialogWidth = stackPaneCenter.getWidth();
                 imageView.setLayoutX(dialogWidth * 0.3);
                 labelWordDetection.setLayoutX(dialogWidth * 0.03);
+                labelStartRecording.setLayoutX(dialogWidth * 0.03);
+                textFieldStartRecording.setLayoutX(dialogWidth * 0.185);
+                labelWordThreshold.setLayoutX(dialogWidth * 0.03);
+                textFieldWordThreshold.setLayoutX(dialogWidth * 0.185);
+                labelPreWordSamples.setLayoutX(dialogWidth * 0.03);
+                textFieldPreWordSamples.setLayoutX(dialogWidth * 0.185);
+                labelWordInertiaThreshold.setLayoutX(dialogWidth * 0.03);
+                textFieldWordInertiaThreshold.setLayoutX(dialogWidth * 0.185);
+                labelWordInertiaSamples.setLayoutX(dialogWidth * 0.03);
+                textFieldWordInertiaSamples.setLayoutX(dialogWidth * 0.185);
             }
         });
 
