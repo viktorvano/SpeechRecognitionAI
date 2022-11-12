@@ -59,6 +59,7 @@ public class SpeechRecognitionAI extends Application {
     private final VBox vBoxRight = new VBox();
     private final FlowPane flow = new FlowPane();
     private final HBox hBoxBottom = new HBox();
+    private final Pane settingsPane = new Pane();
     private ObservableList<RecordedAudio> database, records;
     private ObservableList<WordRouting> wordRoutingDatabase;
     private ListView<String> databaseList, recordsList, trainingList, topologyList, wordRoutingList;
@@ -812,6 +813,456 @@ public class SpeechRecognitionAI extends Application {
         wordRoutingList = new ListView<>();
 
         //TODO: add advanced Settings layout
+        double dialogWidth = stackPaneCenter.getWidth();
+        double dialogHeight = stackPaneCenter.getHeight();
+
+        ImageView imageView = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/word_detection.png"));
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(350);
+        imageView.setFitHeight(350);
+        imageView.setLayoutX(300);
+        imageView.setLayoutY(30);
+        settingsPane.getChildren().add(imageView);
+
+        Label labelWordDetection =  new Label("Word Detection");
+        labelWordDetection.setLayoutX(30);
+        labelWordDetection.setLayoutY(10);
+        labelWordDetection.setFont(Font.font("Arial", 22));
+        labelWordDetection.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelWordDetection);
+
+        Label labelStartRecording = new Label("Start Recording");
+        labelStartRecording.setLayoutX(30);
+        labelStartRecording.setLayoutY(50);
+        settingsPane.getChildren().add(labelStartRecording);
+
+        TextField textFieldStartRecording = new TextField();
+        textFieldStartRecording.setPromptText(Integer.toString(recorderThreshold));
+        textFieldStartRecording.setText(Integer.toString(recorderThreshold));
+        textFieldStartRecording.setLayoutX(200);
+        textFieldStartRecording.setLayoutY(45);
+        textFieldStartRecording.setPrefWidth(60);
+        textFieldStartRecording.textProperty().addListener(observable -> {
+            if(textFieldStartRecording.getText().length() > 0)
+            {
+                try{
+                    int value = Integer.parseInt(textFieldStartRecording.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("recorderThreshold.dat", value);
+                        recorderThreshold = value;
+                    }else
+                        textFieldStartRecording.setText("");
+                }catch (Exception e)
+                {
+                    textFieldStartRecording.setText("");
+                }
+            }
+        });
+        settingsPane.getChildren().add(textFieldStartRecording);
+
+        Label labelWordThreshold = new Label("Word Threshold");
+        labelWordThreshold.setLayoutX(30);
+        labelWordThreshold.setLayoutY(91);
+        settingsPane.getChildren().add(labelWordThreshold);
+
+        TextField textFieldWordThreshold = new TextField();
+        textFieldWordThreshold.setPromptText(Integer.toString(wordThreshold));
+        textFieldWordThreshold.setText(Integer.toString(wordThreshold));
+        textFieldWordThreshold.setLayoutX(200);
+        textFieldWordThreshold.setLayoutY(86);
+        textFieldWordThreshold.setPrefWidth(60);
+        textFieldWordThreshold.textProperty().addListener(observable -> {
+            if(textFieldWordThreshold.getText().length() > 0)
+            {
+                try{
+                    int value = Integer.parseInt(textFieldWordThreshold.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("wordThreshold.dat", value);
+                        wordThreshold = value;
+                    }else
+                        textFieldWordThreshold.setText("");
+                }catch (Exception e)
+                {
+                    textFieldWordThreshold.setText("");
+                }
+            }
+        });
+        settingsPane.getChildren().add(textFieldWordThreshold);
+
+        Label labelPreWordSamples = new Label("Pre-Word Samples");
+        labelPreWordSamples.setLayoutX(30);
+        labelPreWordSamples.setLayoutY(132);
+        settingsPane.getChildren().add(labelPreWordSamples);
+
+        TextField textFieldPreWordSamples = new TextField();
+        textFieldPreWordSamples.setPromptText(Integer.toString(preWordSamples));
+        textFieldPreWordSamples.setText(Integer.toString(preWordSamples));
+        textFieldPreWordSamples.setLayoutX(200);
+        textFieldPreWordSamples.setLayoutY(127);
+        textFieldPreWordSamples.setPrefWidth(60);
+        textFieldPreWordSamples.textProperty().addListener(observable -> {
+            if(textFieldPreWordSamples.getText().length() > 0)
+            {
+                try{
+                    int value = Integer.parseInt(textFieldPreWordSamples.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("preWordSamples.dat", value);
+                        preWordSamples = value;
+                    }else
+                        textFieldPreWordSamples.setText("");
+
+                }catch (Exception e)
+                {
+                    textFieldPreWordSamples.setText("");
+                }
+            }
+        });
+        settingsPane.getChildren().add(textFieldPreWordSamples);
+
+        Label labelWordInertiaThreshold = new Label("Word Inertia Threshold");
+        labelWordInertiaThreshold.setLayoutX(30);
+        labelWordInertiaThreshold.setLayoutY(173);
+        settingsPane.getChildren().add(labelWordInertiaThreshold);
+
+        TextField textFieldWordInertiaThreshold = new TextField();
+        textFieldWordInertiaThreshold.setPromptText(Integer.toString(wordInertiaThreshold));
+        textFieldWordInertiaThreshold.setText(Integer.toString(wordInertiaThreshold));
+        textFieldWordInertiaThreshold.setLayoutX(200);
+        textFieldWordInertiaThreshold.setLayoutY(168);
+        textFieldWordInertiaThreshold.setPrefWidth(60);
+        textFieldWordInertiaThreshold.textProperty().addListener(observable -> {
+            if(textFieldWordInertiaThreshold.getText().length() > 0)
+            {
+                try{
+                    int value = Integer.parseInt(textFieldWordInertiaThreshold.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("wordInertiaThreshold.dat", value);
+                        wordInertiaThreshold = value;
+                    }else
+                        textFieldWordInertiaThreshold.setText("");
+                }catch (Exception e)
+                {
+                    textFieldWordInertiaThreshold.setText("");
+                }
+            }
+        });
+        settingsPane.getChildren().add(textFieldWordInertiaThreshold);
+
+        Label labelWordInertiaSamples = new Label("Word Inertia Samples");
+        labelWordInertiaSamples.setLayoutX(30);
+        labelWordInertiaSamples.setLayoutY(214);
+        settingsPane.getChildren().add(labelWordInertiaSamples);
+
+        TextField textFieldWordInertiaSamples = new TextField();
+        textFieldWordInertiaSamples.setPromptText(Integer.toString(wordInertiaSamples));
+        textFieldWordInertiaSamples.setText(Integer.toString(wordInertiaSamples));
+        textFieldWordInertiaSamples.setLayoutX(200);
+        textFieldWordInertiaSamples.setLayoutY(209);
+        textFieldWordInertiaSamples.setPrefWidth(60);
+        textFieldWordInertiaSamples.textProperty().addListener(observable -> {
+            if(textFieldWordInertiaSamples.getText().length() > 0)
+            {
+                try{
+                    int value = Integer.parseInt(textFieldWordInertiaSamples.getText());
+                    if(value > 0)
+                    {
+                        saveIntegerToFile("wordInertiaSamples.dat", value);
+                        wordInertiaSamples = value;
+                    }else
+                        textFieldWordInertiaSamples.setText("");
+                }catch (Exception e)
+                {
+                    textFieldWordInertiaSamples.setText("");
+                }
+            }
+        });
+        settingsPane.getChildren().add(textFieldWordInertiaSamples);
+
+        Label labelOtherSettings =  new Label("Other Settings");
+        labelOtherSettings.setLayoutX(30);
+        labelOtherSettings.setLayoutY(291);
+        labelOtherSettings.setFont(Font.font("Arial", 22));
+        labelOtherSettings.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelOtherSettings);
+
+        CheckBox checkBoxPrintToConsole = new CheckBox("Print Neural Network Values To Console");
+        checkBoxPrintToConsole.setSelected(printNetworkValues);
+        checkBoxPrintToConsole.setOnAction(event -> {
+            printNetworkValues = checkBoxPrintToConsole.isSelected();
+            saveBooleanToFile("printNetworkValues.dat", printNetworkValues);
+        });
+        checkBoxPrintToConsole.setLayoutX(30);
+        checkBoxPrintToConsole.setLayoutY(331);
+        settingsPane.getChildren().add(checkBoxPrintToConsole);
+
+        CheckBox checkBoxPlotNeuralCharts = new CheckBox("Plot Neural Network Charts");
+        checkBoxPlotNeuralCharts.setSelected(plotNeuralCharts);
+        checkBoxPlotNeuralCharts.setOnAction(event -> {
+            plotNeuralCharts = checkBoxPlotNeuralCharts.isSelected();
+            saveBooleanToFile("plotNeuralCharts.dat", plotNeuralCharts);
+        });
+        checkBoxPlotNeuralCharts.setLayoutX(30);
+        checkBoxPlotNeuralCharts.setLayoutY(361);
+        settingsPane.getChildren().add(checkBoxPlotNeuralCharts);
+
+        CheckBox checkBoxPlotKeepLongWords = new CheckBox("Keep Long Words (But Trim Them)");
+        checkBoxPlotKeepLongWords.setSelected(keepLongWords);
+        checkBoxPlotKeepLongWords.setOnAction(event -> {
+            keepLongWords = checkBoxPlotKeepLongWords.isSelected();
+            saveBooleanToFile("keepLongWords.dat", keepLongWords);
+        });
+        checkBoxPlotKeepLongWords.setLayoutX(30);
+        checkBoxPlotKeepLongWords.setLayoutY(391);
+        settingsPane.getChildren().add(checkBoxPlotKeepLongWords);
+
+        Label labelIpMic =  new Label("IP Mic App");
+        labelIpMic.setLayoutX(30);
+        labelIpMic.setLayoutY(440);
+        labelIpMic.setFont(Font.font("Arial", 22));
+        labelIpMic.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelIpMic);
+
+        CheckBox checkBoxUseIpMic = new CheckBox("Use IP Microphone");
+        checkBoxUseIpMic.setSelected(useIpMic);
+        checkBoxUseIpMic.setDisable(useIpMicOnly);
+        checkBoxUseIpMic.setOnAction(event -> {
+            useIpMic = checkBoxUseIpMic.isSelected();
+            saveBooleanToFile("useIpMic.dat", useIpMic);
+        });
+        checkBoxUseIpMic.setLayoutX(30);
+        checkBoxUseIpMic.setLayoutY(480);
+        settingsPane.getChildren().add(checkBoxUseIpMic);
+
+        Label labelToken = new Label("Token");
+        labelToken.setLayoutX(30);
+        labelToken.setLayoutY(520);
+        settingsPane.getChildren().add(labelToken);
+
+        TextField textFieldToken = new TextField();
+        textFieldToken.setPromptText(token);
+        textFieldToken.setText(token);
+        textFieldToken.setLayoutX(80);
+        textFieldToken.setLayoutY(516);
+        textFieldToken.setPrefWidth(240);
+        textFieldToken.textProperty().addListener(observable -> {
+            if(textFieldToken.getText().length() > 0)
+                try{
+                    String value = textFieldToken.getText();
+                    if(value.length() > 0)
+                    {
+                        saveStringToFile("token.dat", value);
+                        token = value;
+                    }else
+                        textFieldToken.setText("");
+                }catch (Exception e)
+                {
+                    textFieldToken.setText("");
+                }
+        });
+        settingsPane.getChildren().add(textFieldToken);
+
+        Label labelMicPort = new Label("Audio Server Port\n(restart required)");
+        labelMicPort.setLayoutX(30);
+        labelMicPort.setLayoutY(560);
+        settingsPane.getChildren().add(labelMicPort);
+
+        Label labelTextPort = new Label("Text Server Port       " + (audioServerPort+1));
+        labelTextPort.setLayoutX(30);
+        labelTextPort.setLayoutY(595);
+        settingsPane.getChildren().add(labelTextPort);
+
+        TextField textFieldPort = new TextField();
+        textFieldPort.setPromptText(Integer.toString(audioServerPort));
+        textFieldPort.setText(Integer.toString(audioServerPort));
+        textFieldPort.setLayoutX(160);
+        textFieldPort.setLayoutY(556);
+        textFieldPort.setPrefWidth(60);
+        textFieldPort.textProperty().addListener(observable -> {
+            if(textFieldPort.getText().length() > 0)
+                try{
+                    int value = Integer.parseInt(textFieldPort.getText());
+                    if(value > 0 && value < 65535)
+                    {
+                        saveIntegerToFile("audioServerPort.dat", value);
+                        audioServerPort = value;
+                        labelTextPort.setText("Text Server Port       " + (audioServerPort+1));
+                    }else
+                        textFieldPort.setText("");
+                }catch (Exception e)
+                {
+                    textFieldPort.setText("");
+                }
+        });
+        settingsPane.getChildren().add(textFieldPort);
+
+        Label labelNeuralNetwork =  new Label("Neural Network");
+        labelNeuralNetwork.setLayoutX(350);
+        labelNeuralNetwork.setLayoutY(370);
+        labelNeuralNetwork.setFont(Font.font("Arial", 22));
+        labelNeuralNetwork.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelNeuralNetwork);
+
+        Label labelVelocity = new Label("Velocity\n" +
+                "(Eta - [0.0..1.0] overall network training rate)");
+        labelVelocity.setLayoutX(350);
+        labelVelocity.setLayoutY(410);
+        settingsPane.getChildren().add(labelVelocity);
+
+        TextField textFieldVelocity = new TextField();
+        textFieldVelocity.setPromptText(Float.toString(velocity));
+        textFieldVelocity.setText(Float.toString(velocity));
+        textFieldVelocity.setLayoutX(500);
+        textFieldVelocity.setLayoutY(400);
+        textFieldVelocity.setPrefWidth(60);
+        textFieldVelocity.textProperty().addListener(observable -> {
+            if(textFieldVelocity.getText().length() > 0)
+                try{
+                    if(textFieldVelocity.getText().length() > 2)
+                    {
+                        float value = Float.parseFloat(textFieldVelocity.getText());
+                        if(value > 0.0f)
+                        {
+                            if(value > 1.0f)
+                            {
+                                value = 1.0f;
+                                textFieldVelocity.setText(String.valueOf(value));
+                            }
+                            saveFloatToFile("velocity.dat", value);
+                            velocity = value;
+                        }else
+                            textFieldVelocity.setText("");
+                    }
+                }catch (Exception e)
+                {
+                    textFieldVelocity.setText("");
+                }
+        });
+        settingsPane.getChildren().add(textFieldVelocity);
+
+        Label labelMomentum = new Label("Momentum\n" +
+                "(Alpha - [0.0..n] multiplier of last weight change)");
+        labelMomentum.setLayoutX(350);
+        labelMomentum.setLayoutY(474);
+        settingsPane.getChildren().add(labelMomentum);
+
+        TextField textFieldMomentum = new TextField();
+        textFieldMomentum.setPromptText(Float.toString(momentum));
+        textFieldMomentum.setText(Float.toString(momentum));
+        textFieldMomentum.setLayoutX(500);
+        textFieldMomentum.setLayoutY(461);
+        textFieldMomentum.setPrefWidth(60);
+        textFieldMomentum.textProperty().addListener(observable -> {
+            if(textFieldMomentum.getText().length() > 0)
+                try{
+                    if(textFieldMomentum.getText().length() > 2)
+                    {
+                        float value = Float.parseFloat(textFieldMomentum.getText());
+                        if(value > 0.0f)
+                        {
+                            if(value > 1.0f)
+                            {
+                                value = 1.0f;
+                                textFieldMomentum.setText(String.valueOf(value));
+                            }
+                            saveFloatToFile("momentum.dat", value);
+                            momentum = value;
+                        }else
+                            textFieldMomentum.setText("");
+                    }
+                }catch (Exception e)
+                {
+                    textFieldMomentum.setText("");
+                }
+        });
+        settingsPane.getChildren().add(textFieldMomentum);
+
+        Label labelExitTrainingLoss = new Label("Exit Training Loss");
+        labelExitTrainingLoss.setLayoutX(350);
+        labelExitTrainingLoss.setLayoutY(536);
+        settingsPane.getChildren().add(labelExitTrainingLoss);
+
+        TextField textFieldExitTrainingLoss = new TextField();
+        textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingLoss));
+        textFieldExitTrainingLoss.setText(Float.toString(exitTrainingLoss));
+        textFieldExitTrainingLoss.setLayoutX(500);
+        textFieldExitTrainingLoss.setLayoutY(532);
+        textFieldExitTrainingLoss.setPrefWidth(60);
+        textFieldExitTrainingLoss.textProperty().addListener(observable -> {
+            if(textFieldExitTrainingLoss.getText().length() > 0)
+                try{
+                    if(textFieldExitTrainingLoss.getText().length() > 2)
+                    {
+                        float value = Float.parseFloat(textFieldExitTrainingLoss.getText());
+                        if(value > 0.0f)
+                        {
+                            if(value > 1.0f)
+                            {
+                                value = 1.0f;
+                                textFieldExitTrainingLoss.setText(String.valueOf(value));
+                            }
+                            saveFloatToFile("exitTrainingLoss.dat", value);
+                            exitTrainingLoss = value;
+                        }else
+                            textFieldExitTrainingLoss.setText("");
+                    }
+                }catch (Exception e)
+                {
+                    textFieldExitTrainingLoss.setText("");
+                }
+        });
+        settingsPane.getChildren().add(textFieldExitTrainingLoss);
+
+        Label labelClassifierMatch = new Label("Classifier Match [%]");
+        labelClassifierMatch.setLayoutX(350);
+        labelClassifierMatch.setLayoutY(577);
+        settingsPane.getChildren().add(labelClassifierMatch);
+
+        TextField textFieldMatch = new TextField();
+        textFieldMatch.setPromptText(Integer.toString((int)(classifierThreshold*100.0f)));
+        textFieldMatch.setText(Integer.toString((int)(classifierThreshold*100.0f)));
+        textFieldMatch.setLayoutX(500);
+        textFieldMatch.setLayoutY(573);
+        textFieldMatch.setPrefWidth(60);
+        textFieldMatch.textProperty().addListener(observable -> {
+            if(textFieldMatch.getText().length() > 0)
+                try{
+                    int value = Integer.parseInt(textFieldMatch.getText());
+                    if(value >= 0)
+                    {
+                        if(value > 100)
+                        {
+                            value = 100;
+                            textFieldMatch.setText(String.valueOf(value));
+                        }
+                        classifierThreshold = (float)value/100.0f;
+                        saveFloatToFile("classifierThreshold.dat", classifierThreshold);
+                    }else
+                        textFieldMatch.setText("");
+                }catch (Exception e)
+                {
+                    textFieldMatch.setText("");
+                }
+        });
+        settingsPane.getChildren().add(textFieldMatch);
+
+        stackPaneCenter.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+            }
+        });
+
+        stackPaneCenter.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+            }
+        });
+        //TODO: end of layout
 
         buttonWordRoutingSettings = new Button("Word Routing");
         buttonWordRoutingSettings.setOnAction(event -> {
@@ -939,6 +1390,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void displaySettingsLayout()
     {
+        stackPaneCenter.getChildren().add(settingsPane);
         //stackPaneCenter.getChildren().add(wordRoutingList);
         /*vBoxRight.getChildren().add(labelNewWordRouting);
         vBoxRight.getChildren().add(txtNewWord);
@@ -962,6 +1414,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void hideSettingsLayout()
     {
+        stackPaneCenter.getChildren().remove(settingsPane);
         //stackPaneCenter.getChildren().remove(wordRoutingList);
         /*vBoxRight.getChildren().remove(labelNewWordRouting);
         vBoxRight.getChildren().remove(txtNewWord);
