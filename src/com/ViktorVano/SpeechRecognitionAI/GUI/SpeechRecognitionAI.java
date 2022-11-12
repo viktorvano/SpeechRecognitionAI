@@ -820,13 +820,13 @@ public class SpeechRecognitionAI extends Application {
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(350);
         imageView.setFitHeight(350);
-        imageView.setLayoutX(300);
-        imageView.setLayoutY(30);
+        imageView.setLayoutX(dialogWidth * 0.3);
+        imageView.setLayoutY(dialogHeight * 0.02);
         settingsPane.getChildren().add(imageView);
 
         Label labelWordDetection =  new Label("Word Detection");
-        labelWordDetection.setLayoutX(30);
-        labelWordDetection.setLayoutY(10);
+        labelWordDetection.setLayoutX(dialogWidth * 0.03);
+        labelWordDetection.setLayoutY(dialogHeight * 0.01);
         labelWordDetection.setFont(Font.font("Arial", 22));
         labelWordDetection.setStyle("-fx-font-weight: bold");
         settingsPane.getChildren().add(labelWordDetection);
@@ -1252,14 +1252,18 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
+                double dialogWidth = stackPaneCenter.getWidth();
+                imageView.setLayoutX(dialogWidth * 0.3);
+                labelWordDetection.setLayoutX(dialogWidth * 0.03);
             }
         });
 
         stackPaneCenter.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
+                double dialogHeight = stackPaneCenter.getHeight();
+                imageView.setLayoutY(dialogHeight * 0.02);
+                labelWordDetection.setLayoutY(dialogHeight * 0.01);
             }
         });
         //TODO: end of layout
