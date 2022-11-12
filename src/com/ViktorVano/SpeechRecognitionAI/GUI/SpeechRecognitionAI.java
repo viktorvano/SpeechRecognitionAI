@@ -1021,7 +1021,7 @@ public class SpeechRecognitionAI extends Application {
 
         Label labelIpMic =  new Label("IP Mic App");
         labelIpMic.setLayoutX(paneWidth * 0.65);
-        labelIpMic.setLayoutY(440);
+        labelIpMic.setLayoutY(paneHeight * 0.5);
         labelIpMic.setFont(Font.font("Arial", 22));
         labelIpMic.setStyle("-fx-font-weight: bold");
         settingsPane.getChildren().add(labelIpMic);
@@ -1034,19 +1034,19 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("useIpMic.dat", useIpMic);
         });
         checkBoxUseIpMic.setLayoutX(paneWidth * 0.65);
-        checkBoxUseIpMic.setLayoutY(480);
+        checkBoxUseIpMic.setLayoutY(paneHeight * 0.57);
         settingsPane.getChildren().add(checkBoxUseIpMic);
 
         Label labelToken = new Label("Token");
         labelToken.setLayoutX(paneWidth * 0.65);
-        labelToken.setLayoutY(520);
+        labelToken.setLayoutY(paneHeight * 0.64);
         settingsPane.getChildren().add(labelToken);
 
         TextField textFieldToken = new TextField();
         textFieldToken.setPromptText(token);
         textFieldToken.setText(token);
         textFieldToken.setLayoutX(paneWidth * 0.7);
-        textFieldToken.setLayoutY(516);
+        textFieldToken.setLayoutY(paneHeight * 0.63);
         textFieldToken.setPrefWidth(240);
         textFieldToken.textProperty().addListener(observable -> {
             if(textFieldToken.getText().length() > 0)
@@ -1067,19 +1067,19 @@ public class SpeechRecognitionAI extends Application {
 
         Label labelMicPort = new Label("Audio Server Port\n(restart required)");
         labelMicPort.setLayoutX(paneWidth * 0.65);
-        labelMicPort.setLayoutY(560);
+        labelMicPort.setLayoutY(paneHeight * 0.71);
         settingsPane.getChildren().add(labelMicPort);
 
         Label labelTextPort = new Label("Text Server Port       " + (audioServerPort+1));
         labelTextPort.setLayoutX(paneWidth * 0.65);
-        labelTextPort.setLayoutY(595);
+        labelTextPort.setLayoutY(paneHeight * 0.78);
         settingsPane.getChildren().add(labelTextPort);
 
         TextField textFieldPort = new TextField();
         textFieldPort.setPromptText(Integer.toString(audioServerPort));
         textFieldPort.setText(Integer.toString(audioServerPort));
         textFieldPort.setLayoutX(paneWidth * 0.78);
-        textFieldPort.setLayoutY(556);
+        textFieldPort.setLayoutY(paneHeight * 0.7);
         textFieldPort.setPrefWidth(60);
         textFieldPort.textProperty().addListener(observable -> {
             if(textFieldPort.getText().length() > 0)
@@ -1306,6 +1306,13 @@ public class SpeechRecognitionAI extends Application {
                 checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.15);
                 checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
 
+                labelIpMic.setLayoutY(paneHeight * 0.5);
+                checkBoxUseIpMic.setLayoutY(paneHeight * 0.57);
+                labelToken.setLayoutY(paneHeight * 0.64);
+                textFieldToken.setLayoutY(paneHeight * 0.63);
+                labelMicPort.setLayoutY(paneHeight * 0.71);
+                labelTextPort.setLayoutY(paneHeight * 0.78);
+                textFieldPort.setLayoutY(paneHeight * 0.7);
             }
         });
         //TODO: end of layout
