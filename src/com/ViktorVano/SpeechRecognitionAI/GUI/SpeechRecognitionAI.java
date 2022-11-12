@@ -1100,7 +1100,7 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldPort);
 
         Label labelNeuralNetwork =  new Label("Neural Network");
-        labelNeuralNetwork.setLayoutX(350);
+        labelNeuralNetwork.setLayoutX(paneWidth * 0.03);
         labelNeuralNetwork.setLayoutY(370);
         labelNeuralNetwork.setFont(Font.font("Arial", 22));
         labelNeuralNetwork.setStyle("-fx-font-weight: bold");
@@ -1108,14 +1108,14 @@ public class SpeechRecognitionAI extends Application {
 
         Label labelVelocity = new Label("Velocity\n" +
                 "(Eta - [0.0..1.0] overall network training rate)");
-        labelVelocity.setLayoutX(350);
+        labelVelocity.setLayoutX(paneWidth * 0.03);
         labelVelocity.setLayoutY(410);
         settingsPane.getChildren().add(labelVelocity);
 
         TextField textFieldVelocity = new TextField();
         textFieldVelocity.setPromptText(Float.toString(velocity));
         textFieldVelocity.setText(Float.toString(velocity));
-        textFieldVelocity.setLayoutX(500);
+        textFieldVelocity.setLayoutX(paneWidth * 0.185);
         textFieldVelocity.setLayoutY(400);
         textFieldVelocity.setPrefWidth(60);
         textFieldVelocity.textProperty().addListener(observable -> {
@@ -1145,14 +1145,14 @@ public class SpeechRecognitionAI extends Application {
 
         Label labelMomentum = new Label("Momentum\n" +
                 "(Alpha - [0.0..n] multiplier of last weight change)");
-        labelMomentum.setLayoutX(350);
+        labelMomentum.setLayoutX(paneWidth * 0.03);
         labelMomentum.setLayoutY(474);
         settingsPane.getChildren().add(labelMomentum);
 
         TextField textFieldMomentum = new TextField();
         textFieldMomentum.setPromptText(Float.toString(momentum));
         textFieldMomentum.setText(Float.toString(momentum));
-        textFieldMomentum.setLayoutX(500);
+        textFieldMomentum.setLayoutX(paneWidth * 0.185);
         textFieldMomentum.setLayoutY(461);
         textFieldMomentum.setPrefWidth(60);
         textFieldMomentum.textProperty().addListener(observable -> {
@@ -1181,14 +1181,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldMomentum);
 
         Label labelExitTrainingLoss = new Label("Exit Training Loss");
-        labelExitTrainingLoss.setLayoutX(350);
+        labelExitTrainingLoss.setLayoutX(paneWidth * 0.03);
         labelExitTrainingLoss.setLayoutY(536);
         settingsPane.getChildren().add(labelExitTrainingLoss);
 
         TextField textFieldExitTrainingLoss = new TextField();
         textFieldExitTrainingLoss.setPromptText(Float.toString(exitTrainingLoss));
         textFieldExitTrainingLoss.setText(Float.toString(exitTrainingLoss));
-        textFieldExitTrainingLoss.setLayoutX(500);
+        textFieldExitTrainingLoss.setLayoutX(paneWidth * 0.185);
         textFieldExitTrainingLoss.setLayoutY(532);
         textFieldExitTrainingLoss.setPrefWidth(60);
         textFieldExitTrainingLoss.textProperty().addListener(observable -> {
@@ -1217,14 +1217,14 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldExitTrainingLoss);
 
         Label labelClassifierMatch = new Label("Classifier Match [%]");
-        labelClassifierMatch.setLayoutX(350);
+        labelClassifierMatch.setLayoutX(paneWidth * 0.03);
         labelClassifierMatch.setLayoutY(577);
         settingsPane.getChildren().add(labelClassifierMatch);
 
         TextField textFieldMatch = new TextField();
         textFieldMatch.setPromptText(Integer.toString((int)(classifierThreshold*100.0f)));
         textFieldMatch.setText(Integer.toString((int)(classifierThreshold*100.0f)));
-        textFieldMatch.setLayoutX(500);
+        textFieldMatch.setLayoutX(paneWidth * 0.185);
         textFieldMatch.setLayoutY(573);
         textFieldMatch.setPrefWidth(60);
         textFieldMatch.textProperty().addListener(observable -> {
@@ -1280,6 +1280,15 @@ public class SpeechRecognitionAI extends Application {
                 labelTextPort.setLayoutX(paneWidth * 0.65);
                 textFieldPort.setLayoutX(paneWidth * 0.78);
 
+                labelNeuralNetwork.setLayoutX(paneWidth * 0.03);
+                labelVelocity.setLayoutX(paneWidth * 0.03);
+                textFieldVelocity.setLayoutX(paneWidth * 0.185);
+                labelMomentum.setLayoutX(paneWidth * 0.03);
+                textFieldMomentum.setLayoutX(paneWidth * 0.185);
+                labelExitTrainingLoss.setLayoutX(paneWidth * 0.03);
+                textFieldExitTrainingLoss.setLayoutX(paneWidth * 0.185);
+                labelClassifierMatch.setLayoutX(paneWidth * 0.03);
+                textFieldMatch.setLayoutX(paneWidth * 0.185);
             }
         });
 
