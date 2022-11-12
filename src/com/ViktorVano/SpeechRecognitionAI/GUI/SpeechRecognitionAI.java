@@ -11,7 +11,11 @@ import com.sun.istack.internal.NotNull;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -28,7 +32,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
@@ -470,6 +474,18 @@ public class SpeechRecognitionAI extends Application {
                 saveDatabase(database);
             }
         });
+        txtDatabaseWord.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(!newValue)
+                {
+                    sortDatabase();
+                    saveDatabase(database);
+                    databaseWordIndex = -1;
+                    txtDatabaseWord.setText("");
+                }
+            }
+        });
 
         records = FXCollections.observableArrayList();
         recordsList = new ListView<>();
@@ -528,6 +544,7 @@ public class SpeechRecognitionAI extends Application {
                 records.remove(recordedWordIndex);
                 recordedWordIndex = -1;
                 database.get(database.size()-1).name = databaseItem.get(databaseItem.size()-1);
+                sortDatabase();
                 saveDatabase(database);
             }
         });
@@ -1208,5 +1225,28 @@ public class SpeechRecognitionAI extends Application {
         }));
         timeline.setCycleCount(1);
         timeline.play();
+    }
+
+    private void sortDatabase()
+    {
+        Collections.sort(databaseItem);
+        ObservableList<RecordedAudio> databaseClone = FXCollections.observableArrayList();
+        databaseClone.addAll(database);
+        int i = 0, d = 0;
+        database.clear();
+        while (databaseClone.size() > 0)
+        {
+            if(databaseItem.get(i).equals(databaseClone.get(d).name))
+            {
+                database.add(databaseClone.get(d));
+                databaseClone.remove(d);
+                d = 0;
+                i++;
+            }
+            else
+            {
+                d++;
+            }
+        }
     }
 }
