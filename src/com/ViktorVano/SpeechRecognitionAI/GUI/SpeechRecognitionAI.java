@@ -812,7 +812,6 @@ public class SpeechRecognitionAI extends Application {
         wordRoutingDatabase = loadWordRouting();
         wordRoutingList = new ListView<>();
 
-        //TODO: add advanced Settings layout
         double paneWidth = stackPaneCenter.getWidth();
         double paneHeight = stackPaneCenter.getHeight();
 
@@ -1249,92 +1248,85 @@ public class SpeechRecognitionAI extends Application {
         });
         settingsPane.getChildren().add(textFieldMatch);
 
-        stackPaneCenter.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                double paneWidth = stackPaneCenter.getWidth();
+        stackPaneCenter.widthProperty().addListener((observable, oldValue, newValue) -> {
+            double paneWidth1 = stackPaneCenter.getWidth();
 
-                imageView.setLayoutX(paneWidth * 0.3);
-                labelWordDetection.setLayoutX(paneWidth * 0.03);
-                labelStartRecording.setLayoutX(paneWidth * 0.03);
-                textFieldStartRecording.setLayoutX(paneWidth * 0.185);
-                labelWordThreshold.setLayoutX(paneWidth * 0.03);
-                textFieldWordThreshold.setLayoutX(paneWidth * 0.185);
-                labelPreWordSamples.setLayoutX(paneWidth * 0.03);
-                textFieldPreWordSamples.setLayoutX(paneWidth * 0.185);
-                labelWordInertiaThreshold.setLayoutX(paneWidth * 0.03);
-                textFieldWordInertiaThreshold.setLayoutX(paneWidth * 0.185);
-                labelWordInertiaSamples.setLayoutX(paneWidth * 0.03);
-                textFieldWordInertiaSamples.setLayoutX(paneWidth * 0.185);
+            imageView.setLayoutX(paneWidth1 * 0.3);
+            labelWordDetection.setLayoutX(paneWidth1 * 0.03);
+            labelStartRecording.setLayoutX(paneWidth1 * 0.03);
+            textFieldStartRecording.setLayoutX(paneWidth1 * 0.185);
+            labelWordThreshold.setLayoutX(paneWidth1 * 0.03);
+            textFieldWordThreshold.setLayoutX(paneWidth1 * 0.185);
+            labelPreWordSamples.setLayoutX(paneWidth1 * 0.03);
+            textFieldPreWordSamples.setLayoutX(paneWidth1 * 0.185);
+            labelWordInertiaThreshold.setLayoutX(paneWidth1 * 0.03);
+            textFieldWordInertiaThreshold.setLayoutX(paneWidth1 * 0.185);
+            labelWordInertiaSamples.setLayoutX(paneWidth1 * 0.03);
+            textFieldWordInertiaSamples.setLayoutX(paneWidth1 * 0.185);
 
-                labelOtherSettings.setLayoutX(paneWidth * 0.65);
-                checkBoxPrintToConsole.setLayoutX(paneWidth * 0.65);
-                checkBoxPlotNeuralCharts.setLayoutX(paneWidth * 0.65);
-                checkBoxPlotKeepLongWords.setLayoutX(paneWidth * 0.65);
+            labelOtherSettings.setLayoutX(paneWidth1 * 0.65);
+            checkBoxPrintToConsole.setLayoutX(paneWidth1 * 0.65);
+            checkBoxPlotNeuralCharts.setLayoutX(paneWidth1 * 0.65);
+            checkBoxPlotKeepLongWords.setLayoutX(paneWidth1 * 0.65);
 
-                labelIpMic.setLayoutX(paneWidth * 0.65);
-                checkBoxUseIpMic.setLayoutX(paneWidth * 0.65);
-                labelToken.setLayoutX(paneWidth * 0.65);
-                textFieldToken.setLayoutX(paneWidth * 0.7);
-                labelMicPort.setLayoutX(paneWidth * 0.65);
-                labelTextPort.setLayoutX(paneWidth * 0.65);
-                textFieldPort.setLayoutX(paneWidth * 0.78);
+            labelIpMic.setLayoutX(paneWidth1 * 0.65);
+            checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
+            labelToken.setLayoutX(paneWidth1 * 0.65);
+            textFieldToken.setLayoutX(paneWidth1 * 0.7);
+            labelMicPort.setLayoutX(paneWidth1 * 0.65);
+            labelTextPort.setLayoutX(paneWidth1 * 0.65);
+            textFieldPort.setLayoutX(paneWidth1 * 0.78);
 
-                labelNeuralNetwork.setLayoutX(paneWidth * 0.03);
-                labelVelocity.setLayoutX(paneWidth * 0.03);
-                textFieldVelocity.setLayoutX(paneWidth * 0.185);
-                labelMomentum.setLayoutX(paneWidth * 0.03);
-                textFieldMomentum.setLayoutX(paneWidth * 0.185);
-                labelExitTrainingLoss.setLayoutX(paneWidth * 0.03);
-                textFieldExitTrainingLoss.setLayoutX(paneWidth * 0.185);
-                labelClassifierMatch.setLayoutX(paneWidth * 0.03);
-                textFieldMatch.setLayoutX(paneWidth * 0.185);
-            }
+            labelNeuralNetwork.setLayoutX(paneWidth1 * 0.03);
+            labelVelocity.setLayoutX(paneWidth1 * 0.03);
+            textFieldVelocity.setLayoutX(paneWidth1 * 0.185);
+            labelMomentum.setLayoutX(paneWidth1 * 0.03);
+            textFieldMomentum.setLayoutX(paneWidth1 * 0.185);
+            labelExitTrainingLoss.setLayoutX(paneWidth1 * 0.03);
+            textFieldExitTrainingLoss.setLayoutX(paneWidth1 * 0.185);
+            labelClassifierMatch.setLayoutX(paneWidth1 * 0.03);
+            textFieldMatch.setLayoutX(paneWidth1 * 0.185);
         });
 
-        stackPaneCenter.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                double paneHeight = stackPaneCenter.getHeight();
+        stackPaneCenter.heightProperty().addListener((observable, oldValue, newValue) -> {
+            double paneHeight1 = stackPaneCenter.getHeight();
 
-                imageView.setLayoutY(paneHeight * 0.02);
-                labelWordDetection.setLayoutY(paneHeight * 0.01);
-                labelStartRecording.setLayoutY(paneHeight * 0.08);
-                textFieldStartRecording.setLayoutY(paneHeight * 0.07);
-                labelWordThreshold.setLayoutY(paneHeight * 0.15);
-                textFieldWordThreshold.setLayoutY(paneHeight * 0.14);
-                labelPreWordSamples.setLayoutY(paneHeight * 0.22);
-                textFieldPreWordSamples.setLayoutY(paneHeight * 0.21);
-                labelWordInertiaThreshold.setLayoutY(paneHeight * 0.29);
-                textFieldWordInertiaThreshold.setLayoutY(paneHeight * 0.28);
-                labelWordInertiaSamples.setLayoutY(paneHeight * 0.36);
-                textFieldWordInertiaSamples.setLayoutY(paneHeight * 0.35);
+            imageView.setLayoutY(paneHeight1 * 0.02);
+            labelWordDetection.setLayoutY(paneHeight1 * 0.01);
+            labelStartRecording.setLayoutY(paneHeight1 * 0.08);
+            textFieldStartRecording.setLayoutY(paneHeight1 * 0.07);
+            labelWordThreshold.setLayoutY(paneHeight1 * 0.15);
+            textFieldWordThreshold.setLayoutY(paneHeight1 * 0.14);
+            labelPreWordSamples.setLayoutY(paneHeight1 * 0.22);
+            textFieldPreWordSamples.setLayoutY(paneHeight1 * 0.21);
+            labelWordInertiaThreshold.setLayoutY(paneHeight1 * 0.29);
+            textFieldWordInertiaThreshold.setLayoutY(paneHeight1 * 0.28);
+            labelWordInertiaSamples.setLayoutY(paneHeight1 * 0.36);
+            textFieldWordInertiaSamples.setLayoutY(paneHeight1 * 0.35);
 
-                labelOtherSettings.setLayoutY(paneHeight * 0.01);
-                checkBoxPrintToConsole.setLayoutY(paneHeight * 0.08);
-                checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.15);
-                checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
+            labelOtherSettings.setLayoutY(paneHeight1 * 0.01);
+            checkBoxPrintToConsole.setLayoutY(paneHeight1 * 0.08);
+            checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.15);
+            checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.22);
 
-                labelIpMic.setLayoutY(paneHeight * 0.5);
-                checkBoxUseIpMic.setLayoutY(paneHeight * 0.57);
-                labelToken.setLayoutY(paneHeight * 0.64);
-                textFieldToken.setLayoutY(paneHeight * 0.63);
-                labelMicPort.setLayoutY(paneHeight * 0.71);
-                labelTextPort.setLayoutY(paneHeight * 0.78);
-                textFieldPort.setLayoutY(paneHeight * 0.7);
+            labelIpMic.setLayoutY(paneHeight1 * 0.5);
+            checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.57);
+            labelToken.setLayoutY(paneHeight1 * 0.64);
+            textFieldToken.setLayoutY(paneHeight1 * 0.63);
+            labelMicPort.setLayoutY(paneHeight1 * 0.71);
+            labelTextPort.setLayoutY(paneHeight1 * 0.78);
+            textFieldPort.setLayoutY(paneHeight1 * 0.7);
 
-                labelNeuralNetwork.setLayoutY(paneHeight * 0.5);
-                labelVelocity.setLayoutY(paneHeight * 0.57);
-                textFieldVelocity.setLayoutY(paneHeight * 0.56);
-                labelMomentum.setLayoutY(paneHeight * 0.66);
-                textFieldMomentum.setLayoutY(paneHeight * 0.65);
-                labelExitTrainingLoss.setLayoutY(paneHeight * 0.75);
-                textFieldExitTrainingLoss.setLayoutY(paneHeight * 0.74);
-                labelClassifierMatch.setLayoutY(paneHeight * 0.84);
-                textFieldMatch.setLayoutY(paneHeight * 0.83);
-            }
+            labelNeuralNetwork.setLayoutY(paneHeight1 * 0.5);
+            labelVelocity.setLayoutY(paneHeight1 * 0.57);
+            textFieldVelocity.setLayoutY(paneHeight1 * 0.56);
+            labelMomentum.setLayoutY(paneHeight1 * 0.66);
+            textFieldMomentum.setLayoutY(paneHeight1 * 0.65);
+            labelExitTrainingLoss.setLayoutY(paneHeight1 * 0.75);
+            textFieldExitTrainingLoss.setLayoutY(paneHeight1 * 0.74);
+            labelClassifierMatch.setLayoutY(paneHeight1 * 0.84);
+            textFieldMatch.setLayoutY(paneHeight1 * 0.83);
         });
-        //TODO: end of layout
 
         buttonWordRoutingSettings = new Button("Word Routing");
         buttonWordRoutingSettings.setOnAction(event -> {
