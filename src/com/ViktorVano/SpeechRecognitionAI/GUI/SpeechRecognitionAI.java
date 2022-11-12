@@ -983,8 +983,8 @@ public class SpeechRecognitionAI extends Application {
         settingsPane.getChildren().add(textFieldWordInertiaSamples);
 
         Label labelOtherSettings =  new Label("Other Settings");
-        labelOtherSettings.setLayoutX(30);
-        labelOtherSettings.setLayoutY(291);
+        labelOtherSettings.setLayoutX(paneWidth * 0.65);
+        labelOtherSettings.setLayoutY(paneHeight * 0.01);
         labelOtherSettings.setFont(Font.font("Arial", 22));
         labelOtherSettings.setStyle("-fx-font-weight: bold");
         settingsPane.getChildren().add(labelOtherSettings);
@@ -995,8 +995,8 @@ public class SpeechRecognitionAI extends Application {
             printNetworkValues = checkBoxPrintToConsole.isSelected();
             saveBooleanToFile("printNetworkValues.dat", printNetworkValues);
         });
-        checkBoxPrintToConsole.setLayoutX(30);
-        checkBoxPrintToConsole.setLayoutY(331);
+        checkBoxPrintToConsole.setLayoutX(paneWidth * 0.65);
+        checkBoxPrintToConsole.setLayoutY(paneHeight * 0.08);
         settingsPane.getChildren().add(checkBoxPrintToConsole);
 
         CheckBox checkBoxPlotNeuralCharts = new CheckBox("Plot Neural Network Charts");
@@ -1005,8 +1005,8 @@ public class SpeechRecognitionAI extends Application {
             plotNeuralCharts = checkBoxPlotNeuralCharts.isSelected();
             saveBooleanToFile("plotNeuralCharts.dat", plotNeuralCharts);
         });
-        checkBoxPlotNeuralCharts.setLayoutX(30);
-        checkBoxPlotNeuralCharts.setLayoutY(361);
+        checkBoxPlotNeuralCharts.setLayoutX(paneWidth * 0.65);
+        checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.15);
         settingsPane.getChildren().add(checkBoxPlotNeuralCharts);
 
         CheckBox checkBoxPlotKeepLongWords = new CheckBox("Keep Long Words (But Trim Them)");
@@ -1015,8 +1015,8 @@ public class SpeechRecognitionAI extends Application {
             keepLongWords = checkBoxPlotKeepLongWords.isSelected();
             saveBooleanToFile("keepLongWords.dat", keepLongWords);
         });
-        checkBoxPlotKeepLongWords.setLayoutX(30);
-        checkBoxPlotKeepLongWords.setLayoutY(391);
+        checkBoxPlotKeepLongWords.setLayoutX(paneWidth * 0.65);
+        checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
         settingsPane.getChildren().add(checkBoxPlotKeepLongWords);
 
         Label labelIpMic =  new Label("IP Mic App");
@@ -1266,7 +1266,12 @@ public class SpeechRecognitionAI extends Application {
                 textFieldWordInertiaThreshold.setLayoutX(paneWidth * 0.185);
                 labelWordInertiaSamples.setLayoutX(paneWidth * 0.03);
                 textFieldWordInertiaSamples.setLayoutX(paneWidth * 0.185);
-                
+
+                labelOtherSettings.setLayoutX(paneWidth * 0.65);
+                checkBoxPrintToConsole.setLayoutX(paneWidth * 0.65);
+                checkBoxPlotNeuralCharts.setLayoutX(paneWidth * 0.65);
+                checkBoxPlotKeepLongWords.setLayoutX(paneWidth * 0.65);
+
             }
         });
 
@@ -1287,6 +1292,11 @@ public class SpeechRecognitionAI extends Application {
                 textFieldWordInertiaThreshold.setLayoutY(paneHeight * 0.28);
                 labelWordInertiaSamples.setLayoutY(paneHeight * 0.36);
                 textFieldWordInertiaSamples.setLayoutY(paneHeight * 0.35);
+
+                labelOtherSettings.setLayoutY(paneHeight * 0.01);
+                checkBoxPrintToConsole.setLayoutY(paneHeight * 0.08);
+                checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.15);
+                checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
 
             }
         });
