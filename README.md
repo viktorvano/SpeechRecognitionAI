@@ -17,6 +17,7 @@
 - High Performance: The neural network runs neurons in each layer in parallel threads for feed forward (speech recognition) and backprop (training).
    
  ### Videos:  
+ [Speech Recognition AI v20221112 - Home Assistant Demo](https://www.youtube.com/watch?v=UK1Q1uv1Dg8)
  [Speech Recognition AI v20220707 - Android App Text Query, Custom Reponses, Word Commands](https://www.youtube.com/watch?v=bid33Fv7ONc)  
  [Speech Recognition AI v20220409 - Review: Boosted Training Performance, Training Loss Charts](https://www.youtube.com/watch?v=w7dV-2AxO0s)  
  [Speech Recognition AI v20220327 - IP Mic Android App Update](https://www.youtube.com/watch?v=94wzIKT2vC8)  
