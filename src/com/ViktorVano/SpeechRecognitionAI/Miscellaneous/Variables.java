@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20221112;
+    public static int versionNumber = 20230407;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -30,7 +30,7 @@ public class Variables {
     public static ArrayList<Integer> topology = new ArrayList<>();
     public static final ArrayList<ArrayList<Float>> learningInputs = new ArrayList<>();
     public static final ArrayList<ArrayList<Float>> learningOutputs = new ArrayList<>();
-    public static ArrayList<Float> weights = new ArrayList<>();
+    public static float[] weights = null;
     public static int neuronIndex = 0;
     public static int trainingLine = 0;// Has to be initialized 0
     public static ArrayList<Float> input, target, result;

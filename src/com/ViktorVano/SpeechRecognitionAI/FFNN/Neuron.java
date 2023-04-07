@@ -2,7 +2,8 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
@@ -69,11 +70,11 @@ public class Neuron {
     public void saveInputWeights(Layer prevLayer)
     {
         for (Neuron neuron : prevLayer) {
-            weights.set(neuronIndex, neuron.m_outputWeights.get(m_myIndex).weight);
+            weights[neuronIndex] = neuron.m_outputWeights.get(m_myIndex).weight;
             neuronIndex++;
         }
 
-        if (neuronIndex == weights.size())
+        if (neuronIndex == weights.length)
         {
             //save weights from Weights[] to a file
             System.out.println("Saving weights to weights.dat...");
@@ -83,9 +84,14 @@ public class Neuron {
                 File file = new File("res" + fileSeparator + "weights.dat");
                 file.createNewFile();
                 FileOutputStream f = new FileOutputStream(file);
-                ObjectOutputStream o = new ObjectOutputStream(f);
-                for (Float weight : weights) o.writeObject(weight);
-                o.close();
+                ByteBuffer buffer = ByteBuffer.allocate(weights.length * 4);
+                FileChannel fc = f.getChannel();
+                for (float weight : weights)
+                {
+                    buffer.putFloat(weight);
+                }
+                buffer.flip();
+                fc.write(buffer);
                 f.close();
             }catch (Exception e)
             {
@@ -94,11 +100,11 @@ public class Neuron {
         }
     }
 
-    public void loadInputWeights(Layer prevLayer)
+    public void loadInputWeights(Layer prevLayer, int loadedWeights)
     {
         for (Neuron neuron : prevLayer) {
-            if(weights.get(neuronIndex) != null)
-                neuron.m_outputWeights.get(m_myIndex).weight = weights.get(neuronIndex);
+            if(neuronIndex < loadedWeights)
+                neuron.m_outputWeights.get(m_myIndex).weight = weights[neuronIndex];
             neuronIndex++;
         }
     }

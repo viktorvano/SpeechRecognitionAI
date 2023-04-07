@@ -604,16 +604,16 @@ public class SpeechRecognitionAI extends Application {
                     }
                     speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                 }
-            } else if (weights.size() != 0 && !weightsLoaded) {
+            } else if (weights.length != 0 && !weightsLoaded) {
                 if (loadingStep == 1)
-                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() + "]: "
-                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
+                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tStep: " + loadingStep + " / 2");
                 else
-                    speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.size() + "]: "
-                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                    speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.length + "]: "
+                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tStep: " + loadingStep + " / 2");
             } else if (weightsLoaded && !wordsDetected && displayedLayout == 2 && loadingStep != 3) {
-                speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() + "]: "
-                        + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tDone.\t\tListening...");
+                speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
+                        + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tDone.\t\tListening...");
                 loadingStep = 3;
                 for (int i = 0; i < 4; i++) {
                     labelMenu[i].setDisable(false);
