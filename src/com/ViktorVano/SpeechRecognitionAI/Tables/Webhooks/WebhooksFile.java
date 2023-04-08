@@ -1,37 +1,37 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
 
-public class WordCommandsFile {
-    public static void saveWordCommands(ObservableList<WordCommand> wordCommands)
+public class WebhooksFile {
+    public static void saveWebhooks(ObservableList<Webhook> webhooks)
     {
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            File file = new File("res" + fileSeparator + "wordCommands.dat");
+            File file = new File("res" + fileSeparator + "webhooks.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
-            for(int i=0; i<wordCommands.size(); i++)
-                o.writeObject(wordCommands.get(i));
+            for(int i=0; i<webhooks.size(); i++)
+                o.writeObject(webhooks.get(i));
             o.close();
             f.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to create the \"wordCommands.dat\" file.");
+            System.out.println("Failed to create the \"webhooks.dat\" file.");
         }
     }
 
-    public static ObservableList<WordCommand> loadWordCommands()
+    public static ObservableList<Webhook> loadWebhooks()
     {
-        ObservableList<WordCommand> wordCommands = FXCollections.observableArrayList();
+        ObservableList<Webhook> webhooks = FXCollections.observableArrayList();
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            FileInputStream fi = new FileInputStream("res" + fileSeparator + "wordCommands.dat");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "webhooks.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)
@@ -43,15 +43,15 @@ public class WordCommandsFile {
                     break;
                 }
                 if(object != null)
-                    wordCommands.add((WordCommand) object);
+                    webhooks.add((Webhook) object);
             }
 
             oi.close();
             fi.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to read the \"wordCommands.dat\" file.");
+            System.out.println("Failed to read the \"webhooks.dat\" file.");
         }
-        return wordCommands;
+        return webhooks;
     }
 }

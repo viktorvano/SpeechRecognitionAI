@@ -1,11 +1,10 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.Scanner;
 
-public class BooleanFile {
-    public static void saveBooleanToFile(String filename, boolean state)
+public class FloatFile {
+    public static void saveFloatToFile(String filename, float value)
     {
         try
         {
@@ -14,7 +13,7 @@ public class BooleanFile {
             file.createNewFile();
             //Write Content
             FileWriter writer = new FileWriter(file);
-            writer.write(Boolean.toString(state));
+            writer.write(Float.toString(value));
             writer.close();
         }catch (Exception e)
         {
@@ -22,29 +21,29 @@ public class BooleanFile {
         }
     }
 
-    public static boolean loadBooleanFromFile(String filename, boolean defaultValue)
+    public static float loadFloatFromFile(String filename, float defaultValue)
     {
-        Boolean state;
+        float value;
         try
         {
             String fileSeparator = System.getProperty("file.separator");
             File file = new File("res" + fileSeparator + filename);
             Scanner scanner = new Scanner(file);
-            if(scanner.hasNextBoolean())
+            if(scanner.hasNextLine())
             {
-                state = scanner.nextBoolean();
+                value = Float.parseFloat(scanner.nextLine());
             }else
             {
-                state = defaultValue;
-                saveBooleanToFile(filename, state);
+                value = defaultValue;
+                saveFloatToFile(filename, value);
             }
             scanner.close();
         }catch (Exception e)
         {
             System.out.println("Failed to read the \"" + filename + "\" file.");
-            state = defaultValue;
-            saveBooleanToFile(filename, state);
+            value = defaultValue;
+            saveFloatToFile(filename, value);
         }
-        return state;
+        return value;
     }
 }

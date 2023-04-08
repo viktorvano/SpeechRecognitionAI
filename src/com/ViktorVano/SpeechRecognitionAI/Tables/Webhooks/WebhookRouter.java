@@ -1,4 +1,4 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks;
 
 import javafx.collections.ObservableList;
 

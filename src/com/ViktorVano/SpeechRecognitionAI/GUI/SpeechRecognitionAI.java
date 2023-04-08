@@ -7,6 +7,15 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommand;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommander;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.Webhook;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhookRouter;
 import com.sun.istack.internal.NotNull;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,19 +41,19 @@ import javafx.util.Duration;
 
 import java.util.*;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.BooleanFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.FloatFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.BooleanFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.FloatFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.IntegerFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.StringFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.IntegerFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WebhooksFile.loadWebhooks;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommandsFile.loadWordCommands;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.loadWordResponses;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.ShellCommandsFile.loadShellCommands;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhooksFile.loadWebhooks;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandsFile.loadWordCommands;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponsesFile.loadWordResponses;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommandsFile.loadShellCommands;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRoutingFile.*;
 
 
 public class SpeechRecognitionAI extends Application {
@@ -604,16 +613,16 @@ public class SpeechRecognitionAI extends Application {
                     }
                     speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
                 }
-            } else if (weights.size() != 0 && !weightsLoaded) {
+            } else if (weights.length != 0 && !weightsLoaded) {
                 if (loadingStep == 1)
-                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() + "]: "
-                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                    speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
+                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tStep: " + loadingStep + " / 2");
                 else
-                    speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.size() + "]: "
-                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tStep: " + loadingStep + " / 2");
+                    speechRecognitionStatus.setText("Setting weights in neurons[" + neuronIndex + " / " + weights.length + "]: "
+                            + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tStep: " + loadingStep + " / 2");
             } else if (weightsLoaded && !wordsDetected && displayedLayout == 2 && loadingStep != 3) {
-                speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.size() + "]: "
-                        + Math.round(((double) neuronIndex * 100.0) / (double) weights.size()) + "%\t\tDone.\t\tListening...");
+                speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
+                        + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tDone.\t\tListening...");
                 loadingStep = 3;
                 for (int i = 0; i < 4; i++) {
                     labelMenu[i].setDisable(false);

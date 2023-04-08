@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Webhook;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.Webhook;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WebhooksFile.saveWebhooks;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhooksFile.saveWebhooks;
 
 public class WebhookSettings {
     private int webhookIndex = -1;

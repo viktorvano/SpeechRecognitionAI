@@ -1,4 +1,4 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files;
 
 import java.io.*;
 import java.util.Scanner;

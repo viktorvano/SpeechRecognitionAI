@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponse;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponsesFile.*;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponsesFile.*;
 
 public class WordResponseSettings {
     private int wordResponseIndex = -1;

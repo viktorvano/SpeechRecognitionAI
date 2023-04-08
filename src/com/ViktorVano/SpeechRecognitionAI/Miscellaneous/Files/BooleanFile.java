@@ -1,11 +1,11 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
-public class StringFile {
-    public static void saveStringToFile(String filename, String value)
+public class BooleanFile {
+    public static void saveBooleanToFile(String filename, boolean state)
     {
         try
         {
@@ -14,7 +14,7 @@ public class StringFile {
             file.createNewFile();
             //Write Content
             FileWriter writer = new FileWriter(file);
-            writer.write(value);
+            writer.write(Boolean.toString(state));
             writer.close();
         }catch (Exception e)
         {
@@ -22,29 +22,29 @@ public class StringFile {
         }
     }
 
-    public static String loadStringFromFile(String filename, String defaultValue)
+    public static boolean loadBooleanFromFile(String filename, boolean defaultValue)
     {
-        String value;
+        Boolean state;
         try
         {
             String fileSeparator = System.getProperty("file.separator");
             File file = new File("res" + fileSeparator + filename);
             Scanner scanner = new Scanner(file);
-            if(scanner.hasNextLine())
+            if(scanner.hasNextBoolean())
             {
-                value = scanner.nextLine();
+                state = scanner.nextBoolean();
             }else
             {
-                value = defaultValue;
-                saveStringToFile(filename, value);
+                state = defaultValue;
+                saveBooleanToFile(filename, state);
             }
             scanner.close();
         }catch (Exception e)
         {
             System.out.println("Failed to read the \"" + filename + "\" file.");
-            value = defaultValue;
-            saveStringToFile(filename, value);
+            state = defaultValue;
+            saveBooleanToFile(filename, state);
         }
-        return value;
+        return state;
     }
 }

@@ -1,12 +1,9 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class Weights {
-    public static void setRandomWeights()
+    public static void allocateNewWeights()
     {
         int index, NumberOfWeights = 0;
         int topologySize = topology.size();
@@ -16,6 +13,7 @@ public class Weights {
             NumberOfWeights += (topology.get(index) + 1)*topology.get(index + 1);
         }
 
-        weights = new ArrayList<>(Arrays.asList(new Float[NumberOfWeights]));
+        weights = new float[NumberOfWeights];
+        System.gc();
     }
 }

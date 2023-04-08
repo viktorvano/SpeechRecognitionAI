@@ -2,13 +2,13 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
 import java.awt.*;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
-import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.setRandomWeights;
+import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.allocateNewWeights;
 
 public class NeuralNetwork {
 
@@ -124,7 +124,7 @@ public class NeuralNetwork {
         savingWeightsPopUp = true;
         updateTrainingLabel = true;
         neuronIndex = 0;
-        setRandomWeights();
+        allocateNewWeights();
         // Forward propagate
         for (int layerNum = 1; layerNum < m_layers.size(); layerNum++)
         {
@@ -144,36 +144,35 @@ public class NeuralNetwork {
         System.out.println("Loading Weights...");
         loadingStep = 1;
         neuronIndex = 0;
-        setRandomWeights();
+        allocateNewWeights();
 
         System.out.println("Reading file weights.dat...");
         try
         {
             String fileSeparator = System.getProperty("file.separator");
             FileInputStream fi = new FileInputStream("res" + fileSeparator + "weights.dat");
-            ObjectInputStream oi = new ObjectInputStream(fi);
-            Object object;
+            FileChannel fc = fi.getChannel();
+            ByteBuffer buffer = ByteBuffer.allocate((int) fc.size());
+            fc.read(buffer);
+            buffer.flip();
             while(true)
             {
-                try{
-                    object = oi.readObject();
-                }
-                catch(IOException e){
+                if(buffer.hasRemaining())
+                {
+                    weights[neuronIndex++] = buffer.getFloat();
+                }else
                     break;
-                }
-                if(object != null)
-                    weights.set(neuronIndex++,(Float) object);
             }
 
-            oi.close();
             fi.close();
         }catch (Exception e)
         {
             System.out.println("Failed to read the \"weights.dat\" file.");
         }
+        int loadedWeights = neuronIndex;
 
         loadingStep = 2;
-        if(neuronIndex == weights.size())
+        if(neuronIndex == weights.length)
         {
             System.out.println("Weights loaded.");
         }else
@@ -192,7 +191,7 @@ public class NeuralNetwork {
             Layer prevLayer = m_layers.get(layerNum - 1);
             for (int n = 0; n < m_layers.get(layerNum).size() - 1; n++)
             {
-                m_layers.get(layerNum).get(n).loadInputWeights(prevLayer);
+                m_layers.get(layerNum).get(n).loadInputWeights(prevLayer, loadedWeights);
             }
         }
 
