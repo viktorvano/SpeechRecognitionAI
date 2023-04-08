@@ -1,5 +1,14 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommand;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommander;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.Webhook;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhookRouter;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
 

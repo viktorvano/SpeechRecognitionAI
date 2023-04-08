@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.ShellCommand;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommand;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.ShellCommandsFile.saveShellCommands;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommandsFile.saveShellCommands;
 
 public class ShellCommandsSettings {
     private int shellCommandIndex = -1;

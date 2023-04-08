@@ -1,37 +1,37 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
 
-public class WebhooksFile {
-    public static void saveWebhooks(ObservableList<Webhook> webhooks)
+public class ShellCommandsFile {
+    public static void saveShellCommands(ObservableList<ShellCommand> shellCommands)
     {
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            File file = new File("res" + fileSeparator + "webhooks.dat");
+            File file = new File("res" + fileSeparator + "shellCommands.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
-            for(int i=0; i<webhooks.size(); i++)
-                o.writeObject(webhooks.get(i));
+            for(int i=0; i<shellCommands.size(); i++)
+                o.writeObject(shellCommands.get(i));
             o.close();
             f.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to create the \"webhooks.dat\" file.");
+            System.out.println("Failed to create the \"shellCommands.dat\" file.");
         }
     }
 
-    public static ObservableList<Webhook> loadWebhooks()
+    public static ObservableList<ShellCommand> loadShellCommands()
     {
-        ObservableList<Webhook> webhooks = FXCollections.observableArrayList();
+        ObservableList<ShellCommand> shellCommands = FXCollections.observableArrayList();
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            FileInputStream fi = new FileInputStream("res" + fileSeparator + "webhooks.dat");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "shellCommands.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)
@@ -43,15 +43,15 @@ public class WebhooksFile {
                     break;
                 }
                 if(object != null)
-                    webhooks.add((Webhook) object);
+                    shellCommands.add((ShellCommand) object);
             }
 
             oi.close();
             fi.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to read the \"webhooks.dat\" file.");
+            System.out.println("Failed to read the \"shellCommands.dat\" file.");
         }
-        return webhooks;
+        return shellCommands;
     }
 }

@@ -1,37 +1,37 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Tables.Routing;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
 
-public class WordResponsesFile {
-    public static void saveWordResponses(ObservableList<WordResponse> wordResponses)
+public class WordRoutingFile {
+    public static void saveWordRouting(ObservableList<WordRouting> wordRouting)
     {
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            File file = new File("res" + fileSeparator + "wordResponses.dat");
+            File file = new File("res" + fileSeparator + "wordRouting.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
-            for(int i=0; i<wordResponses.size(); i++)
-                o.writeObject(wordResponses.get(i));
+            for(int i=0; i<wordRouting.size(); i++)
+                o.writeObject(wordRouting.get(i));
             o.close();
             f.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to create the \"wordResponses.dat\" file.");
+            System.out.println("Failed to create the \"wordRouting.dat\" file.");
         }
     }
 
-    public static ObservableList<WordResponse> loadWordResponses()
+    public static ObservableList<WordRouting> loadWordRouting()
     {
-        ObservableList<WordResponse> wordResponses = FXCollections.observableArrayList();
+        ObservableList<WordRouting> wordRouting = FXCollections.observableArrayList();
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            FileInputStream fi = new FileInputStream("res" + fileSeparator + "wordResponses.dat");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "wordRouting.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)
@@ -43,15 +43,15 @@ public class WordResponsesFile {
                     break;
                 }
                 if(object != null)
-                    wordResponses.add((WordResponse) object);
+                    wordRouting.add((WordRouting) object);
             }
 
             oi.close();
             fi.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to read the \"wordResponses.dat\" file.");
+            System.out.println("Failed to read the \"wordRouting.dat\" file.");
         }
-        return wordResponses;
+        return wordRouting;
     }
 }

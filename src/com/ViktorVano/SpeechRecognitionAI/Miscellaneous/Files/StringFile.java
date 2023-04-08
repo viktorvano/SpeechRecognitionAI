@@ -1,10 +1,11 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 
-public class FloatFile {
-    public static void saveFloatToFile(String filename, float value)
+public class StringFile {
+    public static void saveStringToFile(String filename, String value)
     {
         try
         {
@@ -13,7 +14,7 @@ public class FloatFile {
             file.createNewFile();
             //Write Content
             FileWriter writer = new FileWriter(file);
-            writer.write(Float.toString(value));
+            writer.write(value);
             writer.close();
         }catch (Exception e)
         {
@@ -21,9 +22,9 @@ public class FloatFile {
         }
     }
 
-    public static float loadFloatFromFile(String filename, float defaultValue)
+    public static String loadStringFromFile(String filename, String defaultValue)
     {
-        float value;
+        String value;
         try
         {
             String fileSeparator = System.getProperty("file.separator");
@@ -31,18 +32,18 @@ public class FloatFile {
             Scanner scanner = new Scanner(file);
             if(scanner.hasNextLine())
             {
-                value = Float.parseFloat(scanner.nextLine());
+                value = scanner.nextLine();
             }else
             {
                 value = defaultValue;
-                saveFloatToFile(filename, value);
+                saveStringToFile(filename, value);
             }
             scanner.close();
         }catch (Exception e)
         {
             System.out.println("Failed to read the \"" + filename + "\" file.");
             value = defaultValue;
-            saveFloatToFile(filename, value);
+            saveStringToFile(filename, value);
         }
         return value;
     }

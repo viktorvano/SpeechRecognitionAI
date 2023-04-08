@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommand;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordCommandsFile.saveWordCommands;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandsFile.saveWordCommands;
 
 public class WordCommandSettings {
     private int wordCommandIndex = -1;

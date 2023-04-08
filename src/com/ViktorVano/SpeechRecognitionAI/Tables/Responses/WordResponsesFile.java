@@ -1,37 +1,37 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Tables.Responses;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
 
-public class ShellCommandsFile {
-    public static void saveShellCommands(ObservableList<ShellCommand> shellCommands)
+public class WordResponsesFile {
+    public static void saveWordResponses(ObservableList<WordResponse> wordResponses)
     {
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            File file = new File("res" + fileSeparator + "shellCommands.dat");
+            File file = new File("res" + fileSeparator + "wordResponses.dat");
             file.createNewFile();
             FileOutputStream f = new FileOutputStream(file);
             ObjectOutputStream o = new ObjectOutputStream(f);
-            for(int i=0; i<shellCommands.size(); i++)
-                o.writeObject(shellCommands.get(i));
+            for(int i=0; i<wordResponses.size(); i++)
+                o.writeObject(wordResponses.get(i));
             o.close();
             f.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to create the \"shellCommands.dat\" file.");
+            System.out.println("Failed to create the \"wordResponses.dat\" file.");
         }
     }
 
-    public static ObservableList<ShellCommand> loadShellCommands()
+    public static ObservableList<WordResponse> loadWordResponses()
     {
-        ObservableList<ShellCommand> shellCommands = FXCollections.observableArrayList();
+        ObservableList<WordResponse> wordResponses = FXCollections.observableArrayList();
         try
         {
             String fileSeparator = System.getProperty("file.separator");
-            FileInputStream fi = new FileInputStream("res" + fileSeparator + "shellCommands.dat");
+            FileInputStream fi = new FileInputStream("res" + fileSeparator + "wordResponses.dat");
             ObjectInputStream oi = new ObjectInputStream(fi);
             Object object;
             while(true)
@@ -43,15 +43,15 @@ public class ShellCommandsFile {
                     break;
                 }
                 if(object != null)
-                    shellCommands.add((ShellCommand) object);
+                    wordResponses.add((WordResponse) object);
             }
 
             oi.close();
             fi.close();
         }catch (Exception e)
         {
-            System.out.println("Failed to read the \"shellCommands.dat\" file.");
+            System.out.println("Failed to read the \"wordResponses.dat\" file.");
         }
-        return shellCommands;
+        return wordResponses;
     }
 }

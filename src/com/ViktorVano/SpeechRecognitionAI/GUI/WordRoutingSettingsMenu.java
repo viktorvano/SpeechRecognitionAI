@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRouting;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordRoutingFile.saveWordRouting;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRoutingFile.saveWordRouting;
 
 public class WordRoutingSettingsMenu {
     private int wordRoutingIndex = -1;

@@ -1,4 +1,4 @@
-package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
+package com.ViktorVano.SpeechRecognitionAI.Tables.Routing;
 
 import java.io.Serializable;
 

@@ -2,7 +2,7 @@ package com.ViktorVano.SpeechRecognitionAI.Audio;
 
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI;
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.WordResponse;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
 
