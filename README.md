@@ -55,7 +55,7 @@ Transfer Learning (learning continuation)
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Settings%20Layout.png?raw=true)  
   
 ###### Word Routing
-![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/Screenshot%20of%20Advanced%20Settings.png?raw=true)  
+![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/WordRouting.png?raw=true)  
   
 ###### Word Commands
 ![alt text](https://github.com/viktorvano/SpeechRecognitionAI/blob/master/Document%20Files/WordCommands.png?raw=true)  
