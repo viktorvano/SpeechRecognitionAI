@@ -9,13 +9,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponsesFile.*;
 
 public class WordResponseSettings {
@@ -39,6 +39,13 @@ public class WordResponseSettings {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(stageReference);
         BorderPane borderPane = new BorderPane();
+
+        Color background = new Color(
+                ((double)background_red)/255.0,
+                ((double)background_green)/255.0,
+                ((double)background_blue)/255.0,
+                1.0);
+        borderPane.setBackground(new Background(new BackgroundFill(background, null, null)));
 
         ObservableList<String> wordResponseItems = FXCollections.observableArrayList();
         for (WordResponse wordResponse : wordResponsesDatabase)
