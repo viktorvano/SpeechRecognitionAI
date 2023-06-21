@@ -40,6 +40,7 @@ public class NeuralCharts {
         dialog.initModality(Modality.NONE);
         dialog.initOwner(stageReference);
         VBox vBox = new VBox();
+        vBox.setBackground(new Background(new BackgroundFill(background, null, null)));
         Scene dialogScene = new Scene(scrollPane, dialogWidth, dialogHeight);
         dialog.setMinWidth(scrollPane.getWidth());
         dialog.setMinHeight(scrollPane.getHeight());
