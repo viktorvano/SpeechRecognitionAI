@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20230408;
+    public static int versionNumber = 20230621;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -57,4 +57,10 @@ public class Variables {
     public static int audioServerPort = 7777;
 
     public static boolean useIpMicOnly = false;
+
+    public static boolean updateBackground = false;
+    public static int background_red = 244;
+    public static int background_green = 244;
+    public static int background_blue = 244;
+
 }

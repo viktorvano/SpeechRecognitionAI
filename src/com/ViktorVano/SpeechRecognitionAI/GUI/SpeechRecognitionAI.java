@@ -127,6 +127,10 @@ public class SpeechRecognitionAI extends Application {
         audioServerPort = loadIntegerFromFile("audioServerPort.dat", audioServerPort);
         token = loadStringFromFile("token.dat", token);
         useIpMic = loadBooleanFromFile("useIpMic.dat", useIpMic);
+        background_red = loadIntegerFromFile("background_red.dat", background_red);
+        background_green = loadIntegerFromFile("background_green.dat", background_green);
+        background_blue = loadIntegerFromFile("background_blue.dat", background_blue);
+        updateBackground = true;
 
         final int width = 1200;
         final int height = 690;
@@ -420,6 +424,7 @@ public class SpeechRecognitionAI extends Application {
 
         database = loadDatabase();
         databaseList = new ListView<>();
+        databaseList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         databaseItem = FXCollections.observableArrayList();
         for (RecordedAudio audio : database) databaseItem.add(audio.name);
         databaseList.setItems(databaseItem);
@@ -493,6 +498,7 @@ public class SpeechRecognitionAI extends Application {
 
         records = FXCollections.observableArrayList();
         recordsList = new ListView<>();
+        recordsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         recordItem = FXCollections.observableArrayList();
         recordsList.setItems(recordItem);
         recordsList.setPrefHeight(80);
@@ -558,6 +564,7 @@ public class SpeechRecognitionAI extends Application {
         final NumberAxis yAxis = new NumberAxis();
         //creating the chart
         lineChartAudio = new LineChart<>(xAxis,yAxis);
+        lineChartAudio.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent;");
 
         lineChartAudio.setTitle("Audio Data");
         //defining a series
@@ -629,6 +636,34 @@ public class SpeechRecognitionAI extends Application {
                     icons[i].setDisable(false);
                 }
             }
+
+            if(updateBackground)
+            {
+                updateBackground = false;
+                Color background = new Color(
+                        ((double)background_red)/255.0,
+                        ((double)background_green)/255.0,
+                        ((double)background_blue)/255.0,
+                        1.0);
+
+                stackPaneCenter.setBackground(new Background(new BackgroundFill(background, null, null)));
+                settingsPane.setBackground(new Background(new BackgroundFill(background, null, null)));
+                vBoxRight.setBackground(new Background(new BackgroundFill(background, null, null)));
+
+                databaseList.setCellFactory(param -> new ColoredListCell<>(background));
+                recordsList.setCellFactory(param -> new ColoredListCell<>(background));
+                trainingList.setCellFactory(param -> new ColoredListCell<>(background));
+                topologyList.setCellFactory(param -> new ColoredListCell<>(background));
+                wordRoutingList.setCellFactory(param -> new ColoredListCell<>(background));
+                wordResponsesList.setCellFactory(param -> new ColoredListCell<>(background));
+                wordCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
+                webhooksList.setCellFactory(param -> new ColoredListCell<>(background));
+                shellCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
+
+                saveIntegerToFile("background_red.dat", background_red);
+                saveIntegerToFile("background_green.dat", background_green);
+                saveIntegerToFile("background_blue.dat", background_blue);
+            }
         }));
         timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
         timelineUpdateData.play();
@@ -637,6 +672,7 @@ public class SpeechRecognitionAI extends Application {
     private void initializeTrainingLayout()
     {
         trainingList = new ListView<>();
+        trainingList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         trainingItem = FXCollections.observableArrayList();
         trainingList.setItems(trainingItem);
 
@@ -718,6 +754,7 @@ public class SpeechRecognitionAI extends Application {
         labelHiddenTopology.setStyle("-fx-font-weight: bold");
 
         topologyList = new ListView<>();
+        topologyList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         topologyItem = FXCollections.observableArrayList();
         ArrayList<Integer> tempTopology = loadTopology();
         for (Integer integer : tempTopology)
@@ -791,6 +828,7 @@ public class SpeechRecognitionAI extends Application {
         yAxis.setForceZeroInRange(true);
         //creating the chart
         lineChartLoss = new LineChart<>(xAxis,yAxis);
+        lineChartLoss.lookup(".chart-plot-background").setStyle("-fx-background-color: transparent;");
 
         lineChartLoss.setTitle("Training Loss");
         //defining a series
@@ -820,6 +858,7 @@ public class SpeechRecognitionAI extends Application {
     {
         wordRoutingDatabase = loadWordRouting();
         wordRoutingList = new ListView<>();
+        wordRoutingList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         double paneWidth = stackPaneCenter.getWidth();
         double paneHeight = stackPaneCenter.getHeight();
@@ -1257,6 +1296,58 @@ public class SpeechRecognitionAI extends Application {
         });
         settingsPane.getChildren().add(textFieldMatch);
 
+        Label labelBackground =  new Label("Background");
+        labelBackground.setLayoutX(paneWidth * 0.40);
+        labelBackground.setLayoutY(paneHeight * 0.65);
+        labelBackground.setFont(Font.font("Arial", 22));
+        labelBackground.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelBackground);
+
+        Slider sliderRed = new Slider(0, 255, background_red);
+        sliderRed.setLayoutX(paneWidth * 0.45);
+        sliderRed.setLayoutY(paneHeight * 0.75);
+        sliderRed.setPrefWidth(200);
+        sliderRed.valueProperty().addListener((observable, oldValue, newValue) -> {
+            background_red = newValue.intValue();
+            updateBackground = true;
+        });
+        settingsPane.getChildren().add(sliderRed);
+
+        Slider sliderGreen = new Slider(0, 255, background_green);
+        sliderGreen.setLayoutX(paneWidth * 0.45);
+        sliderGreen.setLayoutY(paneHeight * 0.80);
+        sliderGreen.setPrefWidth(200);
+        sliderGreen.valueProperty().addListener((observable, oldValue, newValue) -> {
+            background_green = newValue.intValue();
+            updateBackground = true;
+        });
+        settingsPane.getChildren().add(sliderGreen);
+
+        Slider sliderBlue = new Slider(0, 255, background_blue);
+        sliderBlue.setLayoutX(paneWidth * 0.45);
+        sliderBlue.setLayoutY(paneHeight * 0.85);
+        sliderBlue.setPrefWidth(200);
+        sliderBlue.valueProperty().addListener((observable, oldValue, newValue) -> {
+            background_blue = newValue.intValue();
+            updateBackground = true;
+        });
+        settingsPane.getChildren().add(sliderBlue);
+
+        Label labelRed = new Label("Red");
+        labelRed.setLayoutX(paneWidth * 0.40);
+        labelRed.setLayoutY(paneHeight * 0.75);
+        settingsPane.getChildren().add(labelRed);
+
+        Label labelGreen = new Label("Green");
+        labelGreen.setLayoutX(paneWidth * 0.40);
+        labelGreen.setLayoutY(paneHeight * 0.80);
+        settingsPane.getChildren().add(labelGreen);
+
+        Label labelBlue = new Label("Blue");
+        labelBlue.setLayoutX(paneWidth * 0.40);
+        labelBlue.setLayoutY(paneHeight * 0.85);
+        settingsPane.getChildren().add(labelBlue);
+
         stackPaneCenter.widthProperty().addListener((observable, oldValue, newValue) -> {
             double paneWidth1 = stackPaneCenter.getWidth();
 
@@ -1295,6 +1386,14 @@ public class SpeechRecognitionAI extends Application {
             textFieldExitTrainingLoss.setLayoutX(paneWidth1 * 0.185);
             labelClassifierMatch.setLayoutX(paneWidth1 * 0.03);
             textFieldMatch.setLayoutX(paneWidth1 * 0.185);
+
+            labelBackground.setLayoutX(paneWidth1 * 0.40);
+            sliderRed.setLayoutX(paneWidth1 * 0.45);
+            sliderGreen.setLayoutX(paneWidth1 * 0.45);
+            sliderBlue.setLayoutX(paneWidth1 * 0.45);
+            labelRed.setLayoutX(paneWidth1 * 0.40);
+            labelGreen.setLayoutX(paneWidth1 * 0.40);
+            labelBlue.setLayoutX(paneWidth1 * 0.40);
         });
 
         stackPaneCenter.heightProperty().addListener((observable, oldValue, newValue) -> {
@@ -1335,6 +1434,14 @@ public class SpeechRecognitionAI extends Application {
             textFieldExitTrainingLoss.setLayoutY(paneHeight1 * 0.74);
             labelClassifierMatch.setLayoutY(paneHeight1 * 0.84);
             textFieldMatch.setLayoutY(paneHeight1 * 0.83);
+
+            labelBackground.setLayoutY(paneHeight1 * 0.65);
+            sliderRed.setLayoutY(paneHeight1 * 0.75);
+            sliderGreen.setLayoutY(paneHeight1 * 0.80);
+            sliderBlue.setLayoutY(paneHeight1 * 0.85);
+            labelRed.setLayoutY(paneHeight1 * 0.75);
+            labelGreen.setLayoutY(paneHeight1 * 0.80);
+            labelBlue.setLayoutY(paneHeight1 * 0.85);
         });
 
         buttonWordRoutingSettings = new Button("Word Routing");
@@ -1364,15 +1471,19 @@ public class SpeechRecognitionAI extends Application {
 
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
+        wordResponsesList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         wordCommandsDatabase = loadWordCommands();
         wordCommandsList = new ListView<>();
+        wordCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         webhooksDatabase = loadWebhooks();
         webhooksList = new ListView<>();
+        webhooksList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         shellCommandsDatabase = loadShellCommands();
         shellCommandsList = new ListView<>();
+        shellCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     }
 
     private void displayDataLayout()
