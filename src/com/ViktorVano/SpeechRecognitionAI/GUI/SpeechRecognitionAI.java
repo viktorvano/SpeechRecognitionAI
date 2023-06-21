@@ -424,6 +424,7 @@ public class SpeechRecognitionAI extends Application {
 
         database = loadDatabase();
         databaseList = new ListView<>();
+        databaseList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         databaseItem = FXCollections.observableArrayList();
         for (RecordedAudio audio : database) databaseItem.add(audio.name);
         databaseList.setItems(databaseItem);
@@ -497,6 +498,7 @@ public class SpeechRecognitionAI extends Application {
 
         records = FXCollections.observableArrayList();
         recordsList = new ListView<>();
+        recordsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         recordItem = FXCollections.observableArrayList();
         recordsList.setItems(recordItem);
         recordsList.setPrefHeight(80);
@@ -647,6 +649,17 @@ public class SpeechRecognitionAI extends Application {
                 stackPaneCenter.setBackground(new Background(new BackgroundFill(background, null, null)));
                 settingsPane.setBackground(new Background(new BackgroundFill(background, null, null)));
                 vBoxRight.setBackground(new Background(new BackgroundFill(background, null, null)));
+
+                databaseList.setCellFactory(param -> new ColoredListCell<>(background));
+                recordsList.setCellFactory(param -> new ColoredListCell<>(background));
+                trainingList.setCellFactory(param -> new ColoredListCell<>(background));
+                topologyList.setCellFactory(param -> new ColoredListCell<>(background));
+                wordRoutingList.setCellFactory(param -> new ColoredListCell<>(background));
+                wordResponsesList.setCellFactory(param -> new ColoredListCell<>(background));
+                wordCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
+                webhooksList.setCellFactory(param -> new ColoredListCell<>(background));
+                shellCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
+
                 saveIntegerToFile("background_red.dat", background_red);
                 saveIntegerToFile("background_green.dat", background_green);
                 saveIntegerToFile("background_blue.dat", background_blue);
@@ -659,6 +672,7 @@ public class SpeechRecognitionAI extends Application {
     private void initializeTrainingLayout()
     {
         trainingList = new ListView<>();
+        trainingList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         trainingItem = FXCollections.observableArrayList();
         trainingList.setItems(trainingItem);
 
@@ -740,6 +754,7 @@ public class SpeechRecognitionAI extends Application {
         labelHiddenTopology.setStyle("-fx-font-weight: bold");
 
         topologyList = new ListView<>();
+        topologyList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         topologyItem = FXCollections.observableArrayList();
         ArrayList<Integer> tempTopology = loadTopology();
         for (Integer integer : tempTopology)
@@ -843,6 +858,7 @@ public class SpeechRecognitionAI extends Application {
     {
         wordRoutingDatabase = loadWordRouting();
         wordRoutingList = new ListView<>();
+        wordRoutingList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         double paneWidth = stackPaneCenter.getWidth();
         double paneHeight = stackPaneCenter.getHeight();
@@ -1455,15 +1471,19 @@ public class SpeechRecognitionAI extends Application {
 
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
+        wordResponsesList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         wordCommandsDatabase = loadWordCommands();
         wordCommandsList = new ListView<>();
+        wordCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         webhooksDatabase = loadWebhooks();
         webhooksList = new ListView<>();
+        webhooksList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
         shellCommandsDatabase = loadShellCommands();
         shellCommandsList = new ListView<>();
+        shellCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     }
 
     private void displayDataLayout()
