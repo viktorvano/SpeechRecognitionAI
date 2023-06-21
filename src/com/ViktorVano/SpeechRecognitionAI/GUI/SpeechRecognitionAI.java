@@ -1317,6 +1317,21 @@ public class SpeechRecognitionAI extends Application {
         });
         settingsPane.getChildren().add(sliderBlue);
 
+        Label labelRed = new Label("Red");
+        labelRed.setLayoutX(paneWidth * 0.40);
+        labelRed.setLayoutY(paneHeight * 0.75);
+        settingsPane.getChildren().add(labelRed);
+
+        Label labelGreen = new Label("Green");
+        labelGreen.setLayoutX(paneWidth * 0.40);
+        labelGreen.setLayoutY(paneHeight * 0.80);
+        settingsPane.getChildren().add(labelGreen);
+
+        Label labelBlue = new Label("Blue");
+        labelBlue.setLayoutX(paneWidth * 0.40);
+        labelBlue.setLayoutY(paneHeight * 0.85);
+        settingsPane.getChildren().add(labelBlue);
+
         stackPaneCenter.widthProperty().addListener((observable, oldValue, newValue) -> {
             double paneWidth1 = stackPaneCenter.getWidth();
 
@@ -1360,6 +1375,9 @@ public class SpeechRecognitionAI extends Application {
             sliderRed.setLayoutX(paneWidth1 * 0.45);
             sliderGreen.setLayoutX(paneWidth1 * 0.45);
             sliderBlue.setLayoutX(paneWidth1 * 0.45);
+            labelRed.setLayoutX(paneWidth1 * 0.40);
+            labelGreen.setLayoutX(paneWidth1 * 0.40);
+            labelBlue.setLayoutX(paneWidth1 * 0.40);
         });
 
         stackPaneCenter.heightProperty().addListener((observable, oldValue, newValue) -> {
@@ -1405,6 +1423,9 @@ public class SpeechRecognitionAI extends Application {
             sliderRed.setLayoutY(paneHeight1 * 0.75);
             sliderGreen.setLayoutY(paneHeight1 * 0.80);
             sliderBlue.setLayoutY(paneHeight1 * 0.85);
+            labelRed.setLayoutY(paneHeight1 * 0.75);
+            labelGreen.setLayoutY(paneHeight1 * 0.80);
+            labelBlue.setLayoutY(paneHeight1 * 0.85);
         });
 
         buttonWordRoutingSettings = new Button("Word Routing");
