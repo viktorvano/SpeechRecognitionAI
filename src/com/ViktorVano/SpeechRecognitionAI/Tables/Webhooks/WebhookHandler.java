@@ -7,11 +7,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class WebhookRouter extends Thread {
+public class WebhookHandler extends Thread {
     private String message;
     private ObservableList<Webhook> webhookList;
 
-    public WebhookRouter(ObservableList<Webhook> webhooksDatabase, String recognizedMessage)
+    public WebhookHandler(ObservableList<Webhook> webhooksDatabase, String recognizedMessage)
     {
         this.message = recognizedMessage;
         this.webhookList = webhooksDatabase;

@@ -7,11 +7,11 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class WordCommandRouter extends Thread {
+public class WordCommandHandler extends Thread {
     private String message;
     private ObservableList<WordCommand> wordCommandsList;
 
-    public WordCommandRouter(ObservableList<WordCommand> wordCommandsDatabase, String recognizedMessage)
+    public WordCommandHandler(ObservableList<WordCommand> wordCommandsDatabase, String recognizedMessage)
     {
         this.message = recognizedMessage;
         this.wordCommandsList = wordCommandsDatabase;

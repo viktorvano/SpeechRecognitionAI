@@ -8,14 +8,16 @@ import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
-import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandHandler;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Extensions.Extension;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Extensions.ExtensionHandler;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
 import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommand;
-import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommander;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommandHandler;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.Webhook;
-import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhookRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhookHandler;
 import com.sun.istack.internal.NotNull;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -49,6 +51,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.StringFile.
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Extensions.ExtensionFile.loadExtensions;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhooksFile.loadWebhooks;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandsFile.loadWordCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponsesFile.loadWordResponses;
@@ -88,17 +91,20 @@ public class SpeechRecognitionAI extends Application {
     private Label speechRecognitionStatus, speechRecognitionOutput;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonWordRoutingSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks, buttonShellCommands;
+    private Button buttonWordRoutingSettings, buttonWordCommands, buttonWordResponses;
+    private Button buttonWebhooks, buttonShellCommands, buttonExtensions;
     private AudioServer audioServer;
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ObservableList<Webhook> webhooksDatabase;
     private ObservableList<ShellCommand> shellCommandsDatabase;
+    private ObservableList<Extension> extensionsDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ListView<String> wordCommandsList;
     private ListView<String> webhooksList;
     private ListView<String> shellCommandsList;
+    private ListView<String> extensionsList;
 
     public static void main(String[] args)
     {
@@ -112,6 +118,7 @@ public class SpeechRecognitionAI extends Application {
         audioCapture = new AudioCapture();
         recordedAudio = new RecordedAudio();
         createDirectoryIfNotExist("res");
+        createDirectoryIfNotExist("extensions");
         recorderThreshold = loadIntegerFromFile("recorderThreshold.dat", recorderThreshold);
         wordThreshold = loadIntegerFromFile("wordThreshold.dat", wordThreshold);
         preWordSamples = loadIntegerFromFile("preWordSamples.dat", preWordSamples);
@@ -193,6 +200,7 @@ public class SpeechRecognitionAI extends Application {
                 this.wordResponsesDatabase,
                 this.webhooksDatabase,
                 this.shellCommandsDatabase,
+                this.extensionsDatabase,
                 audioServerPort+1);
         textServer.start();
 
@@ -610,9 +618,10 @@ public class SpeechRecognitionAI extends Application {
                         displayMessageCounter++;
                     else {
                         new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new WordCommandHandler(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new WebhookHandler(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new ShellCommandHandler(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new ExtensionHandler(extensionsDatabase, neuralNetworkThread.getRecognizedMessage(), "");//TODO: finish this
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -1469,6 +1478,12 @@ public class SpeechRecognitionAI extends Application {
             new ShellCommandsSettings(stageReference, shellCommandsDatabase, shellCommandsList);
         });
 
+        buttonExtensions = new Button("Extensions");
+        buttonExtensions.setOnAction(event -> {
+            //TODO: Make ExtensionSettings
+            //new ExtensionSettings(stageReference, extensionsDatabase, extensionsList);
+        });
+
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
         wordResponsesList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
@@ -1484,6 +1499,10 @@ public class SpeechRecognitionAI extends Application {
         shellCommandsDatabase = loadShellCommands();
         shellCommandsList = new ListView<>();
         shellCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+
+        extensionsDatabase = loadExtensions();
+        extensionsList = new ListView<>();
+        extensionsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     }
 
     private void displayDataLayout()
@@ -1575,23 +1594,12 @@ public class SpeechRecognitionAI extends Application {
     private void displaySettingsLayout()
     {
         stackPaneCenter.getChildren().add(settingsPane);
-        //stackPaneCenter.getChildren().add(wordRoutingList);
-        /*vBoxRight.getChildren().add(labelNewWordRouting);
-        vBoxRight.getChildren().add(txtNewWord);
-        vBoxRight.getChildren().add(txtNewAddress);
-        vBoxRight.getChildren().add(txtNewPort);
-        vBoxRight.getChildren().add(buttonAddWordRouting);
-        vBoxRight.getChildren().add(labelEditWordRouting);
-        vBoxRight.getChildren().add(txtEditWord);
-        vBoxRight.getChildren().add(txtEditAddress);
-        vBoxRight.getChildren().add(txtEditPort);
-        vBoxRight.getChildren().add(buttonUpdateWordRouting);
-        vBoxRight.getChildren().add(buttonRemoveWordRouting);*/
         hBoxBottom.getChildren().add(buttonWordRoutingSettings);
         hBoxBottom.getChildren().add(buttonWordCommands);
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
         hBoxBottom.getChildren().add(buttonShellCommands);
+        hBoxBottom.getChildren().add(buttonExtensions);
         displayedLayout = 3;
         System.out.println("Settings Layout displayed.");
     }
@@ -1599,23 +1607,12 @@ public class SpeechRecognitionAI extends Application {
     private void hideSettingsLayout()
     {
         stackPaneCenter.getChildren().remove(settingsPane);
-        //stackPaneCenter.getChildren().remove(wordRoutingList);
-        /*vBoxRight.getChildren().remove(labelNewWordRouting);
-        vBoxRight.getChildren().remove(txtNewWord);
-        vBoxRight.getChildren().remove(txtNewAddress);
-        vBoxRight.getChildren().remove(txtNewPort);
-        vBoxRight.getChildren().remove(buttonAddWordRouting);
-        vBoxRight.getChildren().remove(labelEditWordRouting);
-        vBoxRight.getChildren().remove(txtEditWord);
-        vBoxRight.getChildren().remove(txtEditAddress);
-        vBoxRight.getChildren().remove(txtEditPort);
-        vBoxRight.getChildren().remove(buttonUpdateWordRouting);
-        vBoxRight.getChildren().remove(buttonRemoveWordRouting);*/
         hBoxBottom.getChildren().remove(buttonWordRoutingSettings);
         hBoxBottom.getChildren().remove(buttonWordCommands);
         hBoxBottom.getChildren().remove(buttonWordResponses);
         hBoxBottom.getChildren().remove(buttonWebhooks);
         hBoxBottom.getChildren().remove(buttonShellCommands);
+        hBoxBottom.getChildren().remove(buttonExtensions);
     }
 
     private void displayLayout(int layoutIndex)

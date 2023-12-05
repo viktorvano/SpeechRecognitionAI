@@ -1,14 +1,16 @@
 package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
-import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandHandler;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Extensions.Extension;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Extensions.ExtensionHandler;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
 import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommand;
-import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommander;
+import com.ViktorVano.SpeechRecognitionAI.Tables.ShellCommands.ShellCommandHandler;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.Webhook;
-import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhookRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhookHandler;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
 
@@ -27,6 +29,7 @@ public class TextServer extends Thread{
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ObservableList<Webhook> webhookDatabase;
     private ObservableList<ShellCommand> shellCommandDatabase;
+    private ObservableList<Extension> extensionsDatabase;
 
     //initialize socket and input stream
     private Socket socket = null;
@@ -39,6 +42,7 @@ public class TextServer extends Thread{
                       @NotNull ObservableList<WordResponse> wordResponsesDatabase,
                       @NotNull ObservableList<Webhook> webhookDatabase,
                       @NotNull ObservableList<ShellCommand> shellCommandDatabase,
+                      @NotNull ObservableList<Extension> extensionsDatabase,
                       int port)
     {
         this.wordRoutingDatabase = wordRoutingDatabase;
@@ -46,6 +50,7 @@ public class TextServer extends Thread{
         this.wordResponsesDatabase = wordResponsesDatabase;
         this.webhookDatabase = webhookDatabase;
         this.shellCommandDatabase = shellCommandDatabase;
+        this.extensionsDatabase = extensionsDatabase;
         this.port = port;
     }
 
@@ -121,11 +126,12 @@ public class TextServer extends Thread{
                     if(receivedToken.equals(token))
                     {
                         System.out.println("Got the message: " + this.message);
-                        new WordRouter(this.wordRoutingDatabase, this.message);
-                        new WordCommandRouter(this.wordCommandsDatabase, this.message);
-                        new WebhookRouter(this.webhookDatabase, this.message);
-                        new ShellCommander(this.shellCommandDatabase, this.message);
                         String response = "";
+                        new WordRouter(this.wordRoutingDatabase, this.message);
+                        new WordCommandHandler(this.wordCommandsDatabase, this.message);
+                        new WebhookHandler(this.webhookDatabase, this.message);
+                        new ShellCommandHandler(this.shellCommandDatabase, this.message);
+                        new ExtensionHandler(this.extensionsDatabase, this.message, response);
                         for (WordResponse wordResponse : wordResponsesDatabase)
                         {
                             if(message.contains(wordResponse.word))
