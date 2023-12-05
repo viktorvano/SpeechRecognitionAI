@@ -130,6 +130,7 @@ public class SpeechRecognitionAI extends Application {
         background_red = loadIntegerFromFile("background_red.dat", background_red);
         background_green = loadIntegerFromFile("background_green.dat", background_green);
         background_blue = loadIntegerFromFile("background_blue.dat", background_blue);
+        showFFT = loadBooleanFromFile("showFFT.dat", showFFT);
         updateBackground = true;
 
         final int width = 1200;
@@ -1066,6 +1067,16 @@ public class SpeechRecognitionAI extends Application {
         checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
         settingsPane.getChildren().add(checkBoxPlotKeepLongWords);
 
+        CheckBox checkBoxShowFFT = new CheckBox("Show FFT Window");
+        checkBoxShowFFT.setSelected(showFFT);
+        checkBoxShowFFT.setOnAction(event -> {
+            showFFT = checkBoxShowFFT.isSelected();
+            saveBooleanToFile("showFFT.dat", showFFT);
+        });
+        checkBoxShowFFT.setLayoutX(paneWidth * 0.65);
+        checkBoxShowFFT.setLayoutY(paneHeight * 0.29);
+        settingsPane.getChildren().add(checkBoxShowFFT);
+
         Label labelIpMic =  new Label("IP Mic App");
         labelIpMic.setLayoutX(paneWidth * 0.65);
         labelIpMic.setLayoutY(paneHeight * 0.5);
@@ -1368,6 +1379,7 @@ public class SpeechRecognitionAI extends Application {
             checkBoxPrintToConsole.setLayoutX(paneWidth1 * 0.65);
             checkBoxPlotNeuralCharts.setLayoutX(paneWidth1 * 0.65);
             checkBoxPlotKeepLongWords.setLayoutX(paneWidth1 * 0.65);
+            checkBoxShowFFT.setLayoutX(paneWidth1 * 0.65);
 
             labelIpMic.setLayoutX(paneWidth1 * 0.65);
             checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
@@ -1416,6 +1428,7 @@ public class SpeechRecognitionAI extends Application {
             checkBoxPrintToConsole.setLayoutY(paneHeight1 * 0.08);
             checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.15);
             checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.22);
+            checkBoxShowFFT.setLayoutY(paneHeight1 * 0.29);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.5);
             checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.57);
@@ -1575,18 +1588,6 @@ public class SpeechRecognitionAI extends Application {
     private void displaySettingsLayout()
     {
         stackPaneCenter.getChildren().add(settingsPane);
-        //stackPaneCenter.getChildren().add(wordRoutingList);
-        /*vBoxRight.getChildren().add(labelNewWordRouting);
-        vBoxRight.getChildren().add(txtNewWord);
-        vBoxRight.getChildren().add(txtNewAddress);
-        vBoxRight.getChildren().add(txtNewPort);
-        vBoxRight.getChildren().add(buttonAddWordRouting);
-        vBoxRight.getChildren().add(labelEditWordRouting);
-        vBoxRight.getChildren().add(txtEditWord);
-        vBoxRight.getChildren().add(txtEditAddress);
-        vBoxRight.getChildren().add(txtEditPort);
-        vBoxRight.getChildren().add(buttonUpdateWordRouting);
-        vBoxRight.getChildren().add(buttonRemoveWordRouting);*/
         hBoxBottom.getChildren().add(buttonWordRoutingSettings);
         hBoxBottom.getChildren().add(buttonWordCommands);
         hBoxBottom.getChildren().add(buttonWordResponses);
@@ -1599,18 +1600,6 @@ public class SpeechRecognitionAI extends Application {
     private void hideSettingsLayout()
     {
         stackPaneCenter.getChildren().remove(settingsPane);
-        //stackPaneCenter.getChildren().remove(wordRoutingList);
-        /*vBoxRight.getChildren().remove(labelNewWordRouting);
-        vBoxRight.getChildren().remove(txtNewWord);
-        vBoxRight.getChildren().remove(txtNewAddress);
-        vBoxRight.getChildren().remove(txtNewPort);
-        vBoxRight.getChildren().remove(buttonAddWordRouting);
-        vBoxRight.getChildren().remove(labelEditWordRouting);
-        vBoxRight.getChildren().remove(txtEditWord);
-        vBoxRight.getChildren().remove(txtEditAddress);
-        vBoxRight.getChildren().remove(txtEditPort);
-        vBoxRight.getChildren().remove(buttonUpdateWordRouting);
-        vBoxRight.getChildren().remove(buttonRemoveWordRouting);*/
         hBoxBottom.getChildren().remove(buttonWordRoutingSettings);
         hBoxBottom.getChildren().remove(buttonWordCommands);
         hBoxBottom.getChildren().remove(buttonWordResponses);
