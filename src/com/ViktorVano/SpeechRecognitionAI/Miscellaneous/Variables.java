@@ -15,10 +15,13 @@ public class Variables {
     public static int wordInertiaSamples = 250;
 
     public static boolean displayNeuralChart = false;
+    public static boolean displayFFTChart = false;
     public static boolean neuralChartBusy = false;
+    public static boolean fftChartBusy = false;
     public static String chartClassifierName = "";
     public static String chartClassifierMatch = "";
     public static ArrayList<XYChart.Series<Number, Number>> neuralChartSeries = new ArrayList<>();
+    public static ArrayList<XYChart.Series<Number, Number>> fftChartSeries = new ArrayList<>();
 
     public static int patternCount;
     public static int inputNodes;

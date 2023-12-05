@@ -126,6 +126,13 @@ public class NeuralNetworkThread extends Thread {
                         chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
                         displayNeuralChart = true;
                     }
+
+                    if (showFFT) {
+                        chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                        DecimalFormat df = new DecimalFormat("##.##");
+                        chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
+                        displayFFTChart = true;
+                    }
                 }
                 records.remove(0);
             }

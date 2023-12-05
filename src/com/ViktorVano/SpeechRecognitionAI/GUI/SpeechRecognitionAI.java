@@ -232,6 +232,14 @@ public class SpeechRecognitionAI extends Application {
                 displayNeuralChart = false;
                 neuralChartBusy = false;
             }
+
+            if(displayFFTChart && !fftChartBusy)
+            {
+                fftChartBusy = true;
+                new FFT(stageReference, fftChartSeries, chartClassifierName, chartClassifierMatch);
+                displayFFTChart = false;
+                fftChartBusy = false;
+            }
         }));
         timelineDisplayNeuralChart.setCycleCount(Timeline.INDEFINITE);
         timelineDisplayNeuralChart.play();
