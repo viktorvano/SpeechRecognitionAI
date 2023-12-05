@@ -152,7 +152,7 @@ public class General {
                 System.out.println(resultOfFFT[i]);
             if(plotNeuralCharts && i%50==0)
                 neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+65636, resultOfFFT[i]));
-            if(showFFT)
+            if(showFFT && (resultOfFFT[i] > 0.1f || i%50==0))
                 fftChartSeries.get(0).getData().add(new XYChart.Data<>(i, resultOfFFT[i]));
         }
     }
