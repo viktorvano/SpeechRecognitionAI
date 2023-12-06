@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
 
 public class FFT {
-    public FFT(Stage stageReference, ArrayList<XYChart.Series<Number, Number>> neuralSeries, String classifierName, String classifierMatch)
+    public FFT(Stage stageReference, XYChart.Series<Number, Number> fftSeries, String classifierName, String classifierMatch)
     {
         final int dialogWidth = 1000;
         final int dialogHeight = 800;
@@ -83,7 +83,7 @@ public class FFT {
 
         lineChart.setLegendVisible(false);
         lineChart.setAnimated(false);
-        lineChart.getData().add(neuralSeries.get(0));
+        lineChart.getData().add(fftSeries);
         vBox.getChildren().add(lineChart);
 
     }

@@ -89,8 +89,7 @@ public class General {
                     e.printStackTrace();
                 }
             }
-            fftChartSeries = new ArrayList<>();
-            fftChartSeries.add(new XYChart.Series<>());
+            fftChartSeries = new XYChart.Series<>();
         }
 
         if(printNetworkValues)
@@ -153,8 +152,26 @@ public class General {
             if(plotNeuralCharts && i%50==0)
                 neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+65636, resultOfFFT[i]));
             if(showFFT && (resultOfFFT[i] > 0.1f || i%50==0))
-                fftChartSeries.get(0).getData().add(new XYChart.Data<>(i, resultOfFFT[i]));
+            {
+                if(i == 0)
+                {
+                    tryAdd(fftChartSeries, new XYChart.Data<>(i, resultOfFFT[i]));
+                    tryAdd(fftChartSeries, new XYChart.Data<>(i+1, resultOfFFT[i+1]));
+                }else
+                {
+                    tryAdd(fftChartSeries, new XYChart.Data<>(i-1, resultOfFFT[i-1]));
+                    tryAdd(fftChartSeries, new XYChart.Data<>(i, resultOfFFT[i]));
+                    if(i+1 < samples)
+                        tryAdd(fftChartSeries, new XYChart.Data<>(i+1, resultOfFFT[i+1]));
+                }
+            }
         }
+    }
+
+    public static void tryAdd(XYChart.Series<Number, Number> chartSeries, XYChart.Data<Number, Number> dataPoint)
+    {
+        if(!chartSeries.getData().contains(dataPoint))
+            chartSeries.getData().add(dataPoint);
     }
 
     static void makeSineTable(int n, float[] sinTable)

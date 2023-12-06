@@ -21,7 +21,7 @@ public class Variables {
     public static String chartClassifierName = "";
     public static String chartClassifierMatch = "";
     public static ArrayList<XYChart.Series<Number, Number>> neuralChartSeries = new ArrayList<>();
-    public static ArrayList<XYChart.Series<Number, Number>> fftChartSeries = new ArrayList<>();
+    public static XYChart.Series<Number, Number> fftChartSeries = new XYChart.Series<>();
 
     public static int patternCount;
     public static int inputNodes;
