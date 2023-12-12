@@ -77,6 +77,21 @@ public class General {
             neuralChartSeries = new ArrayList<>();
             neuralChartSeries.add(new XYChart.Series<>());
         }
+
+        if(showFFT)
+        {
+            while (displayFFTChart)
+            {
+                try{
+                    Thread.sleep(1);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            fftChartSeries = new XYChart.Series<>();
+        }
+
         if(printNetworkValues)
             System.out.println("\nFiltered Normalized Absolute Audio Samples");
         int samples = (int)((double)inputNodes * (2.0/3.0));
@@ -136,6 +151,10 @@ public class General {
                 System.out.println(resultOfFFT[i]);
             if(plotNeuralCharts && i%50==0)
                 neuralChartSeries.get(0).getData().add(new XYChart.Data<>(i+65636, resultOfFFT[i]));
+            if(showFFT && (resultOfFFT[i] > 0.1f || i%20==0))
+            {
+                fftChartSeries.getData().add(new XYChart.Data<>(i*0.335181912365, resultOfFFT[i]));// 22000/65636
+            }
         }
     }
 

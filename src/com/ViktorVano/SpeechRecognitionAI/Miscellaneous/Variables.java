@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Variables {
 
-    public static int versionNumber = 20230621;
+    public static int versionNumber = 20231212;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
@@ -15,10 +15,13 @@ public class Variables {
     public static int wordInertiaSamples = 250;
 
     public static boolean displayNeuralChart = false;
+    public static boolean displayFFTChart = false;
     public static boolean neuralChartBusy = false;
+    public static boolean fftChartBusy = false;
     public static String chartClassifierName = "";
     public static String chartClassifierMatch = "";
     public static ArrayList<XYChart.Series<Number, Number>> neuralChartSeries = new ArrayList<>();
+    public static XYChart.Series<Number, Number> fftChartSeries = new XYChart.Series<>();
 
     public static int patternCount;
     public static int inputNodes;
@@ -52,6 +55,7 @@ public class Variables {
     public static boolean printNetworkValues = false;
     public static boolean plotNeuralCharts = false;
     public static boolean keepLongWords = false;
+    public static boolean showFFT = false;
     public static boolean useIpMic = false;
     public static String token = "defaultToken123";
     public static int audioServerPort = 7777;
