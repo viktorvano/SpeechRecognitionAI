@@ -83,6 +83,7 @@ public class NeuralCharts {
             {
                 lineChart.setTitle("Input Layer");
                 lineChart.setCreateSymbols(false);
+                yAxis.setLowerBound(0.0);
             }
             else
             {
