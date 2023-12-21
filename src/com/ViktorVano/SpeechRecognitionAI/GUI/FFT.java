@@ -32,9 +32,9 @@ public class FFT {
         stackPane.setBackground(new Background(new BackgroundFill(background, null, null)));
 
         if(classifierName.length() == 0)
-            dialog.setTitle("Neural Charts: [artifact] " + classifierMatch);
+            dialog.setTitle("FFT Chart: [artifact] " + classifierMatch);
         else
-            dialog.setTitle("Neural Charts: " + classifierName + " " + classifierMatch);
+            dialog.setTitle("FFT Chart: " + classifierName + " " + classifierMatch);
         dialog.initModality(Modality.NONE);
         dialog.initOwner(stageReference);
 
