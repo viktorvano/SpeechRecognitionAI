@@ -92,6 +92,7 @@ public class AudioServer extends Thread{
                 socket = server.accept();
                 System.out.println("Client accepted");
                 socket.setSoTimeout(20000);
+                socket.setSoLinger(true, 20);
 
                 in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
