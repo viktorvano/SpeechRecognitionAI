@@ -102,6 +102,7 @@ public class TextServer extends Thread{
                 socket = server.accept();
                 System.out.println("Client accepted");
                 socket.setSoTimeout(10000);
+                socket.setSoLinger(true, 10);
 
                 in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
