@@ -190,13 +190,19 @@ public class AudioServer extends Thread{
                         if(buffer.length != length)
                         {
                             System.out.println("Error receiving a recording...");
-                            out.writeUTF("Error receiving a recording...");
-                            out.flush();
+                            if(!socket.isClosed())
+                            {
+                                out.writeUTF("Error receiving a recording...");
+                                out.flush();
+                            }
                         }else if(!useIpMic)
                         {
                             System.out.println("Using Hardware Mic.");
-                            out.writeUTF("Using Hardware Mic.");
-                            out.flush();
+                            if(!socket.isClosed())
+                            {
+                                out.writeUTF("Using Hardware Mic.");
+                                out.flush();
+                            }
                         }
                     }
                 }
