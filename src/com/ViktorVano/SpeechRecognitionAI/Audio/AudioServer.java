@@ -112,7 +112,7 @@ public class AudioServer extends Thread{
                             int bytesRead ;
                             int len = 0;
                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                            while (len<length)
+                            while (len<length && !socket.isClosed())
                             {
                                 bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, length-len));
                                 len = len + bytesRead;
