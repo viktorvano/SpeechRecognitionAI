@@ -107,16 +107,33 @@ public class AudioServer extends Thread{
                         receivedToken = in.readUTF();
                         length = in.readInt();
                         System.out.println("Got the Size: " + length);
-                        int bytesRead ;
-                        int len = 0;
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        while (len<length)
+                        if(receivedToken.equals(token))
                         {
-                            bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, length-len));
-                            len = len + bytesRead;
-                            byteArrayOutputStream.write(buffer, 0, bytesRead);
+                            int bytesRead ;
+                            int len = 0;
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            while (len<length)
+                            {
+                                bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, length-len));
+                                len = len + bytesRead;
+                                byteArrayOutputStream.write(buffer, 0, bytesRead);
+                            }
+                            buffer = byteArrayOutputStream.toByteArray();
+                        }else
+                        {
+                            try
+                            {
+                                int time = 500 + (int)(5*Math.random());
+                                System.out.println("Timing out for an invalid Token for " + time + "ms.");
+                                System.out.println("Imposter IP: " + socket.getInetAddress());
+                                Thread.sleep(time);
+                                socket.close();
+                                server.close();
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
-                        buffer = byteArrayOutputStream.toByteArray();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
