@@ -91,8 +91,8 @@ public class AudioServer extends Thread{
 
                 socket = server.accept();
                 System.out.println("Client accepted");
-                socket.setSoTimeout(20000);
-                socket.setSoLinger(true, 20);
+                socket.setSoTimeout(10000);
+                socket.setSoLinger(true, 10);
 
                 in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
@@ -107,16 +107,38 @@ public class AudioServer extends Thread{
                         receivedToken = in.readUTF();
                         length = in.readInt();
                         System.out.println("Got the Size: " + length);
-                        int bytesRead ;
-                        int len = 0;
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        while (len<length)
+                        if(receivedToken.equals(token))
                         {
-                            bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, length-len));
-                            len = len + bytesRead;
-                            byteArrayOutputStream.write(buffer, 0, bytesRead);
+                            int bytesRead ;
+                            int len = 0;
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            while (len<length && !socket.isClosed())
+                            {
+                                bytesRead = in.read(buffer, 0, (int)Math.min(buffer.length, length-len));
+                                len = len + bytesRead;
+                                byteArrayOutputStream.write(buffer, 0, bytesRead);
+                            }
+                            buffer = byteArrayOutputStream.toByteArray();
+                        }else
+                        {
+                            try
+                            {
+                                int time = 500 + (int)(5000*Math.random());
+                                System.out.println("Timing out for an invalid Token for " + time + "ms.");
+                                System.out.println("Imposter IP: " + socket.getInetAddress());
+                                Thread.sleep(time);
+                                if(!socket.isClosed())
+                                {
+                                    out.writeUTF("Imposter detected.");
+                                    out.flush();
+                                }
+                                socket.close();
+                                server.close();
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
-                        buffer = byteArrayOutputStream.toByteArray();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -173,13 +195,19 @@ public class AudioServer extends Thread{
                         if(buffer.length != length)
                         {
                             System.out.println("Error receiving a recording...");
-                            out.writeUTF("Error receiving a recording...");
-                            out.flush();
+                            if(!socket.isClosed())
+                            {
+                                out.writeUTF("Error receiving a recording...");
+                                out.flush();
+                            }
                         }else if(!useIpMic)
                         {
                             System.out.println("Using Hardware Mic.");
-                            out.writeUTF("Using Hardware Mic.");
-                            out.flush();
+                            if(!socket.isClosed())
+                            {
+                                out.writeUTF("Using Hardware Mic.");
+                                out.flush();
+                            }
                         }
                     }
                 }
