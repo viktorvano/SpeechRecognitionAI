@@ -82,8 +82,8 @@ public class SpeechRecognitionAI extends Application {
     private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
     private ArrayList<Classifier> classifier;
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
-    private ImageView[] icons;
-    private Label[] labelMenu;
+    private final ImageView[] icons = new ImageView[5];
+    private final Label[] labelMenu = new Label[5];
     private NeuralNetworkThread neuralNetworkThread;
     private Label speechRecognitionStatus, speechRecognitionOutput;
     private boolean wordsDetected = false;
@@ -141,20 +141,18 @@ public class SpeechRecognitionAI extends Application {
         borderPane.setRight(vBoxRight);
         borderPane.setLeft(flow);
 
-        flow.setPadding(new Insets(30, 20, 30, 20));
+        flow.setPadding(new Insets(20, 15, 20, 15));
         flow.setVgap(4);
         flow.setHgap(4);
         flow.setPrefWrapLength(30); // preferred width allows for two columns
         flow.setStyle("-fx-background-color: DAE6F3;");
 
-        icons = new ImageView[4];
-        labelMenu = new Label[4];
-        for (int i=0; i<4; i++)
+        for (int i=0; i<labelMenu.length; i++)
         {
             icons[i] = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/icon"+(i+1)+".png"));
             icons[i].setPreserveRatio(true);
-            icons[i].setFitWidth(80);
-            icons[i].setFitHeight(80);
+            icons[i].setFitWidth(60);
+            icons[i].setFitHeight(60);
             labelMenu[i] = new Label();
             flow.getChildren().add(icons[i]);
             flow.getChildren().add(labelMenu[i]);
@@ -167,7 +165,8 @@ public class SpeechRecognitionAI extends Application {
         labelMenu[0].setText("Training Data\n ");
         labelMenu[1].setText("    Train AI\n ");
         labelMenu[2].setText("   Speech\nRecognition\n ");
-        labelMenu[3].setText("   Settings");
+        labelMenu[3].setText("Imagination");
+        labelMenu[4].setText("   Settings");
 
         hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
         hBoxBottom.setSpacing(30);
@@ -640,7 +639,7 @@ public class SpeechRecognitionAI extends Application {
                 speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
                         + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tDone.\t\tListening...");
                 loadingStep = 3;
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < labelMenu.length; i++) {
                     labelMenu[i].setDisable(false);
                     icons[i].setDisable(false);
                 }
@@ -1593,6 +1592,18 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(speechRecognitionOutput);
     }
 
+    private void displayImaginationLayout()
+    {
+
+        displayedLayout = 3;
+        System.out.println("Imagination Layout displayed.");
+    }
+
+    private void hideImaginationLayout()
+    {
+
+    }
+
     private void displaySettingsLayout()
     {
         stackPaneCenter.getChildren().add(settingsPane);
@@ -1601,7 +1612,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
         hBoxBottom.getChildren().add(buttonShellCommands);
-        displayedLayout = 3;
+        displayedLayout = 4;
         System.out.println("Settings Layout displayed.");
     }
 
@@ -1624,6 +1635,8 @@ public class SpeechRecognitionAI extends Application {
         else if(displayedLayout == 2 && layoutIndex != 2)
             hideRecognitionLayout();
         else if(displayedLayout == 3 && layoutIndex != 3)
+            hideImaginationLayout();
+        else if(displayedLayout == 4 && layoutIndex != 4)
             hideSettingsLayout();
 
         if(layoutIndex == 0 && displayedLayout != 0)
@@ -1633,6 +1646,8 @@ public class SpeechRecognitionAI extends Application {
         else if(layoutIndex == 2 && displayedLayout != 2)
             displayRecognitionLayout();
         else if(layoutIndex == 3 && displayedLayout != 3)
+            displayImaginationLayout();
+        else if(layoutIndex == 4 && displayedLayout != 4)
             displaySettingsLayout();
     }
 
