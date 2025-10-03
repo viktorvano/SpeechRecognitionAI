@@ -1681,7 +1681,7 @@ public class SpeechRecognitionAI extends Application {
                 maximum = value.getCount();
         trainingItem.clear();
         for (Classifier value : classifier) {
-            if (value.getCount() == maximum/* && value.getCount()%2 == 0*/)
+            if (value.getCount() == maximum)
                 trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tOK");
             else {
                 trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tMore specimens required!");
