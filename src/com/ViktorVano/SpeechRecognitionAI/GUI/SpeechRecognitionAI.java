@@ -873,6 +873,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 buttonImagine.setDisable(true);
                 comboBoxImagination.setDisable(true);
+                generateWordsForImagination();
             }
         });
 
@@ -1791,6 +1792,29 @@ public class SpeechRecognitionAI extends Application {
             {
                 d++;
             }
+        }
+    }
+
+    private void generateWordsForImagination()// need to verify this...
+    {
+        recordsImagination.clear();
+        for(int i=0; i<1000; i++)
+        {
+            int wordLength = (int)Math.round((((double)maxWordLength - (double)minWordLength) * Math.random()));
+            if(wordLength > maxWordLength)
+            {
+                wordLength = maxWordLength;
+            }
+            byte[] word = new byte[wordLength];
+            for(int x=0; x<wordLength; x++)
+            {
+                word[x] = (byte)Math.round(Math.random()*255.0);
+            }
+            RecordedAudio madeUpWord = new RecordedAudio();
+            madeUpWord.audioRecord = word;
+            madeUpWord.audioRecordLength = wordLength;
+            madeUpWord.name = randomString(16);
+            recordsImagination.add(madeUpWord);
         }
     }
 }
