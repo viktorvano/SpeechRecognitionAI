@@ -100,6 +100,8 @@ public class SpeechRecognitionAI extends Application {
     private ListView<String> webhooksList;
     private ListView<String> shellCommandsList;
     private final ComboBox<String> comboBoxImagination = new ComboBox<>();
+    private final ArrayList<RecordedAudio> recordsImagination = new ArrayList<>();
+    private final Button buttonImagine = new Button("Imagine");
 
     public static void main(String[] args)
     {
@@ -864,6 +866,16 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeImaginationLayout()
     {
+        buttonImagine.setDisable(true);
+        buttonImagine.setOnAction(event -> {
+            int selectedIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
+            if (selectedIndex != -1)
+            {
+                buttonImagine.setDisable(true);
+                comboBoxImagination.setDisable(true);
+            }
+        });
+
         for (Classifier c : classifier) {
             comboBoxImagination.getItems().add(c.getName());
         }
@@ -874,6 +886,7 @@ public class SpeechRecognitionAI extends Application {
         comboBoxImagination.setOnAction(event -> {
             int selectedIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
             System.out.println("Selected index: " + selectedIndex);
+            buttonImagine.setDisable(selectedIndex == -1);
         });
     }
 
@@ -1611,6 +1624,7 @@ public class SpeechRecognitionAI extends Application {
     {
         stackPaneCenter.getChildren().add(lineChartAudio);
         hBoxBottom.getChildren().add(comboBoxImagination);
+        hBoxBottom.getChildren().add(buttonImagine);
         displayedLayout = 3;
         System.out.println("Imagination Layout displayed.");
     }
@@ -1618,6 +1632,7 @@ public class SpeechRecognitionAI extends Application {
     private void hideImaginationLayout()
     {
         stackPaneCenter.getChildren().remove(lineChartAudio);
+        hBoxBottom.getChildren().remove(buttonImagine);
         hBoxBottom.getChildren().remove(comboBoxImagination);
     }
 
