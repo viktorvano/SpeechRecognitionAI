@@ -1594,14 +1594,14 @@ public class SpeechRecognitionAI extends Application {
 
     private void displayImaginationLayout()
     {
-
+        stackPaneCenter.getChildren().add(lineChartAudio);
         displayedLayout = 3;
         System.out.println("Imagination Layout displayed.");
     }
 
     private void hideImaginationLayout()
     {
-
+        stackPaneCenter.getChildren().remove(lineChartAudio);
     }
 
     private void displaySettingsLayout()
