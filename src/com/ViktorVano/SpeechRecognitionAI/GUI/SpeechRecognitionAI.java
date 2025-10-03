@@ -1656,7 +1656,7 @@ public class SpeechRecognitionAI extends Application {
         classifier.clear();
         for(int i=0; i<databaseList.getItems().size(); i++)
         {
-            if(classifier.size()==0)
+            if(classifier.isEmpty())
                 classifier.add(new Classifier(databaseList.getItems().get(i)));
             else
                 for (int x=0; x<classifier.size(); x++)
