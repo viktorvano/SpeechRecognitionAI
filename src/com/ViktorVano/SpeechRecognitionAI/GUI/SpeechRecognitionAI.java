@@ -80,7 +80,7 @@ public class SpeechRecognitionAI extends Application {
     private Button buttonPlayWord, buttonRemoveWord, buttonAddWord;
     private Button buttonTrain, buttonStopTraining, buttonRemoveTopologyLayer, buttonAddHiddenLayer;
     private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
-    private ArrayList<Classifier> classifier;
+    private final ArrayList<Classifier> classifier = new ArrayList<>();
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
     private final ImageView[] icons = new ImageView[5];
     private final Label[] labelMenu = new Label[5];
@@ -172,11 +172,10 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.setSpacing(30);
         hBoxBottom.setStyle("-fx-background-color: #336699;");
 
-        classifier = new ArrayList<>();
-
         initializeDataLayout();
         initializeTrainingLayout();
         initializeRecognitionLayout();
+        initializeImaginationLayout();
         initializeSettingsLayout();
 
         audioServer = new AudioServer(
@@ -860,6 +859,11 @@ public class SpeechRecognitionAI extends Application {
         speechRecognitionOutput.setFont(Font.font("Arial", 20));
         speechRecognitionOutput.setTextFill(Color.web("#ffffff"));
         speechRecognitionOutput.setStyle("-fx-font-weight: bold");
+    }
+
+    private void initializeImaginationLayout()
+    {
+
     }
 
     private void initializeSettingsLayout()
