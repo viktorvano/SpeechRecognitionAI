@@ -706,7 +706,7 @@ public class SpeechRecognitionAI extends Application {
                     {
                         recordsImagination.get(i).loss = results.get(i).loss;
                     }
-                    imaginationStep = 5;
+                    imaginationStep = -1;
                     int lowestLossIndex = getLowestGeneratedLossIndex();
                     AudioPlayer audioPlayer = new AudioPlayer(audioCapture, recordsImagination.get(lowestLossIndex).recordedAudio);
                     audioPlayer.start();
