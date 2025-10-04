@@ -161,9 +161,8 @@ public class SpeechRecognitionAI extends Application {
             int layoutIndex = i;
             labelMenu[i].setOnMouseClicked(event -> displayLayout(layoutIndex));
             icons[i].setOnMouseClicked(event -> displayLayout(layoutIndex));
-            labelMenu[i].setDisable(true);
-            icons[i].setDisable(true);
         }
+        disableMenu();
         labelMenu[0].setText("Training Data\n ");
         labelMenu[1].setText("    Train AI\n ");
         labelMenu[2].setText("   Speech\nRecognition\n ");
@@ -650,10 +649,7 @@ public class SpeechRecognitionAI extends Application {
                 speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
                         + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tDone.\t\tListening...");
                 loadingStep = 3;
-                for (int i = 0; i < labelMenu.length; i++) {
-                    labelMenu[i].setDisable(false);
-                    icons[i].setDisable(false);
-                }
+                enableMenu();
             }
 
             if(updateBackground)
@@ -719,6 +715,22 @@ public class SpeechRecognitionAI extends Application {
         timelineUpdateData.play();
     }
 
+    private void disableMenu()
+    {
+        for (int i = 0; i < labelMenu.length; i++) {
+            labelMenu[i].setDisable(true);
+            icons[i].setDisable(true);
+        }
+    }
+
+    private void enableMenu()
+    {
+        for (int i = 0; i < labelMenu.length; i++) {
+            labelMenu[i].setDisable(false);
+            icons[i].setDisable(false);
+        }
+    }
+
     private void initializeTrainingLayout()
     {
         trainingList = new ListView<>();
@@ -729,11 +741,7 @@ public class SpeechRecognitionAI extends Application {
         timelineTrainingLabelUpdate = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
             if(!trainingIsRunning)
             {
-                for(int i=0; i<labelMenu.length; i++)
-                {
-                    icons[i].setDisable(false);
-                    labelMenu[i].setDisable(false);
-                }
+                enableMenu();
                 timelineTrainingLabelUpdate.stop();
             }else if(updateTrainingLabel)
             {
@@ -767,11 +775,7 @@ public class SpeechRecognitionAI extends Application {
         buttonTrain = new Button("Train");
         buttonTrain.setOnAction(event -> {
             buttonTrain.setDisable(true);
-            for(int i=0; i<labelMenu.length; i++)
-            {
-                icons[i].setDisable(true);
-                labelMenu[i].setDisable(true);
-            }
+            disableMenu();
             trainingThread = new TrainingThread(database, classifier);
             trainingThread.start();
             trainingIsRunning = true;
@@ -906,6 +910,8 @@ public class SpeechRecognitionAI extends Application {
 
     private void initializeImaginationLayout()
     {
+        labelImaginationStatus.setFont(Font.font("Arial", 22));
+        labelImaginationStatus.setStyle("-fx-font-weight: bold");
         buttonImagine.setDisable(true);
         buttonImagine.setOnAction(event -> {
             int selectedIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
