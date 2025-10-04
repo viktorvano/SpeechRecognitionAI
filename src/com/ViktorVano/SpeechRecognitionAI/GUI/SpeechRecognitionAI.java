@@ -919,6 +919,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 buttonImagine.setDisable(true);
                 comboBoxImagination.setDisable(true);
+                disableMenu();
                 imaginationStep = 0;
             }
         });
