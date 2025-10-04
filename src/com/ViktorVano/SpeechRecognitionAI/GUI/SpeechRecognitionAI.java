@@ -1,9 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioServer;
-import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.Audio.*;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
@@ -100,7 +97,7 @@ public class SpeechRecognitionAI extends Application {
     private ListView<String> webhooksList;
     private ListView<String> shellCommandsList;
     private final ComboBox<String> comboBoxImagination = new ComboBox<>();
-    private final ArrayList<RecordedAudio> recordsImagination = new ArrayList<>();
+    private final ArrayList<GeneratedAudio> recordsImagination = new ArrayList<>();
     private final Button buttonImagine = new Button("Imagine");
 
     public static void main(String[] args)
@@ -378,7 +375,7 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         }
-
+        wordsDetected = true;
     }
 
     @Override
@@ -606,7 +603,6 @@ public class SpeechRecognitionAI extends Application {
                         displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                 }
                 detectWords();
-                wordsDetected = true;
             }
 
             if (weightsLoaded && wordsDetected && displayedLayout == 2) {
@@ -1798,23 +1794,68 @@ public class SpeechRecognitionAI extends Application {
     private void generateWordsForImagination()// need to verify this...
     {
         recordsImagination.clear();
-        for(int i=0; i<1000; i++)
+        int lastAddedWords = 0;
+        final int bufferSize = 1000000;
+        final int wordsCapacity = 1000;
+        while(recordsImagination.size() < wordsCapacity)
         {
-            int wordLength = (int)Math.round((((double)maxWordLength - (double)minWordLength) * Math.random()));
-            if(wordLength > maxWordLength)
+            byte[] buffer = new byte[bufferSize];
+            for(int i=minWordLength; i<bufferSize - maxWordLength;)
             {
-                wordLength = maxWordLength;
+                //random word length
+                int wordLength = (int)Math.round((((double)maxWordLength - (double)minWordLength) * Math.random()));
+                if(wordLength%2 != 0)
+                {
+                    wordLength++;
+                }
+                if(wordLength > maxWordLength)
+                {
+                    wordLength = maxWordLength;
+                }
+
+                //generate random noise
+                for(int x = i;
+                    (i-x) < wordLength &&
+                    bufferSize>(i+wordLength) &&
+                    i<bufferSize-maxWordLength;
+                    i+=2)
+                {
+                    buffer[i] = (byte)Math.round(Math.random()*255.0);
+                    buffer[i+1] = (byte)Math.round(Math.random()*255.0);
+                }
+                i += minWordLength;// create a space between words
             }
-            byte[] word = new byte[wordLength];
-            for(int x=0; x<wordLength; x++)
+            System.out.println("Buffer filled with generated words...");
+            captureAudio();//clears record
+            audioCapture.setRecordedAudioBuffer(buffer, bufferSize);
+            recordedAudio.audioRecord = audioCapture.getRecord();
+            recordedAudio.audioRecordLength = audioCapture.getRecordLength();
+            detectWords();
+            while (!wordsDetected)
             {
-                word[x] = (byte)Math.round(Math.random()*255.0);
+                try
+                {
+                    Thread.sleep(100);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
-            RecordedAudio madeUpWord = new RecordedAudio();
-            madeUpWord.audioRecord = word;
-            madeUpWord.audioRecordLength = wordLength;
-            madeUpWord.name = randomString(16);
-            recordsImagination.add(madeUpWord);
+            int newAddedWords = lastAddedWords;
+            for(RecordedAudio record : records)
+            {
+                GeneratedAudio generatedAudio = new GeneratedAudio(record);
+                generatedAudio.recordedAudio.name = randomString(16);
+                recordsImagination.add(generatedAudio);
+                newAddedWords++;
+                if(recordsImagination.size() >= wordsCapacity)
+                {
+                    break;
+                }
+            }
+            System.out.println("New Added Words: " + (newAddedWords - lastAddedWords));
+            lastAddedWords = newAddedWords;//update
         }
+        System.out.println("Generated words capacity reached: " + wordsCapacity);
     }
 }
