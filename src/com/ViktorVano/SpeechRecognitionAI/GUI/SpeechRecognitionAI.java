@@ -1652,6 +1652,7 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.getChildren().add(lineChartAudio);
         hBoxBottom.getChildren().add(comboBoxImagination);
         hBoxBottom.getChildren().add(buttonImagine);
+        hBoxBottom.getChildren().add(labelImaginationStatus);
         displayedLayout = 3;
         System.out.println("Imagination Layout displayed.");
     }
@@ -1661,6 +1662,7 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.getChildren().remove(lineChartAudio);
         hBoxBottom.getChildren().remove(buttonImagine);
         hBoxBottom.getChildren().remove(comboBoxImagination);
+        hBoxBottom.getChildren().remove(labelImaginationStatus);
     }
 
     private void displaySettingsLayout()
