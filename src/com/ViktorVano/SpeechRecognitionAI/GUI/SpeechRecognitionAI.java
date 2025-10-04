@@ -99,6 +99,8 @@ public class SpeechRecognitionAI extends Application {
     private final ComboBox<String> comboBoxImagination = new ComboBox<>();
     private final ArrayList<GeneratedAudio> recordsImagination = new ArrayList<>();
     private final Button buttonImagine = new Button("Imagine");
+    private int imaginationStep = -1;
+    private final Label labelImaginationStatus = new Label();
 
     public static void main(String[] args)
     {
@@ -585,7 +587,6 @@ public class SpeechRecognitionAI extends Application {
         lineChartAudio.getData().add(detectedWordsSeries);
         lineChartAudio.setAnimated(false);
 
-        //Also sets displayMessageCounter to 0
         //How long it should keep the displayed message. X*0.25s
         Timeline timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(250), event -> {
 
@@ -605,7 +606,8 @@ public class SpeechRecognitionAI extends Application {
                 detectWords();
             }
 
-            if (weightsLoaded && wordsDetected && displayedLayout == 2) {
+            if (weightsLoaded && wordsDetected && displayedLayout == 2)// Speech Recognition
+            {
                 if (neuralNetworkThread.isFinished() && displayMessageCounter == -1) {
                     neuralNetworkRoutine();//Also sets displayMessageCounter to 0
                 } else if (!neuralNetworkThread.isFinished() && displayMessageCounter == 0) {
@@ -669,6 +671,30 @@ public class SpeechRecognitionAI extends Application {
                 saveIntegerToFile("background_red.dat", background_red);
                 saveIntegerToFile("background_green.dat", background_green);
                 saveIntegerToFile("background_blue.dat", background_blue);
+            }
+
+            if(displayedLayout == 3)//imagination
+            {
+                if(imaginationStep == 0)
+                {
+                    labelImaginationStatus.setText("Generating new words...");
+                    imaginationStep = 1;
+                }else if(imaginationStep == 1)
+                {
+                    generateWordsForImagination();
+                    imaginationStep = 2;
+                }else if(imaginationStep == 2)
+                {
+                    labelImaginationStatus.setText("Scoring new words via Neural Network...");
+                    imaginationStep = 3;
+                }else if(imaginationStep == 3)
+                {
+                    for(GeneratedAudio generatedAudio : recordsImagination)
+                    {
+                        //score each word loss.
+                    }
+                    imaginationStep = 4;
+                }
             }
         }));
         timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
@@ -869,7 +895,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 buttonImagine.setDisable(true);
                 comboBoxImagination.setDisable(true);
-                generateWordsForImagination();
+                imaginationStep = 0;
             }
         });
 
