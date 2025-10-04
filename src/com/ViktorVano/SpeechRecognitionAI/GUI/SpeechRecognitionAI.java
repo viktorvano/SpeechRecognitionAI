@@ -706,8 +706,14 @@ public class SpeechRecognitionAI extends Application {
                     {
                         recordsImagination.get(i).loss = results.get(i).loss;
                     }
-                    labelImaginationStatus.setText("Scoring new words finished...");
                     imaginationStep = 5;
+                    int lowestLossIndex = getLowestGeneratedLossIndex();
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, recordsImagination.get(lowestLossIndex).recordedAudio);
+                    audioPlayer.start();
+                    enableMenu();
+                    buttonImagine.setDisable(false);
+                    comboBoxImagination.setDisable(false);
+                    labelImaginationStatus.setText("Best generated word \"" + recordsImagination.get(lowestLossIndex).recordedAudio.name + "\" with Loss: " + recordsImagination.get(lowestLossIndex).loss);
                 }
             }
         }));
@@ -1901,5 +1907,24 @@ public class SpeechRecognitionAI extends Application {
             lastAddedWords = newAddedWords;//update
         }
         System.out.println("Generated words capacity reached: " + wordsCapacity);
+    }
+
+    private int getLowestGeneratedLossIndex() {
+        if (recordsImagination == null || recordsImagination.isEmpty()) {
+            return -1; // No records
+        }
+
+        int bestIndex = 0;
+        float bestLoss = recordsImagination.get(0).loss;
+
+        for (int i = 1; i < recordsImagination.size(); i++) {
+            float currentLoss = recordsImagination.get(i).loss;
+            if (currentLoss < bestLoss) {
+                bestLoss = currentLoss;
+                bestIndex = i;
+            }
+        }
+
+        return bestIndex;
     }
 }
