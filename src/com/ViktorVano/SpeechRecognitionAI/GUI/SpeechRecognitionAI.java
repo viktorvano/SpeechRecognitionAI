@@ -1831,16 +1831,6 @@ public class SpeechRecognitionAI extends Application {
             recordedAudio.audioRecord = audioCapture.getRecord();
             recordedAudio.audioRecordLength = audioCapture.getRecordLength();
             detectWords();
-            while (!wordsDetected)
-            {
-                try
-                {
-                    Thread.sleep(100);
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
             int newAddedWords = lastAddedWords;
             for(RecordedAudio record : records)
             {
