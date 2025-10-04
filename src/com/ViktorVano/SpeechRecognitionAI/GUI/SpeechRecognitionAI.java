@@ -404,9 +404,20 @@ public class SpeechRecognitionAI extends Application {
         }
     }
 
-    private void neuralNetworkRoutine()
+    private void neuralNetworkRoutine(ObservableList<RecordedAudio> audioRecords)
     {
-        neuralNetworkThread.setRecords(records);
+        neuralNetworkThread.setRecords(audioRecords);
+        if(neuralNetworkThread.getState() == Thread.State.NEW)
+        {
+            neuralNetworkThread.start();
+        }
+        neuralNetworkThread.startAnalysis();
+        displayMessageCounter = 0;
+    }
+
+    private void neuralNetworkGeneratedLossScoring(ArrayList<GeneratedAudio> generatedAudioRecords)
+    {
+        neuralNetworkThread.setGeneratedAudioRecords(generatedAudioRecords);
         if(neuralNetworkThread.getState() == Thread.State.NEW)
         {
             neuralNetworkThread.start();
@@ -609,7 +620,7 @@ public class SpeechRecognitionAI extends Application {
             if (weightsLoaded && wordsDetected && displayedLayout == 2)// Speech Recognition
             {
                 if (neuralNetworkThread.isFinished() && displayMessageCounter == -1) {
-                    neuralNetworkRoutine();//Also sets displayMessageCounter to 0
+                    neuralNetworkRoutine(records);//Also sets displayMessageCounter to 0
                 } else if (!neuralNetworkThread.isFinished() && displayMessageCounter == 0) {
                     speechRecognitionStatus.setText("Speech being processed.");
                     speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
@@ -686,16 +697,19 @@ public class SpeechRecognitionAI extends Application {
                 }else if(imaginationStep == 2)
                 {
                     labelImaginationStatus.setText("Scoring new words via Neural Network...");
+                    neuralNetworkGeneratedLossScoring(recordsImagination);
                     imaginationStep = 3;
                 }else if(imaginationStep == 3)
                 {
-                    for(GeneratedAudio generatedAudio : recordsImagination)
-                    {
-                        //score each word loss.
-                    }
-                    imaginationStep = 4;
+                    if(neuralNetworkThread.isFinished())//waits until finished
+                        imaginationStep = 4;
                 }else if(imaginationStep == 4)
                 {
+                    ArrayList<GeneratedAudio> results = neuralNetworkThread.getGeneratedRecords();
+                    for(int i=0; i<results.size(); i++)
+                    {
+                        recordsImagination.get(i).loss = results.get(i).loss;
+                    }
                     labelImaginationStatus.setText("Scoring new words finished...");
                     imaginationStep = 5;
                 }
@@ -1826,6 +1840,7 @@ public class SpeechRecognitionAI extends Application {
     private void generateWordsForImagination()// need to verify this...
     {
         recordsImagination.clear();
+        int wordIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
         int lastAddedWords = 0;
         final int bufferSize = 1000000;
         final int wordsCapacity = 1000;
@@ -1866,7 +1881,7 @@ public class SpeechRecognitionAI extends Application {
             int newAddedWords = lastAddedWords;
             for(RecordedAudio record : records)
             {
-                GeneratedAudio generatedAudio = new GeneratedAudio(record);
+                GeneratedAudio generatedAudio = new GeneratedAudio(record, wordIndex);
                 generatedAudio.recordedAudio.name = randomString(16);
                 recordsImagination.add(generatedAudio);
                 newAddedWords++;
