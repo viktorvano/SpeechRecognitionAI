@@ -694,6 +694,10 @@ public class SpeechRecognitionAI extends Application {
                         //score each word loss.
                     }
                     imaginationStep = 4;
+                }else if(imaginationStep == 4)
+                {
+                    labelImaginationStatus.setText("Scoring new words finished...");
+                    imaginationStep = 5;
                 }
             }
         }));
