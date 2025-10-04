@@ -1859,7 +1859,6 @@ public class SpeechRecognitionAI extends Application {
             }
             System.out.println("Buffer filled with generated words...");
             captureAudio();//clears record
-            updateData = false;//because this is not for Speech Recognition
             audioCapture.setRecordedAudioBuffer(buffer, bufferSize);
             recordedAudio.audioRecord = audioCapture.getRecord();
             recordedAudio.audioRecordLength = audioCapture.getRecordLength();
