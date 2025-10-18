@@ -101,6 +101,8 @@ public class SpeechRecognitionAI extends Application {
     private final Button buttonImagine = new Button("Imagine");
     private int imaginationStep = -1;
     private final Label labelImaginationStatus = new Label();
+    private final Button buttonAddGeneratedArtifact = new Button("Add As Generated Artifact");
+    private static int lowestGeneratedLossIndex = -1;
 
     public static void main(String[] args)
     {
@@ -684,6 +686,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 if(imaginationStep == 0)
                 {
+                    lowestGeneratedLossIndex = -1;
                     labelImaginationStatus.setText("Generating new words...");
                     imaginationStep = 1;
                 }else if(imaginationStep == 1)
@@ -707,13 +710,14 @@ public class SpeechRecognitionAI extends Application {
                         recordsImagination.get(i).loss = results.get(i).loss;
                     }
                     imaginationStep = -1;
-                    int lowestLossIndex = getLowestGeneratedLossIndex();
-                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, recordsImagination.get(lowestLossIndex).recordedAudio);
+                    lowestGeneratedLossIndex = getLowestGeneratedLossIndex();
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, recordsImagination.get(lowestGeneratedLossIndex).recordedAudio);
                     audioPlayer.start();
                     enableMenu();
                     buttonImagine.setDisable(false);
                     comboBoxImagination.setDisable(false);
-                    labelImaginationStatus.setText("Best generated word \"" + recordsImagination.get(lowestLossIndex).recordedAudio.name + "\" with Loss: " + recordsImagination.get(lowestLossIndex).loss);
+                    buttonAddGeneratedArtifact.setDisable(recordsImagination.get(lowestGeneratedLossIndex).loss > 0.5);
+                    labelImaginationStatus.setText("Best generated word \"" + recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name + "\" with Loss: " + recordsImagination.get(lowestGeneratedLossIndex).loss);
                 }
             }
         }));
@@ -927,6 +931,23 @@ public class SpeechRecognitionAI extends Application {
                 comboBoxImagination.setDisable(true);
                 disableMenu();
                 imaginationStep = 0;
+            }
+        });
+
+        buttonAddGeneratedArtifact.setDisable(true);
+        buttonAddGeneratedArtifact.setOnAction(event -> {
+            if(lowestGeneratedLossIndex != -1)
+            {
+                recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name = "";//artifact name is ""
+                database.add(recordsImagination.get(lowestGeneratedLossIndex).recordedAudio);
+                databaseItem.add(recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name);
+                txtDetectedWord.setText("");
+                recordedWordIndex = -1;
+                //database.get(database.size()-1).name = databaseItem.get(databaseItem.size()-1);
+                sortDatabase();
+                saveDatabase(database);
+                lowestGeneratedLossIndex = -1;
+                buttonAddGeneratedArtifact.setDisable(true);
             }
         });
 
@@ -1679,6 +1700,7 @@ public class SpeechRecognitionAI extends Application {
         stackPaneCenter.getChildren().add(lineChartAudio);
         hBoxBottom.getChildren().add(comboBoxImagination);
         hBoxBottom.getChildren().add(buttonImagine);
+        hBoxBottom.getChildren().add(buttonAddGeneratedArtifact);
         hBoxBottom.getChildren().add(labelImaginationStatus);
         displayedLayout = 3;
         System.out.println("Imagination Layout displayed.");
@@ -1687,8 +1709,9 @@ public class SpeechRecognitionAI extends Application {
     private void hideImaginationLayout()
     {
         stackPaneCenter.getChildren().remove(lineChartAudio);
-        hBoxBottom.getChildren().remove(buttonImagine);
         hBoxBottom.getChildren().remove(comboBoxImagination);
+        hBoxBottom.getChildren().remove(buttonImagine);
+        hBoxBottom.getChildren().remove(buttonAddGeneratedArtifact);
         hBoxBottom.getChildren().remove(labelImaginationStatus);
     }
 

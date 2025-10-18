@@ -75,6 +75,7 @@ public class NeuralNetworkThread extends Thread {
                 this.generatedTargetOutputs.add(0.0f);
         }
         this.generatedRecords = generatedWords;
+        System.out.println("Generated words are set...");
     }
 
     public ArrayList<GeneratedAudio> getGeneratedRecords()
@@ -127,13 +128,18 @@ public class NeuralNetworkThread extends Thread {
             recognizedMessage = "";
             boolean scoreGeneratedAudio = false;
             int generatedWordIndex = 0;
-            if(records.isEmpty() && !generatedRecords.isEmpty())
+            if(generatedRecords != null && !generatedRecords.isEmpty())
             {
+                if(!records.isEmpty())
+                {
+                    records.clear();
+                }
                 for(GeneratedAudio generatedAudio : generatedRecords)
                 {
                     records.add(generatedAudio.recordedAudio);
                 }
                 scoreGeneratedAudio = true;
+                System.out.println("Generated words are going to be scored...");
             }
 
             while (!records.isEmpty())
