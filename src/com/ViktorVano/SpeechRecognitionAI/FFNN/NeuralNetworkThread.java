@@ -67,6 +67,10 @@ public class NeuralNetworkThread extends Thread {
 
     public void analyzeWord(RecordedAudio word)
     {
+        if(generatedRecords != null && !generatedRecords.isEmpty())
+        {
+            generatedRecords.clear();
+        }
         ObservableList<RecordedAudio> recordedWords = FXCollections.observableArrayList();
         recordedWords.add(word);
         this.records = recordedWords;
