@@ -103,6 +103,7 @@ public class SpeechRecognitionAI extends Application {
     private final Label labelImaginationStatus = new Label();
     private final Button buttonAddGeneratedArtifact = new Button("Add As Generated Artifact");
     private static int lowestGeneratedLossIndex = -1;
+    private final Button buttonGetNeuralNetworkOutput = new Button("Get Neural Network Output");
 
     public static void main(String[] args)
     {
@@ -455,6 +456,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 databaseWordIndex = databaseList.getSelectionModel().getSelectedIndex();
                 txtDatabaseWord.setText(database.get(databaseWordIndex).name);
+                buttonGetNeuralNetworkOutput.setDisable(false);
                 AudioPlayer audioPlayer = new AudioPlayer(audioCapture, database.get(databaseWordIndex));
                 audioPlayer.start();
             }
@@ -515,6 +517,12 @@ public class SpeechRecognitionAI extends Application {
                     txtDatabaseWord.setText("");
                 }
             }
+        });
+
+        buttonGetNeuralNetworkOutput.setDisable(true);
+        buttonGetNeuralNetworkOutput.setOnAction(event -> {
+            buttonGetNeuralNetworkOutput.setDisable(true);
+            //do NN FF stuff
         });
 
         records = FXCollections.observableArrayList();
@@ -1619,6 +1627,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(buttonPlayDatabaseWord);
         vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
         vBoxRight.getChildren().add(txtDatabaseWord);
+        vBoxRight.getChildren().add(buttonGetNeuralNetworkOutput);
         hBoxBottom.getChildren().add(recordsList);
         hBoxBottom.getChildren().add(txtDetectedWord);
         hBoxBottom.getChildren().add(buttonPlayWord);
@@ -1637,6 +1646,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(buttonPlayDatabaseWord);
         vBoxRight.getChildren().remove(buttonRemoveDatabaseWord);
         vBoxRight.getChildren().remove(txtDatabaseWord);
+        vBoxRight.getChildren().remove(buttonGetNeuralNetworkOutput);
         hBoxBottom.getChildren().remove(recordsList);
         hBoxBottom.getChildren().remove(txtDetectedWord);
         hBoxBottom.getChildren().remove(buttonPlayWord);
