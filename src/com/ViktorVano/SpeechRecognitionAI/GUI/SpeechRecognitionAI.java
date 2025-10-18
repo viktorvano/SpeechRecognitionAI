@@ -929,6 +929,8 @@ public class SpeechRecognitionAI extends Application {
             {
                 buttonImagine.setDisable(true);
                 comboBoxImagination.setDisable(true);
+                buttonAddGeneratedArtifact.setDisable(true);
+                lowestGeneratedLossIndex = -1;
                 disableMenu();
                 imaginationStep = 0;
             }
