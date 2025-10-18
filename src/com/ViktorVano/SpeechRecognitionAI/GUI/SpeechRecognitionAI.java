@@ -522,7 +522,7 @@ public class SpeechRecognitionAI extends Application {
         buttonGetNeuralNetworkOutput.setDisable(true);
         buttonGetNeuralNetworkOutput.setOnAction(event -> {
             buttonGetNeuralNetworkOutput.setDisable(true);
-            //do NN FF stuff
+            neuralNetworkThread.analyzeWord(database.get(databaseWordIndex));
         });
 
         records = FXCollections.observableArrayList();
@@ -953,7 +953,6 @@ public class SpeechRecognitionAI extends Application {
                 databaseItem.add(recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name);
                 txtDetectedWord.setText("");
                 recordedWordIndex = -1;
-                //database.get(database.size()-1).name = databaseItem.get(databaseItem.size()-1);
                 sortDatabase();
                 saveDatabase(database);
                 lowestGeneratedLossIndex = -1;

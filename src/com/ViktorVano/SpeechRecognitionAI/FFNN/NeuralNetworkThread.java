@@ -21,6 +21,7 @@ public class NeuralNetworkThread extends Thread {
     private final ArrayList<Classifier> classifierOutputs;
     private boolean runThread;
     private String recognizedMessage;
+    private boolean showOneTimeOutput;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
     {
@@ -30,6 +31,7 @@ public class NeuralNetworkThread extends Thread {
         this.records = FXCollections.observableArrayList();
         this.classifierOutputs = classifier;
         this.runThread = false;
+        this.showOneTimeOutput = false;
         this.recognizedMessage = "";
         if(input == null)
             input = new ArrayList<>();
@@ -61,6 +63,19 @@ public class NeuralNetworkThread extends Thread {
     public void setRecords(ObservableList<RecordedAudio> recordedWords)
     {
         this.records = recordedWords;
+    }
+
+    public void analyzeWord(RecordedAudio word)
+    {
+        ObservableList<RecordedAudio> recordedWords = FXCollections.observableArrayList();
+        recordedWords.add(word);
+        this.records = recordedWords;
+        showOneTimeOutput = true;
+        if(this.getState() == Thread.State.NEW)
+        {
+            this.start();
+        }
+        this.startAnalysis();
     }
 
     public void setGeneratedAudioRecords(ArrayList<GeneratedAudio> generatedWords)
@@ -183,6 +198,21 @@ public class NeuralNetworkThread extends Thread {
                             for (int neuron = 0; neuron < topology.get(layer); neuron++)
                                 neuralChartSeries.get(layer).getData().add(new XYChart.Data<>(neuron + 1, neuralNetwork.getNeuronOutput(layer, neuron)));
                         }
+                        chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                        DecimalFormat df = new DecimalFormat("##.##");
+                        chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
+                        displayNeuralChart = true;
+                    }
+
+                    if (showOneTimeOutput)
+                    {
+                        showOneTimeOutput = false;
+                        int layer = topology.size()-1;
+                        neuralChartSeries.clear();
+                        neuralChartSeries.add(new XYChart.Series<>());
+                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
+                            neuralChartSeries.get(0).getData().add(new XYChart.Data<>(neuron + 1, neuralNetwork.getNeuronOutput(layer, neuron)));
+
                         chartClassifierName = classifierOutputs.get(maximumIndex).getName();
                         DecimalFormat df = new DecimalFormat("##.##");
                         chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
