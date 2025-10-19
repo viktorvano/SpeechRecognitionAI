@@ -1,5 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
+import com.ViktorVano.SpeechRecognitionAI.Audio.GeneratedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
 import javafx.collections.FXCollections;
@@ -15,9 +16,12 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalize
 public class NeuralNetworkThread extends Thread {
     private final NeuralNetwork neuralNetwork;
     private ObservableList<RecordedAudio> records;
+    private ArrayList<GeneratedAudio> generatedRecords;
+    private final ArrayList<Float> generatedTargetOutputs = new ArrayList<>();
     private final ArrayList<Classifier> classifierOutputs;
     private boolean runThread;
     private String recognizedMessage;
+    private boolean showOneTimeOutput;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
     {
@@ -27,6 +31,7 @@ public class NeuralNetworkThread extends Thread {
         this.records = FXCollections.observableArrayList();
         this.classifierOutputs = classifier;
         this.runThread = false;
+        this.showOneTimeOutput = false;
         this.recognizedMessage = "";
         if(input == null)
             input = new ArrayList<>();
@@ -60,6 +65,59 @@ public class NeuralNetworkThread extends Thread {
         this.records = recordedWords;
     }
 
+    public void analyzeWord(RecordedAudio word)
+    {
+        if(generatedRecords != null && !generatedRecords.isEmpty())
+        {
+            generatedRecords.clear();
+        }
+        ObservableList<RecordedAudio> recordedWords = FXCollections.observableArrayList();
+        recordedWords.add(word);
+        this.records = recordedWords;
+        showOneTimeOutput = true;
+        if(this.getState() == Thread.State.NEW)
+        {
+            this.start();
+        }
+        this.startAnalysis();
+    }
+
+    public void setGeneratedAudioRecords(ArrayList<GeneratedAudio> generatedWords)
+    {
+        this.generatedTargetOutputs.clear();
+        int targetIndex = generatedWords.get(0).wordIndex;
+        for(int i=0; i<outputNodes; i++)
+        {
+            if(i == targetIndex)
+                this.generatedTargetOutputs.add(1.0f);
+            else
+                this.generatedTargetOutputs.add(0.0f);
+        }
+        this.generatedRecords = generatedWords;
+        System.out.println("Generated words are set...");
+    }
+
+    public ArrayList<GeneratedAudio> getGeneratedRecords()
+    {
+        return this.generatedRecords;
+    }
+
+    private float calculateGeneratedOutputLoss(ArrayList<Float> result, ArrayList<Float> generatedTargetOutputs)
+    {
+        if (result.size() != generatedTargetOutputs.size()) {
+            throw new IllegalArgumentException("Output and target size must match");
+        }
+
+        float sumSquaredError = 0f;
+
+        for (int i = 0; i < result.size(); i++) {
+            float diff = result.get(i) - generatedTargetOutputs.get(i);
+            sumSquaredError += diff * diff;
+        }
+
+        return sumSquaredError / result.size(); // Mean Squared Error
+    }
+
     private int findMaximumValueIndex(ArrayList<Float> values)
     {
         int maximumIndex = 0;
@@ -87,27 +145,48 @@ public class NeuralNetworkThread extends Thread {
             }
             System.out.println("Speech being processed.");
             recognizedMessage = "";
-            while (records.size() > 0)
+            boolean scoreGeneratedAudio = false;
+            int generatedWordIndex = 0;
+            if(generatedRecords != null && !generatedRecords.isEmpty())
+            {
+                if(!records.isEmpty())
+                {
+                    records.clear();
+                }
+                for(GeneratedAudio generatedAudio : generatedRecords)
+                {
+                    records.add(generatedAudio.recordedAudio);
+                }
+                scoreGeneratedAudio = true;
+                System.out.println("Generated words are going to be scored...");
+            }
+
+            while (!records.isEmpty())
             {
                 input.clear();
                 normalizeInputs(input, records.get(0));
                 neuralNetwork.feedForward(input);
                 neuralNetwork.getResults(result);
                 int maximumIndex = findMaximumValueIndex(result);
-                if(result.size() != 0) {
-                    if (result.get(maximumIndex) > classifierThreshold) {
+                if(!result.isEmpty() && !scoreGeneratedAudio)
+                {
+                    if (result.get(maximumIndex) > classifierThreshold)
+                    {
                         System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has " + (result.get(maximumIndex) * 100.0f) + "% match.");
                         if (recognizedMessage.length() == 0)
                             recognizedMessage = classifierOutputs.get(maximumIndex).getName();
                         else if (classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
                             recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
-                    } else {
+                    } else
+                    {
                         System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has low  match " + (result.get(maximumIndex) * 100.0f) + "%.");
                     }
 
-                    if (printNetworkValues) {
+                    if (printNetworkValues)
+                    {
                         //From the fist hidden layer to the output layer. Input layer contains just a normalized data.
-                        for (int layer = 1; layer < topology.size(); layer++) {
+                        for (int layer = 1; layer < topology.size(); layer++)
+                        {
                             System.out.println("\nLayer " + layer);
                             for (int neuron = 0; neuron < topology.get(layer); neuron++)
                                 System.out.println(neuralNetwork.getNeuronOutput(layer, neuron));
@@ -115,8 +194,10 @@ public class NeuralNetworkThread extends Thread {
                         System.out.println();//just a new line after printing the last layer
                     }
 
-                    if (plotNeuralCharts) {
-                        for (int layer = 1; layer < topology.size(); layer++) {
+                    if (plotNeuralCharts)
+                    {
+                        for (int layer = 1; layer < topology.size(); layer++)
+                        {
                             neuralChartSeries.add(new XYChart.Series<>());
                             for (int neuron = 0; neuron < topology.get(layer); neuron++)
                                 neuralChartSeries.get(layer).getData().add(new XYChart.Data<>(neuron + 1, neuralNetwork.getNeuronOutput(layer, neuron)));
@@ -127,13 +208,38 @@ public class NeuralNetworkThread extends Thread {
                         displayNeuralChart = true;
                     }
 
-                    if (showFFT) {
+                    if (showOneTimeOutput)
+                    {
+                        showOneTimeOutput = false;
+                        int layer = topology.size()-1;
+                        neuralChartSeries.clear();
+                        neuralChartSeries.add(new XYChart.Series<>());
+                        for (int neuron = 0; neuron < topology.get(layer); neuron++)
+                            neuralChartSeries.get(0).getData().add(new XYChart.Data<>(neuron + 1, neuralNetwork.getNeuronOutput(layer, neuron)));
+
+                        chartClassifierName = classifierOutputs.get(maximumIndex).getName();
+                        DecimalFormat df = new DecimalFormat("##.##");
+                        chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
+                        displayNeuralChart = true;
+                    }
+
+                    if (showFFT)
+                    {
                         chartClassifierName = classifierOutputs.get(maximumIndex).getName();
                         DecimalFormat df = new DecimalFormat("##.##");
                         chartClassifierMatch = df.format(result.get(maximumIndex) * 100.0) + "%";
                         displayFFTChart = true;
                     }
+                }else if(scoreGeneratedAudio)
+                {
+                    try{
+                        generatedRecords.get(generatedWordIndex).loss = calculateGeneratedOutputLoss(result, generatedTargetOutputs);
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
+                generatedWordIndex++;
                 records.remove(0);
             }
             System.out.println("Speech analysed.");

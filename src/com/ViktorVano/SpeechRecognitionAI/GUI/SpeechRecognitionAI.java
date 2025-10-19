@@ -1,9 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.GUI;
 
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioServer;
-import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.Audio.*;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
@@ -80,10 +77,10 @@ public class SpeechRecognitionAI extends Application {
     private Button buttonPlayWord, buttonRemoveWord, buttonAddWord;
     private Button buttonTrain, buttonStopTraining, buttonRemoveTopologyLayer, buttonAddHiddenLayer;
     private int displayedLayout = -1, textFieldTopologyValue = -1, displayMessageCounter = -1;
-    private ArrayList<Classifier> classifier;
+    private final ArrayList<Classifier> classifier = new ArrayList<>();
     private Label labelHiddenTopology, labelNewHiddenLayer, labelTopology, labelTrainingStatus;
-    private ImageView[] icons;
-    private Label[] labelMenu;
+    private final ImageView[] icons = new ImageView[5];
+    private final Label[] labelMenu = new Label[5];
     private NeuralNetworkThread neuralNetworkThread;
     private Label speechRecognitionStatus, speechRecognitionOutput;
     private boolean wordsDetected = false;
@@ -99,6 +96,14 @@ public class SpeechRecognitionAI extends Application {
     private ListView<String> wordCommandsList;
     private ListView<String> webhooksList;
     private ListView<String> shellCommandsList;
+    private final ComboBox<String> comboBoxImagination = new ComboBox<>();
+    private final ArrayList<GeneratedAudio> recordsImagination = new ArrayList<>();
+    private final Button buttonImagine = new Button("Imagine");
+    private int imaginationStep = -1;
+    private final Label labelImaginationStatus = new Label();
+    private final Button buttonAddGeneratedArtifact = new Button("Add As Generated Artifact");
+    private static int lowestGeneratedLossIndex = -1;
+    private final Button buttonGetNeuralNetworkOutput = new Button("Get Neural Network Output");
 
     public static void main(String[] args)
     {
@@ -141,43 +146,40 @@ public class SpeechRecognitionAI extends Application {
         borderPane.setRight(vBoxRight);
         borderPane.setLeft(flow);
 
-        flow.setPadding(new Insets(30, 20, 30, 20));
+        flow.setPadding(new Insets(20, 15, 20, 15));
         flow.setVgap(4);
         flow.setHgap(4);
         flow.setPrefWrapLength(30); // preferred width allows for two columns
         flow.setStyle("-fx-background-color: DAE6F3;");
 
-        icons = new ImageView[4];
-        labelMenu = new Label[4];
-        for (int i=0; i<4; i++)
+        for (int i=0; i<labelMenu.length; i++)
         {
             icons[i] = new ImageView(new Image("/com/ViktorVano/SpeechRecognitionAI/images/icon"+(i+1)+".png"));
             icons[i].setPreserveRatio(true);
-            icons[i].setFitWidth(80);
-            icons[i].setFitHeight(80);
+            icons[i].setFitWidth(60);
+            icons[i].setFitHeight(60);
             labelMenu[i] = new Label();
             flow.getChildren().add(icons[i]);
             flow.getChildren().add(labelMenu[i]);
             int layoutIndex = i;
             labelMenu[i].setOnMouseClicked(event -> displayLayout(layoutIndex));
             icons[i].setOnMouseClicked(event -> displayLayout(layoutIndex));
-            labelMenu[i].setDisable(true);
-            icons[i].setDisable(true);
         }
+        disableMenu();
         labelMenu[0].setText("Training Data\n ");
         labelMenu[1].setText("    Train AI\n ");
         labelMenu[2].setText("   Speech\nRecognition\n ");
-        labelMenu[3].setText("   Settings");
+        labelMenu[3].setText("Imagination");
+        labelMenu[4].setText("   Settings");
 
         hBoxBottom.setPadding(new Insets(15, 50, 15, 50));
         hBoxBottom.setSpacing(30);
         hBoxBottom.setStyle("-fx-background-color: #336699;");
 
-        classifier = new ArrayList<>();
-
         initializeDataLayout();
         initializeTrainingLayout();
         initializeRecognitionLayout();
+        initializeImaginationLayout();
         initializeSettingsLayout();
 
         audioServer = new AudioServer(
@@ -377,7 +379,7 @@ public class SpeechRecognitionAI extends Application {
                 }
             }
         }
-
+        wordsDetected = true;
     }
 
     @Override
@@ -404,9 +406,20 @@ public class SpeechRecognitionAI extends Application {
         }
     }
 
-    private void neuralNetworkRoutine()
+    private void neuralNetworkRoutine(ObservableList<RecordedAudio> audioRecords)
     {
-        neuralNetworkThread.setRecords(records);
+        neuralNetworkThread.setRecords(audioRecords);
+        if(neuralNetworkThread.getState() == Thread.State.NEW)
+        {
+            neuralNetworkThread.start();
+        }
+        neuralNetworkThread.startAnalysis();
+        displayMessageCounter = 0;
+    }
+
+    private void neuralNetworkGeneratedLossScoring(ArrayList<GeneratedAudio> generatedAudioRecords)
+    {
+        neuralNetworkThread.setGeneratedAudioRecords(generatedAudioRecords);
         if(neuralNetworkThread.getState() == Thread.State.NEW)
         {
             neuralNetworkThread.start();
@@ -443,6 +456,7 @@ public class SpeechRecognitionAI extends Application {
             {
                 databaseWordIndex = databaseList.getSelectionModel().getSelectedIndex();
                 txtDatabaseWord.setText(database.get(databaseWordIndex).name);
+                buttonGetNeuralNetworkOutput.setDisable(false);
                 AudioPlayer audioPlayer = new AudioPlayer(audioCapture, database.get(databaseWordIndex));
                 audioPlayer.start();
             }
@@ -503,6 +517,12 @@ public class SpeechRecognitionAI extends Application {
                     txtDatabaseWord.setText("");
                 }
             }
+        });
+
+        buttonGetNeuralNetworkOutput.setDisable(true);
+        buttonGetNeuralNetworkOutput.setOnAction(event -> {
+            buttonGetNeuralNetworkOutput.setDisable(true);
+            neuralNetworkThread.analyzeWord(database.get(databaseWordIndex));
         });
 
         records = FXCollections.observableArrayList();
@@ -587,7 +607,6 @@ public class SpeechRecognitionAI extends Application {
         lineChartAudio.getData().add(detectedWordsSeries);
         lineChartAudio.setAnimated(false);
 
-        //Also sets displayMessageCounter to 0
         //How long it should keep the displayed message. X*0.25s
         Timeline timelineUpdateData = new Timeline(new KeyFrame(Duration.millis(250), event -> {
 
@@ -605,12 +624,12 @@ public class SpeechRecognitionAI extends Application {
                         displayedSeries.getData().add(new XYChart.Data<>(i, recordedAudio.audioRecord[i] + recordedAudio.audioRecord[i + 1] * 256));
                 }
                 detectWords();
-                wordsDetected = true;
             }
 
-            if (weightsLoaded && wordsDetected && displayedLayout == 2) {
+            if (weightsLoaded && wordsDetected && displayedLayout == 2)// Speech Recognition
+            {
                 if (neuralNetworkThread.isFinished() && displayMessageCounter == -1) {
-                    neuralNetworkRoutine();//Also sets displayMessageCounter to 0
+                    neuralNetworkRoutine(records);//Also sets displayMessageCounter to 0
                 } else if (!neuralNetworkThread.isFinished() && displayMessageCounter == 0) {
                     speechRecognitionStatus.setText("Speech being processed.");
                     speechRecognitionOutput.setText(neuralNetworkThread.getRecognizedMessage());
@@ -640,10 +659,7 @@ public class SpeechRecognitionAI extends Application {
                 speechRecognitionStatus.setText("Loading weights from a file[" + neuronIndex + " / " + weights.length + "]: "
                         + Math.round(((double) neuronIndex * 100.0) / (double) weights.length) + "%\t\tDone.\t\tListening...");
                 loadingStep = 3;
-                for (int i = 0; i < 4; i++) {
-                    labelMenu[i].setDisable(false);
-                    icons[i].setDisable(false);
-                }
+                enableMenu();
             }
 
             if(updateBackground)
@@ -673,9 +689,64 @@ public class SpeechRecognitionAI extends Application {
                 saveIntegerToFile("background_green.dat", background_green);
                 saveIntegerToFile("background_blue.dat", background_blue);
             }
+
+            if(displayedLayout == 3)//imagination
+            {
+                if(imaginationStep == 0)
+                {
+                    lowestGeneratedLossIndex = -1;
+                    labelImaginationStatus.setText("Generating new words...");
+                    imaginationStep = 1;
+                }else if(imaginationStep == 1)
+                {
+                    generateWordsForImagination();
+                    imaginationStep = 2;
+                }else if(imaginationStep == 2)
+                {
+                    labelImaginationStatus.setText("Scoring new words via Neural Network...");
+                    neuralNetworkGeneratedLossScoring(recordsImagination);
+                    imaginationStep = 3;
+                }else if(imaginationStep == 3)
+                {
+                    if(neuralNetworkThread.isFinished())//waits until finished
+                        imaginationStep = 4;
+                }else if(imaginationStep == 4)
+                {
+                    ArrayList<GeneratedAudio> results = neuralNetworkThread.getGeneratedRecords();
+                    for(int i=0; i<results.size(); i++)
+                    {
+                        recordsImagination.get(i).loss = results.get(i).loss;
+                    }
+                    imaginationStep = -1;
+                    lowestGeneratedLossIndex = getLowestGeneratedLossIndex();
+                    AudioPlayer audioPlayer = new AudioPlayer(audioCapture, recordsImagination.get(lowestGeneratedLossIndex).recordedAudio);
+                    audioPlayer.start();
+                    enableMenu();
+                    buttonImagine.setDisable(false);
+                    comboBoxImagination.setDisable(false);
+                    buttonAddGeneratedArtifact.setDisable(recordsImagination.get(lowestGeneratedLossIndex).loss > 0.5);
+                    labelImaginationStatus.setText("Best generated word \"" + recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name + "\" with Loss: " + recordsImagination.get(lowestGeneratedLossIndex).loss);
+                }
+            }
         }));
         timelineUpdateData.setCycleCount(Timeline.INDEFINITE);
         timelineUpdateData.play();
+    }
+
+    private void disableMenu()
+    {
+        for (int i = 0; i < labelMenu.length; i++) {
+            labelMenu[i].setDisable(true);
+            icons[i].setDisable(true);
+        }
+    }
+
+    private void enableMenu()
+    {
+        for (int i = 0; i < labelMenu.length; i++) {
+            labelMenu[i].setDisable(false);
+            icons[i].setDisable(false);
+        }
     }
 
     private void initializeTrainingLayout()
@@ -688,11 +759,7 @@ public class SpeechRecognitionAI extends Application {
         timelineTrainingLabelUpdate = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
             if(!trainingIsRunning)
             {
-                for(int i=0; i<labelMenu.length; i++)
-                {
-                    icons[i].setDisable(false);
-                    labelMenu[i].setDisable(false);
-                }
+                enableMenu();
                 timelineTrainingLabelUpdate.stop();
             }else if(updateTrainingLabel)
             {
@@ -726,11 +793,7 @@ public class SpeechRecognitionAI extends Application {
         buttonTrain = new Button("Train");
         buttonTrain.setOnAction(event -> {
             buttonTrain.setDisable(true);
-            for(int i=0; i<labelMenu.length; i++)
-            {
-                icons[i].setDisable(true);
-                labelMenu[i].setDisable(true);
-            }
+            disableMenu();
             trainingThread = new TrainingThread(database, classifier);
             trainingThread.start();
             trainingIsRunning = true;
@@ -861,6 +924,54 @@ public class SpeechRecognitionAI extends Application {
         speechRecognitionOutput.setFont(Font.font("Arial", 20));
         speechRecognitionOutput.setTextFill(Color.web("#ffffff"));
         speechRecognitionOutput.setStyle("-fx-font-weight: bold");
+    }
+
+    private void initializeImaginationLayout()
+    {
+        labelImaginationStatus.setFont(Font.font("Arial", 22));
+        labelImaginationStatus.setStyle("-fx-font-weight: bold");
+        buttonImagine.setDisable(true);
+        buttonImagine.setOnAction(event -> {
+            int selectedIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
+            if (selectedIndex != -1)
+            {
+                buttonImagine.setDisable(true);
+                comboBoxImagination.setDisable(true);
+                buttonAddGeneratedArtifact.setDisable(true);
+                lowestGeneratedLossIndex = -1;
+                disableMenu();
+                imaginationStep = 0;
+            }
+        });
+
+        buttonAddGeneratedArtifact.setDisable(true);
+        buttonAddGeneratedArtifact.setOnAction(event -> {
+            if(lowestGeneratedLossIndex != -1)
+            {
+                recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name = "";//artifact name is ""
+                database.add(recordsImagination.get(lowestGeneratedLossIndex).recordedAudio);
+                databaseItem.add(recordsImagination.get(lowestGeneratedLossIndex).recordedAudio.name);
+                txtDetectedWord.setText("");
+                recordedWordIndex = -1;
+                sortDatabase();
+                saveDatabase(database);
+                lowestGeneratedLossIndex = -1;
+                buttonAddGeneratedArtifact.setDisable(true);
+            }
+        });
+
+        for (Classifier c : classifier) {
+            comboBoxImagination.getItems().add(c.getName());
+        }
+
+        comboBoxImagination.setPromptText("Select a word");
+
+        // Handle selection
+        comboBoxImagination.setOnAction(event -> {
+            int selectedIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
+            System.out.println("Selected index: " + selectedIndex);
+            buttonImagine.setDisable(selectedIndex == -1);
+        });
     }
 
     private void initializeSettingsLayout()
@@ -1515,6 +1626,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().add(buttonPlayDatabaseWord);
         vBoxRight.getChildren().add(buttonRemoveDatabaseWord);
         vBoxRight.getChildren().add(txtDatabaseWord);
+        vBoxRight.getChildren().add(buttonGetNeuralNetworkOutput);
         hBoxBottom.getChildren().add(recordsList);
         hBoxBottom.getChildren().add(txtDetectedWord);
         hBoxBottom.getChildren().add(buttonPlayWord);
@@ -1533,6 +1645,7 @@ public class SpeechRecognitionAI extends Application {
         vBoxRight.getChildren().remove(buttonPlayDatabaseWord);
         vBoxRight.getChildren().remove(buttonRemoveDatabaseWord);
         vBoxRight.getChildren().remove(txtDatabaseWord);
+        vBoxRight.getChildren().remove(buttonGetNeuralNetworkOutput);
         hBoxBottom.getChildren().remove(recordsList);
         hBoxBottom.getChildren().remove(txtDetectedWord);
         hBoxBottom.getChildren().remove(buttonPlayWord);
@@ -1593,6 +1706,26 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(speechRecognitionOutput);
     }
 
+    private void displayImaginationLayout()
+    {
+        stackPaneCenter.getChildren().add(lineChartAudio);
+        hBoxBottom.getChildren().add(comboBoxImagination);
+        hBoxBottom.getChildren().add(buttonImagine);
+        hBoxBottom.getChildren().add(buttonAddGeneratedArtifact);
+        hBoxBottom.getChildren().add(labelImaginationStatus);
+        displayedLayout = 3;
+        System.out.println("Imagination Layout displayed.");
+    }
+
+    private void hideImaginationLayout()
+    {
+        stackPaneCenter.getChildren().remove(lineChartAudio);
+        hBoxBottom.getChildren().remove(comboBoxImagination);
+        hBoxBottom.getChildren().remove(buttonImagine);
+        hBoxBottom.getChildren().remove(buttonAddGeneratedArtifact);
+        hBoxBottom.getChildren().remove(labelImaginationStatus);
+    }
+
     private void displaySettingsLayout()
     {
         stackPaneCenter.getChildren().add(settingsPane);
@@ -1601,7 +1734,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
         hBoxBottom.getChildren().add(buttonShellCommands);
-        displayedLayout = 3;
+        displayedLayout = 4;
         System.out.println("Settings Layout displayed.");
     }
 
@@ -1624,6 +1757,8 @@ public class SpeechRecognitionAI extends Application {
         else if(displayedLayout == 2 && layoutIndex != 2)
             hideRecognitionLayout();
         else if(displayedLayout == 3 && layoutIndex != 3)
+            hideImaginationLayout();
+        else if(displayedLayout == 4 && layoutIndex != 4)
             hideSettingsLayout();
 
         if(layoutIndex == 0 && displayedLayout != 0)
@@ -1633,6 +1768,8 @@ public class SpeechRecognitionAI extends Application {
         else if(layoutIndex == 2 && displayedLayout != 2)
             displayRecognitionLayout();
         else if(layoutIndex == 3 && displayedLayout != 3)
+            displayImaginationLayout();
+        else if(layoutIndex == 4 && displayedLayout != 4)
             displaySettingsLayout();
     }
 
@@ -1641,7 +1778,7 @@ public class SpeechRecognitionAI extends Application {
         classifier.clear();
         for(int i=0; i<databaseList.getItems().size(); i++)
         {
-            if(classifier.size()==0)
+            if(classifier.isEmpty())
                 classifier.add(new Classifier(databaseList.getItems().get(i)));
             else
                 for (int x=0; x<classifier.size(); x++)
@@ -1666,7 +1803,7 @@ public class SpeechRecognitionAI extends Application {
                 maximum = value.getCount();
         trainingItem.clear();
         for (Classifier value : classifier) {
-            if (value.getCount() == maximum/* && value.getCount()%2 == 0*/)
+            if (value.getCount() == maximum)
                 trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tOK");
             else {
                 trainingItem.add(value.getName() + "\t\t\t\tcount: " + value.getCount() + "\t\t\tMore specimens required!");
@@ -1745,5 +1882,83 @@ public class SpeechRecognitionAI extends Application {
                 d++;
             }
         }
+    }
+
+    private void generateWordsForImagination()// need to verify this...
+    {
+        recordsImagination.clear();
+        int wordIndex = comboBoxImagination.getSelectionModel().getSelectedIndex();
+        int lastAddedWords = 0;
+        final int bufferSize = 1000000;
+        final int wordsCapacity = 1000;
+        while(recordsImagination.size() < wordsCapacity)
+        {
+            byte[] buffer = new byte[bufferSize];
+            for(int i=minWordLength; i<bufferSize - maxWordLength;)
+            {
+                //random word length
+                int wordLength = (int)Math.round((((double)maxWordLength - (double)minWordLength) * Math.random()));
+                if(wordLength%2 != 0)
+                {
+                    wordLength++;
+                }
+                if(wordLength > maxWordLength)
+                {
+                    wordLength = maxWordLength;
+                }
+
+                //generate random noise
+                for(int x = i;
+                    (i-x) < wordLength &&
+                    bufferSize>(i+wordLength) &&
+                    i<bufferSize-maxWordLength;
+                    i+=2)
+                {
+                    buffer[i] = (byte)Math.round(Math.random()*255.0);
+                    buffer[i+1] = (byte)Math.round(Math.random()*255.0);
+                }
+                i += minWordLength;// create a space between words
+            }
+            System.out.println("Buffer filled with generated words...");
+            captureAudio();//clears record
+            audioCapture.setRecordedAudioBuffer(buffer, bufferSize);
+            recordedAudio.audioRecord = audioCapture.getRecord();
+            recordedAudio.audioRecordLength = audioCapture.getRecordLength();
+            detectWords();
+            int newAddedWords = lastAddedWords;
+            for(RecordedAudio record : records)
+            {
+                GeneratedAudio generatedAudio = new GeneratedAudio(record, wordIndex);
+                generatedAudio.recordedAudio.name = randomString(16);
+                recordsImagination.add(generatedAudio);
+                newAddedWords++;
+                if(recordsImagination.size() >= wordsCapacity)
+                {
+                    break;
+                }
+            }
+            System.out.println("New Added Words: " + (newAddedWords - lastAddedWords));
+            lastAddedWords = newAddedWords;//update
+        }
+        System.out.println("Generated words capacity reached: " + wordsCapacity);
+    }
+
+    private int getLowestGeneratedLossIndex() {
+        if (recordsImagination == null || recordsImagination.isEmpty()) {
+            return -1; // No records
+        }
+
+        int bestIndex = 0;
+        float bestLoss = recordsImagination.get(0).loss;
+
+        for (int i = 1; i < recordsImagination.size(); i++) {
+            float currentLoss = recordsImagination.get(i).loss;
+            if (currentLoss < bestLoss) {
+                bestLoss = currentLoss;
+                bestIndex = i;
+            }
+        }
+
+        return bestIndex;
     }
 }
