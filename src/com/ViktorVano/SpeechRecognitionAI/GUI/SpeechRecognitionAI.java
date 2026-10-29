@@ -1205,6 +1205,13 @@ public class SpeechRecognitionAI extends Application {
         checkBoxShowFFT.setLayoutY(paneHeight * 0.20);
         settingsPane.getChildren().add(checkBoxShowFFT);
 
+        Label labelEntitySettings =  new Label("EntitySettings");
+        labelEntitySettings.setLayoutX(paneWidth * 0.65);
+        labelEntitySettings.setLayoutY(paneHeight * 0.30);
+        labelEntitySettings.setFont(Font.font("Arial", 22));
+        labelEntitySettings.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelEntitySettings);
+
         Label labelIpMic =  new Label("IP Mic App");
         labelIpMic.setLayoutX(paneWidth * 0.65);
         labelIpMic.setLayoutY(paneHeight * 0.65);
@@ -1509,6 +1516,8 @@ public class SpeechRecognitionAI extends Application {
             checkBoxPlotKeepLongWords.setLayoutX(paneWidth1 * 0.65);
             checkBoxShowFFT.setLayoutX(paneWidth1 * 0.65);
 
+            labelEntitySettings.setLayoutX(paneWidth1 * 0.65);
+
             labelIpMic.setLayoutX(paneWidth1 * 0.65);
             checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
             labelToken.setLayoutX(paneWidth1 * 0.65);
@@ -1557,6 +1566,8 @@ public class SpeechRecognitionAI extends Application {
             checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.12);
             checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.16);
             checkBoxShowFFT.setLayoutY(paneHeight1 * 0.20);
+
+            labelEntitySettings.setLayoutY(paneHeight1 * 0.30);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.65);
             checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.72);
