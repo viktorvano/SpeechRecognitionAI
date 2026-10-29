@@ -136,6 +136,7 @@ public class SpeechRecognitionAI extends Application {
         background_green = loadIntegerFromFile("background_green.dat", background_green);
         background_blue = loadIntegerFromFile("background_blue.dat", background_blue);
         showFFT = loadBooleanFromFile("showFFT.dat", showFFT);
+        entityName = loadStringFromFile("entityName.dat", entityName);
         updateBackground = true;
 
         final int width = 1200;
@@ -201,7 +202,7 @@ public class SpeechRecognitionAI extends Application {
 
         Scene scene = new Scene(borderPane, width, height);
 
-        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ")");
+        updateAppStageName(stage);
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
@@ -390,6 +391,14 @@ public class SpeechRecognitionAI extends Application {
         this.audioServer.stopServer();
         this.audioCapture.stopAudioCapture();
         System.exit(0);
+    }
+
+    private void updateAppStageName(Stage stage)
+    {
+        if(entityName.isEmpty())
+            stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ")");
+        else
+            stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ") - " + entityName);
     }
 
     public void captureAudio()
@@ -1173,7 +1182,7 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("plotNeuralCharts.dat", plotNeuralCharts);
         });
         checkBoxPlotNeuralCharts.setLayoutX(paneWidth * 0.65);
-        checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.15);
+        checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.12);
         settingsPane.getChildren().add(checkBoxPlotNeuralCharts);
 
         CheckBox checkBoxPlotKeepLongWords = new CheckBox("Keep Long Words (But Trim Them)");
@@ -1183,7 +1192,7 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("keepLongWords.dat", keepLongWords);
         });
         checkBoxPlotKeepLongWords.setLayoutX(paneWidth * 0.65);
-        checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
+        checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.16);
         settingsPane.getChildren().add(checkBoxPlotKeepLongWords);
 
         CheckBox checkBoxShowFFT = new CheckBox("Show FFT Window");
@@ -1193,7 +1202,7 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("showFFT.dat", showFFT);
         });
         checkBoxShowFFT.setLayoutX(paneWidth * 0.65);
-        checkBoxShowFFT.setLayoutY(paneHeight * 0.29);
+        checkBoxShowFFT.setLayoutY(paneHeight * 0.20);
         settingsPane.getChildren().add(checkBoxShowFFT);
 
         Label labelIpMic =  new Label("IP Mic App");
@@ -1545,9 +1554,9 @@ public class SpeechRecognitionAI extends Application {
 
             labelOtherSettings.setLayoutY(paneHeight1 * 0.01);
             checkBoxPrintToConsole.setLayoutY(paneHeight1 * 0.08);
-            checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.15);
-            checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.22);
-            checkBoxShowFFT.setLayoutY(paneHeight1 * 0.29);
+            checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.12);
+            checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.16);
+            checkBoxShowFFT.setLayoutY(paneHeight1 * 0.20);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.5);
             checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.57);
