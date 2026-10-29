@@ -1212,6 +1212,30 @@ public class SpeechRecognitionAI extends Application {
         labelEntitySettings.setStyle("-fx-font-weight: bold");
         settingsPane.getChildren().add(labelEntitySettings);
 
+        Label labelEntityName = new Label("Entity name:");
+        labelEntityName.setLayoutX(paneWidth * 0.65);
+        labelEntityName.setLayoutY(paneHeight * 0.35);
+        settingsPane.getChildren().add(labelEntityName);
+
+        TextField textFieldEntityName = new TextField();
+        textFieldEntityName.setText(entityName);
+        textFieldEntityName.setLayoutX(paneWidth * 0.75);
+        textFieldEntityName.setLayoutY(paneHeight * 0.35);
+        textFieldEntityName.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(newValue.length() > 20)
+            {
+                entityName = newValue.substring(0, 20);
+                textFieldEntityName.setText(entityName);
+            }else
+            {
+                entityName = newValue;
+            }
+            saveStringToFile("entityName.dat", entityName);
+            updateAppStageName(stageReference);
+        });
+        settingsPane.getChildren().add(textFieldEntityName);
+
         Label labelIpMic =  new Label("IP Mic App");
         labelIpMic.setLayoutX(paneWidth * 0.65);
         labelIpMic.setLayoutY(paneHeight * 0.65);
@@ -1517,6 +1541,8 @@ public class SpeechRecognitionAI extends Application {
             checkBoxShowFFT.setLayoutX(paneWidth1 * 0.65);
 
             labelEntitySettings.setLayoutX(paneWidth1 * 0.65);
+            labelEntityName.setLayoutX(paneWidth1 * 0.65);
+            textFieldEntityName.setLayoutX(paneWidth1 * 0.75);
 
             labelIpMic.setLayoutX(paneWidth1 * 0.65);
             checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
@@ -1568,6 +1594,8 @@ public class SpeechRecognitionAI extends Application {
             checkBoxShowFFT.setLayoutY(paneHeight1 * 0.20);
 
             labelEntitySettings.setLayoutY(paneHeight1 * 0.30);
+            labelEntityName.setLayoutY(paneHeight1 * 0.35);
+            textFieldEntityName.setLayoutY(paneHeight1 * 0.35);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.65);
             checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.72);
