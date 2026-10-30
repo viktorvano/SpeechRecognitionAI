@@ -1217,6 +1217,11 @@ public class SpeechRecognitionAI extends Application {
         labelEntityName.setLayoutY(paneHeight * 0.36);
         settingsPane.getChildren().add(labelEntityName);
 
+        Label labelEntityRole = new Label("Entity role:");
+        labelEntityRole.setLayoutX(paneWidth * 0.65);
+        labelEntityRole.setLayoutY(paneHeight * 0.43);
+        settingsPane.getChildren().add(labelEntityRole);
+
         TextField textFieldEntityName = new TextField();
         textFieldEntityName.setText(entityName);
         textFieldEntityName.setLayoutX(paneWidth * 0.75);
@@ -1543,6 +1548,7 @@ public class SpeechRecognitionAI extends Application {
             labelEntitySettings.setLayoutX(paneWidth1 * 0.65);
             labelEntityName.setLayoutX(paneWidth1 * 0.65);
             textFieldEntityName.setLayoutX(paneWidth1 * 0.75);
+            labelEntityRole.setLayoutX(paneWidth1 * 0.65);
 
             labelIpMic.setLayoutX(paneWidth1 * 0.65);
             checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
@@ -1596,6 +1602,7 @@ public class SpeechRecognitionAI extends Application {
             labelEntitySettings.setLayoutY(paneHeight1 * 0.30);
             labelEntityName.setLayoutY(paneHeight1 * 0.36);
             textFieldEntityName.setLayoutY(paneHeight1 * 0.35);
+            labelEntityRole.setLayoutY(paneHeight1 * 0.43);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.65);
             checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.72);
