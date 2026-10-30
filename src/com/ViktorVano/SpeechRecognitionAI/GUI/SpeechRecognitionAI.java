@@ -1214,7 +1214,7 @@ public class SpeechRecognitionAI extends Application {
 
         Label labelEntityName = new Label("Entity name:");
         labelEntityName.setLayoutX(paneWidth * 0.65);
-        labelEntityName.setLayoutY(paneHeight * 0.35);
+        labelEntityName.setLayoutY(paneHeight * 0.36);
         settingsPane.getChildren().add(labelEntityName);
 
         TextField textFieldEntityName = new TextField();
@@ -1594,7 +1594,7 @@ public class SpeechRecognitionAI extends Application {
             checkBoxShowFFT.setLayoutY(paneHeight1 * 0.20);
 
             labelEntitySettings.setLayoutY(paneHeight1 * 0.30);
-            labelEntityName.setLayoutY(paneHeight1 * 0.35);
+            labelEntityName.setLayoutY(paneHeight1 * 0.36);
             textFieldEntityName.setLayoutY(paneHeight1 * 0.35);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.65);
