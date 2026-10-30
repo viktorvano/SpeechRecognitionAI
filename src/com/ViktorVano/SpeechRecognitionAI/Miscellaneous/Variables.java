@@ -60,6 +60,7 @@ public class Variables {
     public static String token = "defaultToken123";
     public static int audioServerPort = 7777;
     public static String entityName = "";
+    public static String entityRole = "Worker";
 
     public static boolean useIpMicOnly = false;
 

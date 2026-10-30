@@ -137,6 +137,7 @@ public class SpeechRecognitionAI extends Application {
         background_blue = loadIntegerFromFile("background_blue.dat", background_blue);
         showFFT = loadBooleanFromFile("showFFT.dat", showFFT);
         entityName = loadStringFromFile("entityName.dat", entityName);
+        entityRole = loadStringFromFile("entityRole.dat", entityRole);
         updateBackground = true;
 
         final int width = 1200;
@@ -1217,11 +1218,6 @@ public class SpeechRecognitionAI extends Application {
         labelEntityName.setLayoutY(paneHeight * 0.36);
         settingsPane.getChildren().add(labelEntityName);
 
-        Label labelEntityRole = new Label("Entity role:");
-        labelEntityRole.setLayoutX(paneWidth * 0.65);
-        labelEntityRole.setLayoutY(paneHeight * 0.43);
-        settingsPane.getChildren().add(labelEntityRole);
-
         TextField textFieldEntityName = new TextField();
         textFieldEntityName.setText(entityName);
         textFieldEntityName.setLayoutX(paneWidth * 0.75);
@@ -1240,6 +1236,40 @@ public class SpeechRecognitionAI extends Application {
             updateAppStageName(stageReference);
         });
         settingsPane.getChildren().add(textFieldEntityName);
+
+        Label labelEntityRole = new Label("Entity role:");
+        labelEntityRole.setLayoutX(paneWidth * 0.65);
+        labelEntityRole.setLayoutY(paneHeight * 0.42);
+        settingsPane.getChildren().add(labelEntityRole);
+
+        ToggleGroup entityRoleGroup = new ToggleGroup();
+
+        RadioButton radioOrchestrator = new RadioButton("Orchestrator");
+        radioOrchestrator.setToggleGroup(entityRoleGroup);
+        radioOrchestrator.setLayoutX(paneWidth * 0.75);
+        radioOrchestrator.setLayoutY(paneHeight * 0.42);
+
+        RadioButton radioWorker = new RadioButton("Worker");
+        radioWorker.setToggleGroup(entityRoleGroup);
+        radioWorker.setLayoutX(paneWidth * 0.88);
+        radioWorker.setLayoutY(paneHeight * 0.42);
+
+        // Set default selection based on saved/current state (e.g., entityRole variable)
+        if ("Orchestrator".equalsIgnoreCase(entityRole)) {
+            radioOrchestrator.setSelected(true);
+        } else {
+            radioWorker.setSelected(true);
+        }
+
+        entityRoleGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                RadioButton selectedRadio = (RadioButton) newToggle;
+                entityRole = selectedRadio.getText();
+                saveStringToFile("entityRole.dat", entityRole);
+            }
+        });
+
+        settingsPane.getChildren().addAll(radioOrchestrator, radioWorker);
 
         Label labelIpMic =  new Label("IP Mic App");
         labelIpMic.setLayoutX(paneWidth * 0.65);
@@ -1549,6 +1579,8 @@ public class SpeechRecognitionAI extends Application {
             labelEntityName.setLayoutX(paneWidth1 * 0.65);
             textFieldEntityName.setLayoutX(paneWidth1 * 0.75);
             labelEntityRole.setLayoutX(paneWidth1 * 0.65);
+            radioOrchestrator.setLayoutX(paneWidth1 * 0.75);
+            radioWorker.setLayoutX(paneWidth1 * 0.88);
 
             labelIpMic.setLayoutX(paneWidth1 * 0.65);
             checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
@@ -1602,7 +1634,9 @@ public class SpeechRecognitionAI extends Application {
             labelEntitySettings.setLayoutY(paneHeight1 * 0.30);
             labelEntityName.setLayoutY(paneHeight1 * 0.36);
             textFieldEntityName.setLayoutY(paneHeight1 * 0.35);
-            labelEntityRole.setLayoutY(paneHeight1 * 0.43);
+            labelEntityRole.setLayoutY(paneHeight1 * 0.42);
+            radioOrchestrator.setLayoutY(paneHeight1 * 0.42);
+            radioWorker.setLayoutY(paneHeight1 * 0.42);
 
             labelIpMic.setLayoutY(paneHeight1 * 0.65);
             checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.72);
