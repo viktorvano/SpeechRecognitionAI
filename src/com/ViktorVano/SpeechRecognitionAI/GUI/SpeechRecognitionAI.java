@@ -6,6 +6,8 @@ import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorRoutine;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorWorker;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
@@ -46,6 +48,7 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.StringFile.
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorFile.loadOrchestratorWorkers;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhooksFile.loadWebhooks;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandsFile.loadWordCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponsesFile.loadWordResponses;
@@ -85,17 +88,20 @@ public class SpeechRecognitionAI extends Application {
     private Label speechRecognitionStatus, speechRecognitionOutput;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonWordRoutingSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks, buttonShellCommands;
+    private Button buttonWordRoutingSettings, buttonWordCommands, buttonWordResponses;
+    private Button buttonWebhooks, buttonShellCommands, buttonOrchestratorTable;
     private AudioServer audioServer;
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ObservableList<Webhook> webhooksDatabase;
     private ObservableList<ShellCommand> shellCommandsDatabase;
+    private ObservableList<OrchestratorWorker> orchestratorWorkersDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ListView<String> wordCommandsList;
     private ListView<String> webhooksList;
     private ListView<String> shellCommandsList;
+    private ListView<String> orchestratorWorkersList;
     private final ComboBox<String> comboBoxImagination = new ComboBox<>();
     private final ArrayList<GeneratedAudio> recordsImagination = new ArrayList<>();
     private final Button buttonImagine = new Button("Imagine");
@@ -651,6 +657,7 @@ public class SpeechRecognitionAI extends Application {
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
                         new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        new OrchestratorRoutine();//TODO: finish this class
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -694,6 +701,7 @@ public class SpeechRecognitionAI extends Application {
                 wordCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
                 webhooksList.setCellFactory(param -> new ColoredListCell<>(background));
                 shellCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
+                orchestratorWorkersList.setCellFactory(param -> new ColoredListCell<>(background));
 
                 saveIntegerToFile("background_red.dat", background_red);
                 saveIntegerToFile("background_green.dat", background_green);
@@ -1254,17 +1262,11 @@ public class SpeechRecognitionAI extends Application {
         radioWorker.setLayoutX(paneWidth * 0.88);
         radioWorker.setLayoutY(paneHeight * 0.42);
 
-        // Set default selection based on saved/current state (e.g., entityRole variable)
-        if ("Orchestrator".equalsIgnoreCase(entityRole)) {
-            radioOrchestrator.setSelected(true);
-        } else {
-            radioWorker.setSelected(true);
-        }
-
         entityRoleGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
             if (newToggle != null) {
                 RadioButton selectedRadio = (RadioButton) newToggle;
                 entityRole = selectedRadio.getText();
+                buttonOrchestratorTable.setDisable("Worker".equalsIgnoreCase(entityRole));
                 saveStringToFile("entityRole.dat", entityRole);
             }
         });
@@ -1690,6 +1692,20 @@ public class SpeechRecognitionAI extends Application {
             new ShellCommandsSettings(stageReference, shellCommandsDatabase, shellCommandsList);
         });
 
+        buttonOrchestratorTable = new Button("Orchestrator Table");
+        buttonOrchestratorTable.setOnAction(event -> {
+            new OrchestratorSettings(stageReference, orchestratorWorkersDatabase, orchestratorWorkersList);
+        });
+
+        // Set default selection based on saved/current state (e.g., entityRole variable)
+        if ("Orchestrator".equalsIgnoreCase(entityRole)) {
+            radioOrchestrator.setSelected(true);
+            buttonOrchestratorTable.setDisable(false);
+        } else {
+            radioWorker.setSelected(true);
+            buttonOrchestratorTable.setDisable(true);
+        }
+
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
         wordResponsesList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
@@ -1705,6 +1721,10 @@ public class SpeechRecognitionAI extends Application {
         shellCommandsDatabase = loadShellCommands();
         shellCommandsList = new ListView<>();
         shellCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+
+        orchestratorWorkersDatabase = loadOrchestratorWorkers();
+        orchestratorWorkersList = new ListView<>();
+        orchestratorWorkersList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     }
 
     private void displayDataLayout()
@@ -1823,6 +1843,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
         hBoxBottom.getChildren().add(buttonShellCommands);
+        hBoxBottom.getChildren().add(buttonOrchestratorTable);
         displayedLayout = 4;
         System.out.println("Settings Layout displayed.");
     }
@@ -1835,6 +1856,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(buttonWordResponses);
         hBoxBottom.getChildren().remove(buttonWebhooks);
         hBoxBottom.getChildren().remove(buttonShellCommands);
+        hBoxBottom.getChildren().remove(buttonOrchestratorTable);
     }
 
     private void displayLayout(int layoutIndex)
