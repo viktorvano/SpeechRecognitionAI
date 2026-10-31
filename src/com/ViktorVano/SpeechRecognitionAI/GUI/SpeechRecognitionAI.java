@@ -657,10 +657,7 @@ public class SpeechRecognitionAI extends Application {
                     if (displayMessageCounter < 2)//How long it should keep the displayed message. X*0.25s
                         displayMessageCounter++;
                     else {
-                        if(entityRole.equalsIgnoreCase("Orchestrator"))
-                        {
-                            new OrchestratorRoutine(recordedAudio, records, neuralNetworkThread.getRecognizedOrchestratorWorker());//TODO: finish this class
-                        }else
+                        if(entityRole.equalsIgnoreCase("Worker"))
                         { // Worker
                             new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
                             new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
