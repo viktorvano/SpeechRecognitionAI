@@ -2,6 +2,7 @@ package com.ViktorVano.SpeechRecognitionAI.Audio;
 
 import com.ViktorVano.SpeechRecognitionAI.FFNN.NeuralNetworkThread;
 import com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorRoutine;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
@@ -162,16 +163,33 @@ public class AudioServer extends Thread{
                             }
                             String message = neuralNetworkThread.getRecognizedMessage();
                             String response = "";
-                            for (WordResponse wordResponse : wordResponsesDatabase)
+                            if(entityRole.equalsIgnoreCase("Worker"))
                             {
-                                if(message.contains(wordResponse.word))
+                                for (WordResponse wordResponse : wordResponsesDatabase)
                                 {
-                                    if(response.length() == 0)
-                                        response += wordResponse.response;
-                                    else
-                                        response += " " + wordResponse.response;
+                                    if(message.contains(wordResponse.word))
+                                    {
+                                        if(response.length() == 0)
+                                            response += wordResponse.response;
+                                        else
+                                            response += " " + wordResponse.response;
+                                    }
+                                }
+                            }else
+                            { // Orchestrator
+                                RecordedAudio recordedAudio = new RecordedAudio();
+                                recordedAudio.audioRecord = buffer;
+                                recordedAudio.audioRecordLength = length;
+                                OrchestratorRoutine orchestratorRoutine = new OrchestratorRoutine(recordedAudio, neuralNetworkThread.getRecognizedOrchestratorWorker(), audioCapture);
+                                orchestratorRoutine.start();
+                                try {
+                                    orchestratorRoutine.join(); // Waits here until 'thread' has finished execution
+                                    response = orchestratorRoutine.getWorkerMessage();
+                                } catch (InterruptedException e) {
+                                    response = e.getMessage();
                                 }
                             }
+
                             String outputMessage;
                             if(response.length() == 0)
                                 outputMessage = message;
