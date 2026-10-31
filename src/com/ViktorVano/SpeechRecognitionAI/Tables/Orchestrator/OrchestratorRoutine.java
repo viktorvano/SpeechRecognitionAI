@@ -10,12 +10,14 @@ public class OrchestratorRoutine extends Thread{
     private RecordedAudio recordedAudio;
     private OrchestratorWorker recognizedOrchestratorWorker;
     private AudioCapture audioCapture;
+    private int workerWordIndex;
 
-    public OrchestratorRoutine(RecordedAudio recordedAudio, OrchestratorWorker recognizedOrchestratorWorker, AudioCapture audioCapture)
+    public OrchestratorRoutine(RecordedAudio recordedAudio, OrchestratorWorker recognizedOrchestratorWorker, int workerWordIndex, AudioCapture audioCapture)
     {
         this.recordedAudio = recordedAudio;
         this.recognizedOrchestratorWorker = recognizedOrchestratorWorker;
         this.audioCapture = audioCapture;
+        this.workerWordIndex = workerWordIndex;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class OrchestratorRoutine extends Thread{
             audioPlayer.start();
         }
 
-        receivedWorkerMessage = "Received message from a worker.";
+        receivedWorkerMessage = "Received message from a worker " + workerWordIndex + ".";
     }
 
     public String getWorkerMessage()

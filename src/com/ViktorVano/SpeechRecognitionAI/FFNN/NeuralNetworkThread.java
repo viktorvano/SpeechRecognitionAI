@@ -25,6 +25,7 @@ public class NeuralNetworkThread extends Thread {
     private String recognizedMessage;
     private boolean showOneTimeOutput;
     private OrchestratorWorker recognizedOrchestratorWorker;
+    private int workerWordIndex = -1;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
     {
@@ -72,11 +73,17 @@ public class NeuralNetworkThread extends Thread {
     {
         this.orchestratorWorkers = orchestratorWorkers;
         this.recognizedOrchestratorWorker = null;
+        this.workerWordIndex = -1;
     }
 
     public OrchestratorWorker getRecognizedOrchestratorWorker()
     {
         return this.recognizedOrchestratorWorker;
+    }
+
+    public int getWorkerWordIndex()
+    {
+        return this.workerWordIndex;
     }
 
     public void analyzeWord(RecordedAudio word)
@@ -161,6 +168,7 @@ public class NeuralNetworkThread extends Thread {
             recognizedMessage = "";
             boolean scoreGeneratedAudio = false;
             int generatedWordIndex = 0;
+            int workerWordIndex = 0;
             if(generatedRecords != null && !generatedRecords.isEmpty())
             {
                 if(!records.isEmpty())
@@ -202,9 +210,11 @@ public class NeuralNetworkThread extends Thread {
                                 {
                                     this.recognizedOrchestratorWorker = worker;
                                     recognizedMessage = "Recognized Worker: " + worker.name;
+                                    this.workerWordIndex = workerWordIndex;
                                     break;
                                 }
                             }
+                            workerWordIndex++;
                         }
                     } else
                     {

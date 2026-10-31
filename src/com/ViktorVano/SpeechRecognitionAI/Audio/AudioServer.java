@@ -180,13 +180,24 @@ public class AudioServer extends Thread{
                                 RecordedAudio recordedAudio = new RecordedAudio();
                                 recordedAudio.audioRecord = buffer;
                                 recordedAudio.audioRecordLength = length;
-                                OrchestratorRoutine orchestratorRoutine = new OrchestratorRoutine(recordedAudio, neuralNetworkThread.getRecognizedOrchestratorWorker(), audioCapture);
-                                orchestratorRoutine.start();
-                                try {
-                                    orchestratorRoutine.join(); // Waits here until 'thread' has finished execution
-                                    response = orchestratorRoutine.getWorkerMessage();
-                                } catch (InterruptedException e) {
-                                    response = e.getMessage();
+                                int workerIndex = neuralNetworkThread.getWorkerWordIndex();
+                                if(workerIndex == -1)
+                                {
+                                    response = "Orchestrator: No worker name recognized.";
+                                }else
+                                {
+                                    OrchestratorRoutine orchestratorRoutine = new OrchestratorRoutine(
+                                            recordedAudio,
+                                            neuralNetworkThread.getRecognizedOrchestratorWorker(),
+                                            neuralNetworkThread.getWorkerWordIndex(),
+                                            audioCapture);
+                                    orchestratorRoutine.start();
+                                    try {
+                                        orchestratorRoutine.join(); // Waits here until 'thread' has finished execution
+                                        response = orchestratorRoutine.getWorkerMessage();
+                                    } catch (InterruptedException e) {
+                                        response = e.getMessage();
+                                    }
                                 }
                             }
 
