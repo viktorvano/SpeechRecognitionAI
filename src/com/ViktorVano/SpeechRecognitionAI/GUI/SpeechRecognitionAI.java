@@ -657,13 +657,15 @@ public class SpeechRecognitionAI extends Application {
                     if (displayMessageCounter < 2)//How long it should keep the displayed message. X*0.25s
                         displayMessageCounter++;
                     else {
-                        new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         if(entityRole.equalsIgnoreCase("Orchestrator"))
                         {
                             new OrchestratorRoutine(recordedAudio, records, neuralNetworkThread.getRecognizedOrchestratorWorker());//TODO: finish this class
+                        }else
+                        { // Worker
+                            new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
+                            new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                            new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
+                            new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         }
                         displayMessageCounter = -1;
                         wordsDetected = false;
@@ -1273,7 +1275,13 @@ public class SpeechRecognitionAI extends Application {
             if (newToggle != null) {
                 RadioButton selectedRadio = (RadioButton) newToggle;
                 entityRole = selectedRadio.getText();
-                buttonOrchestratorTable.setDisable("Worker".equalsIgnoreCase(entityRole));
+                boolean isWorker = "Worker".equalsIgnoreCase(entityRole);
+                buttonOrchestratorTable.setDisable(isWorker);
+                buttonWordRoutingSettings.setDisable(!isWorker);
+                buttonWordResponses.setDisable(!isWorker);
+                buttonShellCommands.setDisable(!isWorker);
+                buttonWordCommands.setDisable(!isWorker);
+                buttonWebhooks.setDisable(!isWorker);
                 saveStringToFile("entityRole.dat", entityRole);
             }
         });
@@ -1708,9 +1716,19 @@ public class SpeechRecognitionAI extends Application {
         if ("Orchestrator".equalsIgnoreCase(entityRole)) {
             radioOrchestrator.setSelected(true);
             buttonOrchestratorTable.setDisable(false);
+            buttonWordRoutingSettings.setDisable(true);
+            buttonWordResponses.setDisable(true);
+            buttonShellCommands.setDisable(true);
+            buttonWordCommands.setDisable(true);
+            buttonWebhooks.setDisable(true);
         } else {
             radioWorker.setSelected(true);
             buttonOrchestratorTable.setDisable(true);
+            buttonWordRoutingSettings.setDisable(false);
+            buttonWordResponses.setDisable(false);
+            buttonShellCommands.setDisable(false);
+            buttonWordCommands.setDisable(false);
+            buttonWebhooks.setDisable(false);
         }
 
         wordResponsesDatabase = loadWordResponses();
