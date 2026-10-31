@@ -3,6 +3,7 @@ package com.ViktorVano.SpeechRecognitionAI.FFNN;
 import com.ViktorVano.SpeechRecognitionAI.Audio.GeneratedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorWorker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
@@ -16,12 +17,14 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalize
 public class NeuralNetworkThread extends Thread {
     private final NeuralNetwork neuralNetwork;
     private ObservableList<RecordedAudio> records;
+    private ObservableList<OrchestratorWorker> orchestratorWorkers;
     private ArrayList<GeneratedAudio> generatedRecords;
     private final ArrayList<Float> generatedTargetOutputs = new ArrayList<>();
     private final ArrayList<Classifier> classifierOutputs;
     private boolean runThread;
     private String recognizedMessage;
     private boolean showOneTimeOutput;
+    private OrchestratorWorker recognizedOrchestratorWorker;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
     {
@@ -63,6 +66,17 @@ public class NeuralNetworkThread extends Thread {
     public void setRecords(ObservableList<RecordedAudio> recordedWords)
     {
         this.records = recordedWords;
+    }
+
+    public void setOrchestratorWorkers(ObservableList<OrchestratorWorker> orchestratorWorkers)
+    {
+        this.orchestratorWorkers = orchestratorWorkers;
+        this.recognizedOrchestratorWorker = null;
+    }
+
+    public OrchestratorWorker getRecognizedOrchestratorWorker()
+    {
+        return this.recognizedOrchestratorWorker;
     }
 
     public void analyzeWord(RecordedAudio word)
@@ -172,11 +186,26 @@ public class NeuralNetworkThread extends Thread {
                 {
                     if (result.get(maximumIndex) > classifierThreshold)
                     {
-                        System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has " + (result.get(maximumIndex) * 100.0f) + "% match.");
-                        if (recognizedMessage.length() == 0)
-                            recognizedMessage = classifierOutputs.get(maximumIndex).getName();
-                        else if (classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
-                            recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
+                        if(entityRole.equalsIgnoreCase("Worker"))
+                        {
+                            System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has " + (result.get(maximumIndex) * 100.0f) + "% match.");
+                            if (recognizedMessage.length() == 0)
+                                recognizedMessage = classifierOutputs.get(maximumIndex).getName();
+                            else if (classifierOutputs.get(maximumIndex).getName().length() > 0)//skips in case of an empty string ""
+                                recognizedMessage += " " + classifierOutputs.get(maximumIndex).getName();
+                        }else
+                        { // Orchestrator
+                            String recognizedWord = classifierOutputs.get(maximumIndex).getName();
+                            for (OrchestratorWorker worker : orchestratorWorkers)
+                            {
+                                if(recognizedWord.equals(worker.name))
+                                {
+                                    this.recognizedOrchestratorWorker = worker;
+                                    recognizedMessage = "Recognized Worker: " + worker.name;
+                                    break;
+                                }
+                            }
+                        }
                     } else
                     {
                         System.out.println("Word \"" + classifierOutputs.get(maximumIndex).getName() + "\" has low  match " + (result.get(maximumIndex) * 100.0f) + "%.");
@@ -241,6 +270,11 @@ public class NeuralNetworkThread extends Thread {
                 }
                 generatedWordIndex++;
                 records.remove(0);
+                if(entityRole.equalsIgnoreCase("Orchestrator")
+                && this.recognizedOrchestratorWorker != null)
+                {
+                    records.clear();
+                }
             }
             System.out.println("Speech analysed.");
             runThread = false;

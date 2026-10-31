@@ -1,5 +1,17 @@
 package com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator;
 
-public class OrchestratorRoutine  extends Thread{
+import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import javafx.collections.ObservableList;
 
+public class OrchestratorRoutine extends Thread{
+
+    public OrchestratorRoutine(RecordedAudio recordedAudio, ObservableList<RecordedAudio> records, OrchestratorWorker recognizedOrchestratorWorker)
+    {
+
+    }
+
+    @Override
+    public void run() {
+
+    }
 }

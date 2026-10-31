@@ -425,6 +425,10 @@ public class SpeechRecognitionAI extends Application {
     private void neuralNetworkRoutine(ObservableList<RecordedAudio> audioRecords)
     {
         neuralNetworkThread.setRecords(audioRecords);
+        if(entityRole.equalsIgnoreCase("Orchestrator"))
+        {
+            neuralNetworkThread.setOrchestratorWorkers(orchestratorWorkersDatabase);
+        }
         if(neuralNetworkThread.getState() == Thread.State.NEW)
         {
             neuralNetworkThread.start();
@@ -657,7 +661,10 @@ public class SpeechRecognitionAI extends Application {
                         new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
                         new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
                         new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new OrchestratorRoutine();//TODO: finish this class
+                        if(entityRole.equalsIgnoreCase("Orchestrator"))
+                        {
+                            new OrchestratorRoutine(recordedAudio, records, neuralNetworkThread.getRecognizedOrchestratorWorker());//TODO: finish this class
+                        }
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
