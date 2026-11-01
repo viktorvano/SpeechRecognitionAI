@@ -6,14 +6,12 @@ public class OrchestratorRoutine extends Thread{
     private String receivedWorkerMessage = "No worker response received.";
     private RecordedAudio recordedAudio;
     private OrchestratorWorker recognizedOrchestratorWorker;
-    private AudioCapture audioCapture;
     private BufferWordMarker bufferWordMarker;
 
-    public OrchestratorRoutine(RecordedAudio recordedAudio, OrchestratorWorker recognizedOrchestratorWorker, BufferWordMarker bufferWordMarker, AudioCapture audioCapture)
+    public OrchestratorRoutine(RecordedAudio recordedAudio, OrchestratorWorker recognizedOrchestratorWorker, BufferWordMarker bufferWordMarker)
     {
         this.recordedAudio = recordedAudio;
         this.recognizedOrchestratorWorker = recognizedOrchestratorWorker;
-        this.audioCapture = audioCapture;
         this.bufferWordMarker = bufferWordMarker;
     }
 
@@ -29,9 +27,6 @@ public class OrchestratorRoutine extends Thread{
             System.arraycopy(recordedAudio.audioRecord, removeCount, trimmedRecordBuffer, 0, newLength);
             trimmedRecord.audioRecord = trimmedRecordBuffer;
             trimmedRecord.audioRecordLength = trimmedRecordBuffer.length;
-
-            AudioPlayer audioPlayer = new AudioPlayer(audioCapture, trimmedRecord);
-            audioPlayer.start();
 
             AudioRecordClient audioRecordClient = new AudioRecordClient(
                     recognizedOrchestratorWorker.address,
