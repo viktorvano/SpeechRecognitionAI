@@ -1,12 +1,9 @@
 package com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator;
 
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
-import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
-import com.ViktorVano.SpeechRecognitionAI.Audio.BufferWordMarker;
-import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
+import com.ViktorVano.SpeechRecognitionAI.Audio.*;
 
 public class OrchestratorRoutine extends Thread{
-    private String receivedWorkerMessage = "";
+    private String receivedWorkerMessage = "No worker response received.";
     private RecordedAudio recordedAudio;
     private OrchestratorWorker recognizedOrchestratorWorker;
     private AudioCapture audioCapture;
@@ -35,9 +32,27 @@ public class OrchestratorRoutine extends Thread{
 
             AudioPlayer audioPlayer = new AudioPlayer(audioCapture, trimmedRecord);
             audioPlayer.start();
-        }
 
-        receivedWorkerMessage = "Received message from a worker " + bufferWordMarker.getWordIndex() + ".";
+            AudioRecordClient audioRecordClient = new AudioRecordClient(
+                    recognizedOrchestratorWorker.address,
+                    Integer.parseInt(recognizedOrchestratorWorker.port),
+                    trimmedRecord.audioRecord,
+                    trimmedRecord.audioRecordLength);
+            try
+            {
+                while(audioRecordClient.isClientBusy())
+                {
+                    Thread.sleep(50);
+                }
+                if(audioRecordClient.gotResponse())
+                {
+                    receivedWorkerMessage = audioRecordClient.getResponse();
+                }
+            }catch (Exception e)
+            {
+                System.out.println("OrchestratorRoutine: Audio Client Cannot wait properly.");
+            }
+        }
     }
 
     public String getWorkerMessage()
