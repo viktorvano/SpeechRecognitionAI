@@ -204,6 +204,7 @@ public class SpeechRecognitionAI extends Application {
                 this.wordResponsesDatabase,
                 this.webhooksDatabase,
                 this.shellCommandsDatabase,
+                this.orchestratorWorkersDatabase,
                 audioServerPort+1);
         textServer.start();
 
