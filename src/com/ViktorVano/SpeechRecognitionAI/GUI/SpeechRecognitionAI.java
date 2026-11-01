@@ -1224,7 +1224,7 @@ public class SpeechRecognitionAI extends Application {
         checkBoxShowFFT.setLayoutY(paneHeight * 0.20);
         settingsPane.getChildren().add(checkBoxShowFFT);
 
-        Label labelEntitySettings =  new Label("EntitySettings");
+        Label labelEntitySettings =  new Label("Entity Settings");
         labelEntitySettings.setLayoutX(paneWidth * 0.65);
         labelEntitySettings.setLayoutY(paneHeight * 0.30);
         labelEntitySettings.setFont(Font.font("Arial", 22));
