@@ -6,6 +6,7 @@ import com.ViktorVano.SpeechRecognitionAI.FFNN.TrainingThread;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.*;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorWorker;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
@@ -45,7 +46,8 @@ import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.IntegerFile
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.StringFile.*;
 import static com.ViktorVano.SpeechRecognitionAI.Audio.AudioDatabase.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.TopologyFile.*;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
+import static com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorFile.loadOrchestratorWorkers;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhooksFile.loadWebhooks;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandsFile.loadWordCommands;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponsesFile.loadWordResponses;
@@ -85,17 +87,20 @@ public class SpeechRecognitionAI extends Application {
     private Label speechRecognitionStatus, speechRecognitionOutput;
     private boolean wordsDetected = false;
     private TrainingThread trainingThread;
-    private Button buttonWordRoutingSettings, buttonWordCommands, buttonWordResponses, buttonWebhooks, buttonShellCommands;
+    private Button buttonWordRoutingSettings, buttonWordCommands, buttonWordResponses;
+    private Button buttonWebhooks, buttonShellCommands, buttonOrchestratorTable;
     private AudioServer audioServer;
     private TextServer textServer;
     private ObservableList<WordResponse> wordResponsesDatabase;
     private ObservableList<Webhook> webhooksDatabase;
     private ObservableList<ShellCommand> shellCommandsDatabase;
+    private ObservableList<OrchestratorWorker> orchestratorWorkersDatabase;
     private ListView<String> wordResponsesList;
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ListView<String> wordCommandsList;
     private ListView<String> webhooksList;
     private ListView<String> shellCommandsList;
+    private ListView<String> orchestratorWorkersList;
     private final ComboBox<String> comboBoxImagination = new ComboBox<>();
     private final ArrayList<GeneratedAudio> recordsImagination = new ArrayList<>();
     private final Button buttonImagine = new Button("Imagine");
@@ -104,6 +109,7 @@ public class SpeechRecognitionAI extends Application {
     private final Button buttonAddGeneratedArtifact = new Button("Add As Generated Artifact");
     private static int lowestGeneratedLossIndex = -1;
     private final Button buttonGetNeuralNetworkOutput = new Button("Get Neural Network Output");
+    private final ArrayList<BufferWordMarker> bufferWordMarkers = new ArrayList<>();
 
     public static void main(String[] args)
     {
@@ -136,6 +142,8 @@ public class SpeechRecognitionAI extends Application {
         background_green = loadIntegerFromFile("background_green.dat", background_green);
         background_blue = loadIntegerFromFile("background_blue.dat", background_blue);
         showFFT = loadBooleanFromFile("showFFT.dat", showFFT);
+        entityName = loadStringFromFile("entityName.dat", entityName);
+        entityRole = loadStringFromFile("entityRole.dat", entityRole);
         updateBackground = true;
 
         final int width = 1200;
@@ -201,7 +209,7 @@ public class SpeechRecognitionAI extends Application {
 
         Scene scene = new Scene(borderPane, width, height);
 
-        stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ")");
+        updateAppStageName(stage);
         stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
@@ -249,6 +257,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void detectWords()
     {
+        bufferWordMarkers.clear();
         detectedWordsSeries.getData().clear();
         final int detectedValue = 3000;
         int lastValue = 1500;
@@ -344,6 +353,7 @@ public class SpeechRecognitionAI extends Application {
                             {
                                 tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
                             }
+                            bufferWordMarkers.add(new BufferWordMarker(end, records.size()));
                             records.add(tempRecord);
                             recordItem.add(tempRecord.name);
                         }catch (Exception e)
@@ -370,6 +380,7 @@ public class SpeechRecognitionAI extends Application {
                         {
                             tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
                         }
+                        bufferWordMarkers.add(new BufferWordMarker(end, records.size()));
                         records.add(tempRecord);
                         recordItem.add(tempRecord.name);
                     }catch (Exception e)
@@ -392,6 +403,14 @@ public class SpeechRecognitionAI extends Application {
         System.exit(0);
     }
 
+    private void updateAppStageName(Stage stage)
+    {
+        if(entityName.isEmpty())
+            stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ")");
+        else
+            stage.setTitle("Speech Recognition AI - developed by Viktor Vano (" + versionNumber + ") - " + entityName);
+    }
+
     public void captureAudio()
     {
         if(audioCapture.isAudioRecorded())
@@ -409,6 +428,10 @@ public class SpeechRecognitionAI extends Application {
     private void neuralNetworkRoutine(ObservableList<RecordedAudio> audioRecords)
     {
         neuralNetworkThread.setRecords(audioRecords);
+        if(entityRole.equalsIgnoreCase("Orchestrator"))
+        {
+            neuralNetworkThread.setOrchestratorWorkers(orchestratorWorkersDatabase, bufferWordMarkers);
+        }
         if(neuralNetworkThread.getState() == Thread.State.NEW)
         {
             neuralNetworkThread.start();
@@ -637,10 +660,13 @@ public class SpeechRecognitionAI extends Application {
                     if (displayMessageCounter < 2)//How long it should keep the displayed message. X*0.25s
                         displayMessageCounter++;
                     else {
-                        new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
-                        new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        if(entityRole.equalsIgnoreCase("Worker"))
+                        { // Worker
+                            new WordRouter(wordRoutingDatabase, neuralNetworkThread.getRecognizedMessage());
+                            new WordCommandRouter(wordCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                            new WebhookRouter(webhooksDatabase, neuralNetworkThread.getRecognizedMessage());
+                            new ShellCommander(shellCommandsDatabase, neuralNetworkThread.getRecognizedMessage());
+                        }
                         displayMessageCounter = -1;
                         wordsDetected = false;
                         speechRecognitionStatus.setText("Listening...");
@@ -684,6 +710,7 @@ public class SpeechRecognitionAI extends Application {
                 wordCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
                 webhooksList.setCellFactory(param -> new ColoredListCell<>(background));
                 shellCommandsList.setCellFactory(param -> new ColoredListCell<>(background));
+                orchestratorWorkersList.setCellFactory(param -> new ColoredListCell<>(background));
 
                 saveIntegerToFile("background_red.dat", background_red);
                 saveIntegerToFile("background_green.dat", background_green);
@@ -1173,7 +1200,7 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("plotNeuralCharts.dat", plotNeuralCharts);
         });
         checkBoxPlotNeuralCharts.setLayoutX(paneWidth * 0.65);
-        checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.15);
+        checkBoxPlotNeuralCharts.setLayoutY(paneHeight * 0.12);
         settingsPane.getChildren().add(checkBoxPlotNeuralCharts);
 
         CheckBox checkBoxPlotKeepLongWords = new CheckBox("Keep Long Words (But Trim Them)");
@@ -1183,7 +1210,7 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("keepLongWords.dat", keepLongWords);
         });
         checkBoxPlotKeepLongWords.setLayoutX(paneWidth * 0.65);
-        checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.22);
+        checkBoxPlotKeepLongWords.setLayoutY(paneHeight * 0.16);
         settingsPane.getChildren().add(checkBoxPlotKeepLongWords);
 
         CheckBox checkBoxShowFFT = new CheckBox("Show FFT Window");
@@ -1193,12 +1220,77 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("showFFT.dat", showFFT);
         });
         checkBoxShowFFT.setLayoutX(paneWidth * 0.65);
-        checkBoxShowFFT.setLayoutY(paneHeight * 0.29);
+        checkBoxShowFFT.setLayoutY(paneHeight * 0.20);
         settingsPane.getChildren().add(checkBoxShowFFT);
+
+        Label labelEntitySettings =  new Label("EntitySettings");
+        labelEntitySettings.setLayoutX(paneWidth * 0.65);
+        labelEntitySettings.setLayoutY(paneHeight * 0.30);
+        labelEntitySettings.setFont(Font.font("Arial", 22));
+        labelEntitySettings.setStyle("-fx-font-weight: bold");
+        settingsPane.getChildren().add(labelEntitySettings);
+
+        Label labelEntityName = new Label("Entity name:");
+        labelEntityName.setLayoutX(paneWidth * 0.65);
+        labelEntityName.setLayoutY(paneHeight * 0.36);
+        settingsPane.getChildren().add(labelEntityName);
+
+        TextField textFieldEntityName = new TextField();
+        textFieldEntityName.setText(entityName);
+        textFieldEntityName.setLayoutX(paneWidth * 0.75);
+        textFieldEntityName.setLayoutY(paneHeight * 0.35);
+        textFieldEntityName.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(newValue.length() > 20)
+            {
+                entityName = newValue.substring(0, 20);
+                textFieldEntityName.setText(entityName);
+            }else
+            {
+                entityName = newValue;
+            }
+            saveStringToFile("entityName.dat", entityName);
+            updateAppStageName(stageReference);
+        });
+        settingsPane.getChildren().add(textFieldEntityName);
+
+        Label labelEntityRole = new Label("Entity role:");
+        labelEntityRole.setLayoutX(paneWidth * 0.65);
+        labelEntityRole.setLayoutY(paneHeight * 0.42);
+        settingsPane.getChildren().add(labelEntityRole);
+
+        ToggleGroup entityRoleGroup = new ToggleGroup();
+
+        RadioButton radioOrchestrator = new RadioButton("Orchestrator");
+        radioOrchestrator.setToggleGroup(entityRoleGroup);
+        radioOrchestrator.setLayoutX(paneWidth * 0.75);
+        radioOrchestrator.setLayoutY(paneHeight * 0.42);
+
+        RadioButton radioWorker = new RadioButton("Worker");
+        radioWorker.setToggleGroup(entityRoleGroup);
+        radioWorker.setLayoutX(paneWidth * 0.88);
+        radioWorker.setLayoutY(paneHeight * 0.42);
+
+        entityRoleGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle != null) {
+                RadioButton selectedRadio = (RadioButton) newToggle;
+                entityRole = selectedRadio.getText();
+                boolean isWorker = "Worker".equalsIgnoreCase(entityRole);
+                buttonOrchestratorTable.setDisable(isWorker);
+                buttonWordRoutingSettings.setDisable(!isWorker);
+                buttonWordResponses.setDisable(!isWorker);
+                buttonShellCommands.setDisable(!isWorker);
+                buttonWordCommands.setDisable(!isWorker);
+                buttonWebhooks.setDisable(!isWorker);
+                saveStringToFile("entityRole.dat", entityRole);
+            }
+        });
+
+        settingsPane.getChildren().addAll(radioOrchestrator, radioWorker);
 
         Label labelIpMic =  new Label("IP Mic App");
         labelIpMic.setLayoutX(paneWidth * 0.65);
-        labelIpMic.setLayoutY(paneHeight * 0.5);
+        labelIpMic.setLayoutY(paneHeight * 0.65);
         labelIpMic.setFont(Font.font("Arial", 22));
         labelIpMic.setStyle("-fx-font-weight: bold");
         settingsPane.getChildren().add(labelIpMic);
@@ -1211,19 +1303,19 @@ public class SpeechRecognitionAI extends Application {
             saveBooleanToFile("useIpMic.dat", useIpMic);
         });
         checkBoxUseIpMic.setLayoutX(paneWidth * 0.65);
-        checkBoxUseIpMic.setLayoutY(paneHeight * 0.57);
+        checkBoxUseIpMic.setLayoutY(paneHeight * 0.72);
         settingsPane.getChildren().add(checkBoxUseIpMic);
 
         Label labelToken = new Label("Token");
         labelToken.setLayoutX(paneWidth * 0.65);
-        labelToken.setLayoutY(paneHeight * 0.64);
+        labelToken.setLayoutY(paneHeight * 0.79);
         settingsPane.getChildren().add(labelToken);
 
         TextField textFieldToken = new TextField();
         textFieldToken.setPromptText(token);
         textFieldToken.setText(token);
         textFieldToken.setLayoutX(paneWidth * 0.7);
-        textFieldToken.setLayoutY(paneHeight * 0.63);
+        textFieldToken.setLayoutY(paneHeight * 0.78);
         textFieldToken.setPrefWidth(240);
         textFieldToken.textProperty().addListener(observable -> {
             if(textFieldToken.getText().length() > 0)
@@ -1244,19 +1336,19 @@ public class SpeechRecognitionAI extends Application {
 
         Label labelMicPort = new Label("Audio Server Port\n(restart required)");
         labelMicPort.setLayoutX(paneWidth * 0.65);
-        labelMicPort.setLayoutY(paneHeight * 0.71);
+        labelMicPort.setLayoutY(paneHeight * 0.86);
         settingsPane.getChildren().add(labelMicPort);
 
         Label labelTextPort = new Label("Text Server Port       " + (audioServerPort+1));
         labelTextPort.setLayoutX(paneWidth * 0.65);
-        labelTextPort.setLayoutY(paneHeight * 0.78);
+        labelTextPort.setLayoutY(paneHeight * 0.93);
         settingsPane.getChildren().add(labelTextPort);
 
         TextField textFieldPort = new TextField();
         textFieldPort.setPromptText(Integer.toString(audioServerPort));
         textFieldPort.setText(Integer.toString(audioServerPort));
         textFieldPort.setLayoutX(paneWidth * 0.78);
-        textFieldPort.setLayoutY(paneHeight * 0.7);
+        textFieldPort.setLayoutY(paneHeight * 0.85);
         textFieldPort.setPrefWidth(60);
         textFieldPort.textProperty().addListener(observable -> {
             if(textFieldPort.getText().length() > 0)
@@ -1500,6 +1592,13 @@ public class SpeechRecognitionAI extends Application {
             checkBoxPlotKeepLongWords.setLayoutX(paneWidth1 * 0.65);
             checkBoxShowFFT.setLayoutX(paneWidth1 * 0.65);
 
+            labelEntitySettings.setLayoutX(paneWidth1 * 0.65);
+            labelEntityName.setLayoutX(paneWidth1 * 0.65);
+            textFieldEntityName.setLayoutX(paneWidth1 * 0.75);
+            labelEntityRole.setLayoutX(paneWidth1 * 0.65);
+            radioOrchestrator.setLayoutX(paneWidth1 * 0.75);
+            radioWorker.setLayoutX(paneWidth1 * 0.88);
+
             labelIpMic.setLayoutX(paneWidth1 * 0.65);
             checkBoxUseIpMic.setLayoutX(paneWidth1 * 0.65);
             labelToken.setLayoutX(paneWidth1 * 0.65);
@@ -1545,17 +1644,24 @@ public class SpeechRecognitionAI extends Application {
 
             labelOtherSettings.setLayoutY(paneHeight1 * 0.01);
             checkBoxPrintToConsole.setLayoutY(paneHeight1 * 0.08);
-            checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.15);
-            checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.22);
-            checkBoxShowFFT.setLayoutY(paneHeight1 * 0.29);
+            checkBoxPlotNeuralCharts.setLayoutY(paneHeight1 * 0.12);
+            checkBoxPlotKeepLongWords.setLayoutY(paneHeight1 * 0.16);
+            checkBoxShowFFT.setLayoutY(paneHeight1 * 0.20);
 
-            labelIpMic.setLayoutY(paneHeight1 * 0.5);
-            checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.57);
-            labelToken.setLayoutY(paneHeight1 * 0.64);
-            textFieldToken.setLayoutY(paneHeight1 * 0.63);
-            labelMicPort.setLayoutY(paneHeight1 * 0.71);
-            labelTextPort.setLayoutY(paneHeight1 * 0.78);
-            textFieldPort.setLayoutY(paneHeight1 * 0.7);
+            labelEntitySettings.setLayoutY(paneHeight1 * 0.30);
+            labelEntityName.setLayoutY(paneHeight1 * 0.36);
+            textFieldEntityName.setLayoutY(paneHeight1 * 0.35);
+            labelEntityRole.setLayoutY(paneHeight1 * 0.42);
+            radioOrchestrator.setLayoutY(paneHeight1 * 0.42);
+            radioWorker.setLayoutY(paneHeight1 * 0.42);
+
+            labelIpMic.setLayoutY(paneHeight1 * 0.65);
+            checkBoxUseIpMic.setLayoutY(paneHeight1 * 0.72);
+            labelToken.setLayoutY(paneHeight1 * 0.79);
+            textFieldToken.setLayoutY(paneHeight1 * 0.78);
+            labelMicPort.setLayoutY(paneHeight1 * 0.86);
+            labelTextPort.setLayoutY(paneHeight1 * 0.93);
+            textFieldPort.setLayoutY(paneHeight1 * 0.85);
 
             labelNeuralNetwork.setLayoutY(paneHeight1 * 0.5);
             labelVelocity.setLayoutY(paneHeight1 * 0.57);
@@ -1601,6 +1707,30 @@ public class SpeechRecognitionAI extends Application {
             new ShellCommandsSettings(stageReference, shellCommandsDatabase, shellCommandsList);
         });
 
+        buttonOrchestratorTable = new Button("Orchestrator Table");
+        buttonOrchestratorTable.setOnAction(event -> {
+            new OrchestratorSettings(stageReference, orchestratorWorkersDatabase, orchestratorWorkersList);
+        });
+
+        // Set default selection based on saved/current state (e.g., entityRole variable)
+        if ("Orchestrator".equalsIgnoreCase(entityRole)) {
+            radioOrchestrator.setSelected(true);
+            buttonOrchestratorTable.setDisable(false);
+            buttonWordRoutingSettings.setDisable(true);
+            buttonWordResponses.setDisable(true);
+            buttonShellCommands.setDisable(true);
+            buttonWordCommands.setDisable(true);
+            buttonWebhooks.setDisable(true);
+        } else {
+            radioWorker.setSelected(true);
+            buttonOrchestratorTable.setDisable(true);
+            buttonWordRoutingSettings.setDisable(false);
+            buttonWordResponses.setDisable(false);
+            buttonShellCommands.setDisable(false);
+            buttonWordCommands.setDisable(false);
+            buttonWebhooks.setDisable(false);
+        }
+
         wordResponsesDatabase = loadWordResponses();
         wordResponsesList = new ListView<>();
         wordResponsesList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
@@ -1616,6 +1746,10 @@ public class SpeechRecognitionAI extends Application {
         shellCommandsDatabase = loadShellCommands();
         shellCommandsList = new ListView<>();
         shellCommandsList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+
+        orchestratorWorkersDatabase = loadOrchestratorWorkers();
+        orchestratorWorkersList = new ListView<>();
+        orchestratorWorkersList.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
     }
 
     private void displayDataLayout()
@@ -1734,6 +1868,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().add(buttonWordResponses);
         hBoxBottom.getChildren().add(buttonWebhooks);
         hBoxBottom.getChildren().add(buttonShellCommands);
+        hBoxBottom.getChildren().add(buttonOrchestratorTable);
         displayedLayout = 4;
         System.out.println("Settings Layout displayed.");
     }
@@ -1746,6 +1881,7 @@ public class SpeechRecognitionAI extends Application {
         hBoxBottom.getChildren().remove(buttonWordResponses);
         hBoxBottom.getChildren().remove(buttonWebhooks);
         hBoxBottom.getChildren().remove(buttonShellCommands);
+        hBoxBottom.getChildren().remove(buttonOrchestratorTable);
     }
 
     private void displayLayout(int layoutIndex)

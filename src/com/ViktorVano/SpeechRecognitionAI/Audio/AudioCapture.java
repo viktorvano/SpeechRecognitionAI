@@ -8,7 +8,7 @@ import javax.sound.sampled.*;
 
 import static com.ViktorVano.SpeechRecognitionAI.GUI.SpeechRecognitionAI.customPrompt;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Files.BooleanFile.saveBooleanToFile;
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 
 public class AudioCapture {
     private AudioFormat adFormat;

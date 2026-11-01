@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 import static com.ViktorVano.SpeechRecognitionAI.Tables.Webhooks.WebhooksFile.saveWebhooks;
 
 public class WebhookSettings {
