@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.Audio;
 
-import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables;
+import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters;
 
 import java.net.*;
 import java.io.*;
@@ -45,7 +45,7 @@ public class AudioRecordClient {
             if(buffer != null)
             {
                 InputStream inn = new ByteArrayInputStream(buffer);
-                out.writeUTF(Variables.token);
+                out.writeUTF(Parameters.token);
                 out.writeInt(length);
                 int len;
                 byte[] b = new byte[1024];

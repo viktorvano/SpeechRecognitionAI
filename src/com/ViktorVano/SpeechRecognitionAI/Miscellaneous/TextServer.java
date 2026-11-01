@@ -16,7 +16,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.token;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.token;
 
 public class TextServer extends Thread{
     private int port;

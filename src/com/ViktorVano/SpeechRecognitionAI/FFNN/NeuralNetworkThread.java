@@ -12,7 +12,7 @@ import javafx.scene.chart.XYChart;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.General.normalizeInputs;
 
 public class NeuralNetworkThread extends Thread {

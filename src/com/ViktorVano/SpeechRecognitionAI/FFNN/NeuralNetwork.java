@@ -7,7 +7,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 import static com.ViktorVano.SpeechRecognitionAI.FFNN.Weights.allocateNewWeights;
 
 public class NeuralNetwork {

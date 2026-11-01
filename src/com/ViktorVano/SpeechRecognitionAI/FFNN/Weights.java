@@ -1,6 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 
 public class Weights {
     public static void allocateNewWeights()

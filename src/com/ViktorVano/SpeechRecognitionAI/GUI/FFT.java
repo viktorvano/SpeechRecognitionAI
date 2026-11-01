@@ -2,19 +2,15 @@ package com.ViktorVano.SpeechRecognitionAI.GUI;
 
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 
 public class FFT {
     public FFT(Stage stageReference, XYChart.Series<Number, Number> fftSeries, String classifierName, String classifierMatch)

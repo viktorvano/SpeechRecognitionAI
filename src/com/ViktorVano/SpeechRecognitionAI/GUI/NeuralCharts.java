@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 
 public class NeuralCharts {
     public NeuralCharts(Stage stageReference, ArrayList<XYChart.Series<Number, Number>> neuralSeries, ArrayList<Classifier> classifier, String classifierName, String classifierMatch)

@@ -4,7 +4,7 @@ import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
 
-public class Variables {
+public class Parameters {
 
     public static int versionNumber = 20261101;
 

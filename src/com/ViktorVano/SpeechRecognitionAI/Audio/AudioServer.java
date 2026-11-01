@@ -11,7 +11,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Variables.*;
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.*;
 
 public class AudioServer extends Thread{
     private int port;
