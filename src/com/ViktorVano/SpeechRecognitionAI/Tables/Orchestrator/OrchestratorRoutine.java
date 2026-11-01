@@ -27,7 +27,7 @@ public class OrchestratorRoutine extends Thread{
         {
             // trim the audio
             RecordedAudio trimmedRecord = new RecordedAudio();
-            int removeCount = bufferWordMarker.getEnd();
+            int removeCount = bufferWordMarker.getEnd() + 1;
             int newLength = recordedAudio.audioRecord.length - removeCount;
             byte[] trimmedRecordBuffer = new byte[newLength];
             System.arraycopy(recordedAudio.audioRecord, removeCount, trimmedRecordBuffer, 0, newLength);
