@@ -4,7 +4,6 @@ import com.ViktorVano.SpeechRecognitionAI.Audio.AudioCapture;
 import com.ViktorVano.SpeechRecognitionAI.Audio.AudioPlayer;
 import com.ViktorVano.SpeechRecognitionAI.Audio.BufferWordMarker;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
-import javafx.collections.ObservableList;
 
 public class OrchestratorRoutine extends Thread{
     private String receivedWorkerMessage = "";
@@ -27,7 +26,7 @@ public class OrchestratorRoutine extends Thread{
         {
             // trim the audio
             RecordedAudio trimmedRecord = new RecordedAudio();
-            int removeCount = bufferWordMarker.getEnd() + 1;
+            int removeCount = bufferWordMarker.getBufferMarker();
             int newLength = recordedAudio.audioRecord.length - removeCount;
             byte[] trimmedRecordBuffer = new byte[newLength];
             System.arraycopy(recordedAudio.audioRecord, removeCount, trimmedRecordBuffer, 0, newLength);

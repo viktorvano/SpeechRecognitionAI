@@ -354,7 +354,7 @@ public class SpeechRecognitionAI extends Application {
                             {
                                 tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
                             }
-                            bufferWordMarkers.add(new BufferWordMarker(start, end, records.size()));
+                            bufferWordMarkers.add(new BufferWordMarker(end, records.size()));
                             records.add(tempRecord);
                             recordItem.add(tempRecord.name);
                         }catch (Exception e)
@@ -381,7 +381,7 @@ public class SpeechRecognitionAI extends Application {
                         {
                             tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
                         }
-                        bufferWordMarkers.add(new BufferWordMarker(start, end, records.size()));
+                        bufferWordMarkers.add(new BufferWordMarker(end, records.size()));
                         records.add(tempRecord);
                         recordItem.add(tempRecord.name);
                     }catch (Exception e)
