@@ -110,6 +110,7 @@ public class SpeechRecognitionAI extends Application {
     private final Button buttonAddGeneratedArtifact = new Button("Add As Generated Artifact");
     private static int lowestGeneratedLossIndex = -1;
     private final Button buttonGetNeuralNetworkOutput = new Button("Get Neural Network Output");
+    private final ArrayList<BufferWordMarker> bufferWordMarkers = new ArrayList<>();
 
     public static void main(String[] args)
     {
@@ -257,6 +258,7 @@ public class SpeechRecognitionAI extends Application {
 
     private void detectWords()
     {
+        bufferWordMarkers.clear();
         detectedWordsSeries.getData().clear();
         final int detectedValue = 3000;
         int lastValue = 1500;
@@ -352,6 +354,7 @@ public class SpeechRecognitionAI extends Application {
                             {
                                 tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
                             }
+                            bufferWordMarkers.add(new BufferWordMarker(start, end, records.size()));
                             records.add(tempRecord);
                             recordItem.add(tempRecord.name);
                         }catch (Exception e)
@@ -378,6 +381,7 @@ public class SpeechRecognitionAI extends Application {
                         {
                             tempRecord.audioRecord[x - start] = recordedAudio.audioRecord[x + 1];
                         }
+                        bufferWordMarkers.add(new BufferWordMarker(start, end, records.size()));
                         records.add(tempRecord);
                         recordItem.add(tempRecord.name);
                     }catch (Exception e)
@@ -427,7 +431,7 @@ public class SpeechRecognitionAI extends Application {
         neuralNetworkThread.setRecords(audioRecords);
         if(entityRole.equalsIgnoreCase("Orchestrator"))
         {
-            neuralNetworkThread.setOrchestratorWorkers(orchestratorWorkersDatabase);
+            neuralNetworkThread.setOrchestratorWorkers(orchestratorWorkersDatabase, bufferWordMarkers);
         }
         if(neuralNetworkThread.getState() == Thread.State.NEW)
         {

@@ -1,5 +1,6 @@
 package com.ViktorVano.SpeechRecognitionAI.FFNN;
 
+import com.ViktorVano.SpeechRecognitionAI.Audio.BufferWordMarker;
 import com.ViktorVano.SpeechRecognitionAI.Audio.GeneratedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Audio.RecordedAudio;
 import com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Classifier;
@@ -25,6 +26,7 @@ public class NeuralNetworkThread extends Thread {
     private String recognizedMessage;
     private boolean showOneTimeOutput;
     private OrchestratorWorker recognizedOrchestratorWorker;
+    private ArrayList<BufferWordMarker> bufferWordMarkers = new ArrayList();
     private int workerWordIndex = -1;
 
     public NeuralNetworkThread(ArrayList<Classifier> classifier)
@@ -69,8 +71,9 @@ public class NeuralNetworkThread extends Thread {
         this.records = recordedWords;
     }
 
-    public void setOrchestratorWorkers(ObservableList<OrchestratorWorker> orchestratorWorkers)
+    public void setOrchestratorWorkers(ObservableList<OrchestratorWorker> orchestratorWorkers, ArrayList<BufferWordMarker> bufferWordMarkers)
     {
+        this.bufferWordMarkers = bufferWordMarkers;
         this.orchestratorWorkers = orchestratorWorkers;
         this.recognizedOrchestratorWorker = null;
         this.workerWordIndex = -1;
@@ -84,6 +87,14 @@ public class NeuralNetworkThread extends Thread {
     public int getWorkerWordIndex()
     {
         return this.workerWordIndex;
+    }
+
+    public BufferWordMarker getBufferWordMarker()
+    {
+        if(this.workerWordIndex != -1)
+            return bufferWordMarkers.get(this.workerWordIndex);
+        else
+            return null;
     }
 
     public void analyzeWord(RecordedAudio word)

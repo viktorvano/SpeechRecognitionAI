@@ -189,7 +189,7 @@ public class AudioServer extends Thread{
                                     OrchestratorRoutine orchestratorRoutine = new OrchestratorRoutine(
                                             recordedAudio,
                                             neuralNetworkThread.getRecognizedOrchestratorWorker(),
-                                            neuralNetworkThread.getWorkerWordIndex(),
+                                            neuralNetworkThread.getBufferWordMarker(),
                                             audioCapture);
                                     orchestratorRoutine.start();
                                     try {
