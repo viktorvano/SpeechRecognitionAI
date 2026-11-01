@@ -2,6 +2,7 @@ package com.ViktorVano.SpeechRecognitionAI.Miscellaneous;
 
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommand;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Commands.WordCommandRouter;
+import com.ViktorVano.SpeechRecognitionAI.Tables.Orchestrator.OrchestratorWorker;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Responses.WordResponse;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouter;
 import com.ViktorVano.SpeechRecognitionAI.Tables.Routing.WordRouting;
@@ -16,6 +17,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.entityRole;
 import static com.ViktorVano.SpeechRecognitionAI.Miscellaneous.Parameters.token;
 
 public class TextServer extends Thread{
@@ -27,6 +29,7 @@ public class TextServer extends Thread{
     private ObservableList<WordCommand> wordCommandsDatabase;
     private ObservableList<Webhook> webhookDatabase;
     private ObservableList<ShellCommand> shellCommandDatabase;
+    private ObservableList<OrchestratorWorker> orchestratorWorkersDatabase;
 
     //initialize socket and input stream
     private Socket socket = null;
@@ -39,6 +42,7 @@ public class TextServer extends Thread{
                       @NotNull ObservableList<WordResponse> wordResponsesDatabase,
                       @NotNull ObservableList<Webhook> webhookDatabase,
                       @NotNull ObservableList<ShellCommand> shellCommandDatabase,
+                      @NotNull ObservableList<OrchestratorWorker> orchestratorWorkersDatabase,
                       int port)
     {
         this.wordRoutingDatabase = wordRoutingDatabase;
@@ -46,6 +50,7 @@ public class TextServer extends Thread{
         this.wordResponsesDatabase = wordResponsesDatabase;
         this.webhookDatabase = webhookDatabase;
         this.shellCommandDatabase = shellCommandDatabase;
+        this.orchestratorWorkersDatabase = orchestratorWorkersDatabase;
         this.port = port;
     }
 
@@ -122,21 +127,78 @@ public class TextServer extends Thread{
                     if(receivedToken.equals(token))
                     {
                         System.out.println("Got the message: " + this.message);
-                        new WordRouter(this.wordRoutingDatabase, this.message);
-                        new WordCommandRouter(this.wordCommandsDatabase, this.message);
-                        new WebhookRouter(this.webhookDatabase, this.message);
-                        new ShellCommander(this.shellCommandDatabase, this.message);
                         String response = "";
-                        for (WordResponse wordResponse : wordResponsesDatabase)
+                        if(entityRole.equalsIgnoreCase("Worker"))
                         {
-                            if(message.contains(wordResponse.word))
+                            new WordRouter(this.wordRoutingDatabase, this.message);
+                            new WordCommandRouter(this.wordCommandsDatabase, this.message);
+                            new WebhookRouter(this.webhookDatabase, this.message);
+                            new ShellCommander(this.shellCommandDatabase, this.message);
+
+                            for (WordResponse wordResponse : wordResponsesDatabase)
                             {
-                                if(response.length() == 0)
-                                    response += wordResponse.response;
-                                else
-                                    response += " " + wordResponse.response;
+                                if(message.contains(wordResponse.word))
+                                {
+                                    if(response.length() == 0)
+                                        response += wordResponse.response;
+                                    else
+                                        response += " " + wordResponse.response;
+                                }
+                            }
+                        }else
+                        { // Orchestrator
+                            String[] words = message.split(" ");
+                            OrchestratorWorker recognizedOrchestratorWorker = null;
+                            String messageForWorker = "";
+                            for (String word : words)
+                            {
+                                if(recognizedOrchestratorWorker != null)
+                                { // Assemble a message for worker after a worker is found.
+                                    if(messageForWorker.isEmpty())
+                                        messageForWorker = word;
+                                    else
+                                        messageForWorker += " " + word;
+                                }else
+                                {
+                                    for (OrchestratorWorker worker : orchestratorWorkersDatabase)
+                                    {
+                                        if(word.equals(worker.name))
+                                        {
+                                            recognizedOrchestratorWorker = worker;
+                                            System.out.println("Recognized Worker: " + worker.name);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if(recognizedOrchestratorWorker == null)
+                            {
+                                response = "Orchestrator: No worker name recognized.";
+                            }else
+                            {
+                                // Text client code
+                                TextClient textClient = new TextClient(
+                                        recognizedOrchestratorWorker.address,
+                                        Integer.parseInt(recognizedOrchestratorWorker.port) + 1,
+                                        messageForWorker);
+                                try
+                                {
+                                    while(textClient.isClientBusy())
+                                    {
+                                        Thread.sleep(50);
+                                    }
+                                    if(textClient.gotResponse())
+                                    {
+                                        response = textClient.getResponse();
+                                    }
+                                }catch (Exception e)
+                                {
+                                    System.out.println("OrchestratorRoutine: Text Client Cannot wait properly.");
+                                }
                             }
                         }
+
                         String outputMessage;
                         if(response.length() == 0)
                             outputMessage = message;
