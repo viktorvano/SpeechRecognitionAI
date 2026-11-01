@@ -102,20 +102,20 @@ public class OrchestratorSettings {
         txtNewWorker = new TextField();
         txtNewWorker.setPromptText("Worker Name");
         txtNewWorker.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWorker.setDisable(txtNewWorker.getText().length() == 0 ||
-                        txtNewAddress.getText().length() == 0 || txtNewPort.getText().length() == 0));
+                buttonAddWorker.setDisable(txtNewWorker.getText().isEmpty() ||
+                        txtNewAddress.getText().isEmpty() || txtNewPort.getText().isEmpty()));
 
         txtNewAddress = new TextField();
         txtNewAddress.setPromptText("IP Address/URL");
         txtNewAddress.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWorker.setDisable(txtNewWorker.getText().length() == 0 ||
-                        txtNewAddress.getText().length() == 0 || txtNewPort.getText().length() == 0));
+                buttonAddWorker.setDisable(txtNewWorker.getText().isEmpty() ||
+                        txtNewAddress.getText().isEmpty() || txtNewPort.getText().isEmpty()));
 
         txtNewPort = new TextField();
         txtNewPort.setPromptText("Port");
         txtNewPort.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonAddWorker.setDisable(txtNewWorker.getText().length() == 0 ||
-                        txtNewAddress.getText().length() == 0 || txtNewPort.getText().length() == 0));
+                buttonAddWorker.setDisable(txtNewWorker.getText().isEmpty() ||
+                        txtNewAddress.getText().isEmpty() || txtNewPort.getText().isEmpty()));
 
         buttonAddWorker = new Button("Add Worker");
         buttonAddWorker.setDisable(true);
@@ -141,22 +141,22 @@ public class OrchestratorSettings {
         txtEditWorker = new TextField();
         txtEditWorker.setPromptText("Worker Name");
         txtEditWorker.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonUpdateWorker.setDisable(txtEditWorker.getText().length() == 0 ||
-                        txtEditAddress.getText().length() == 0 || txtEditPort.getText().length() == 0 ||
+                buttonUpdateWorker.setDisable(txtEditWorker.getText().isEmpty() ||
+                        txtEditAddress.getText().isEmpty() || txtEditPort.getText().isEmpty() ||
                         workerIndex == -1));
 
         txtEditAddress = new TextField();
         txtEditAddress.setPromptText("IP Address/URL");
         txtEditAddress.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonUpdateWorker.setDisable(txtEditWorker.getText().length() == 0 ||
-                        txtEditAddress.getText().length() == 0 || txtEditPort.getText().length() == 0 ||
+                buttonUpdateWorker.setDisable(txtEditWorker.getText().isEmpty() ||
+                        txtEditAddress.getText().isEmpty() || txtEditPort.getText().isEmpty() ||
                         workerIndex == -1));
 
         txtEditPort = new TextField();
         txtEditPort.setPromptText("Port");
         txtEditPort.textProperty().addListener((observable, oldValue, newValue) ->
-                buttonUpdateWorker.setDisable(txtEditWorker.getText().length() == 0 ||
-                        txtEditAddress.getText().length() == 0 || txtEditPort.getText().length() == 0 ||
+                buttonUpdateWorker.setDisable(txtEditWorker.getText().isEmpty() ||
+                        txtEditAddress.getText().isEmpty() || txtEditPort.getText().isEmpty() ||
                         workerIndex == -1));
 
         buttonUpdateWorker = new Button("Update Worker");
