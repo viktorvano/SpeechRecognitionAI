@@ -243,6 +243,15 @@ public class AudioServer extends Thread{
                 {
                     System.out.println(e);
                     e.printStackTrace();
+
+                    try {
+                        if (out != null && socket != null && !socket.isClosed()) {
+                            out.writeUTF("Audio server processing error.");
+                            out.flush();
+                        }
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
 
             }

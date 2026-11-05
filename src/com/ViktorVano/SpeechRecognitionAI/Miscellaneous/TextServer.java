@@ -223,6 +223,15 @@ public class TextServer extends Thread{
                 {
                     System.out.println(e);
                     e.printStackTrace();
+
+                    try {
+                        if (out != null && socket != null && !socket.isClosed()) {
+                            out.writeUTF("Text server processing error.");
+                            out.flush();
+                        }
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
 
             }
