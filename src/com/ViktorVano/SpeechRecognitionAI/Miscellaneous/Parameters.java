@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 public class Parameters {
 
-    public static int versionNumber = 20261101;
+    public static int versionNumber = 20261106;
 
     public static int recorderThreshold = 500;
     public static int wordThreshold = 500;
-    public static int preWordSamples = 1200;
-    public static int wordInertiaThreshold = 300;
-    public static int wordInertiaSamples = 250;
+    public static int preWordSamples = 1500;
+    public static int wordInertiaThreshold = 350;
+    public static int wordInertiaSamples = 1800;
 
     public static boolean displayNeuralChart = false;
     public static boolean displayFFTChart = false;
